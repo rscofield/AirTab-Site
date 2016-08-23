@@ -1,0 +1,24 @@
+{exp:airtab:log_page_load}
+<div ng-cloak>
+<ion-view title="News &amp; Events" ng-init="checkLogin();">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+
+  	<ion-content has-header="true" padding="true" has-tabs="true" delegate-handle="scrollCtrl" ng-controller="NewsCtrl" ng-init="doScroll();loadNews();">
+  		<ion-refresher
+		    pulling-text="Pull to refresh..."
+		    on-refresh="doRefresh()">
+		</ion-refresher>
+  		<div ng-repeat="news in $root.news">
+	    	<div class="list card" ng-click="showEvent({{news.id}});">
+	    		
+				<div class="item item-image">
+					<img src="{{news.banner}}">
+				</div>
+
+			</div>
+		</div>
+	</ion-content>
+</ion-view>
+</div>

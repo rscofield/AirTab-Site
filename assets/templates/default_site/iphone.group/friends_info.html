@@ -1,0 +1,10 @@
+{exp:member:custom_profile_data member_id="{embed:member_id}"}
+	{
+		"id": "{embed:member_id}",
+		"username": "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{username}{/exp:low_replace}",
+		"email": "{exp:query sql="SELECT email as mail FROM exp_members WHERE member_id = '{embed:member_id}'"}{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{mail}{/exp:low_replace}{/exp:query}",
+		"photo": "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{photo_url}{/exp:low_replace}",
+		"display_name": "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{screen_name}{/exp:low_replace}",
+		"status":"{embed:status}"
+	}
+{/exp:member:custom_profile_data}

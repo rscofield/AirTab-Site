@@ -1,0 +1,53 @@
+{exp:airtab:log_page_load}
+<div ng-cloak>
+<style type="text/css">
+	.button.button-block, .button.button-full {
+		margin-top:0;
+	}
+
+	ol {
+		list-style-type: decimal !important;
+		margin-left:40px;
+		font-size: 10pt;
+		margin-bottom: 10px;
+	}
+</style>
+{if segment_3 == ""}
+<ion-view title="How It Works">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" padding="true" has-tabs="false" id="mydrinks" ng-init="$root.hideLoading()" ng-controller="aboutCtrl">
+
+    	<div class="card">
+    		<div class="item item-text-wrap">
+    			<p center>Welcome to AirTab!</p>
+    			<p center>An innovative and easy to use social gifting application.</p>
+    		</div>
+    	</div>
+
+    	<button class="button  button-block button-assertive" ng-click="goTo('howto_send')">How to Gift a Drink</button>
+      <button class="button  button-block button-assertive" ng-click="goTo('howto_redeem')">How to Redeem a Drink</button>
+
+    </ion-content>
+</ion-view>
+{if:elseif segment_3 == "send"}
+<ion-view title="How It Works">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" padding="true" has-tabs="false" id="mydrinks" ng-init="$root.hideLoading()" ng-controller="aboutCtrl">
+  		 <img src="/images/how-to-gift.jpg" width="100%">
+     </ion-content>
+</ion-view>
+{if:elseif segment_3 == "redeem"}
+<ion-view title="How It Works">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" padding="true" has-tabs="false" id="mydrinks" ng-init="$root.hideLoading()" ng-controller="aboutCtrl">
+			<img src="/images/how-to-redeem.jpg" width="100%">
+    </ion-content>
+</ion-view>
+{/if}
+</div>

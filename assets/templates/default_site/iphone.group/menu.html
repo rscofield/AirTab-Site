@@ -1,0 +1,29 @@
+{if segment_3}
+[
+		{exp:low_search:results channel="drinks" child:drk_establishment="{segment_3}" child:drk_level="Premium"}
+			{
+<?php
+$content = <<<EOF
+{fld_body}
+EOF;
+?>
+				"id": "{entry_id}",
+				"title": "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{exp:mah_eencode decode="yes"}{title}{/exp:mah_eencode}{/exp:low_replace}",
+				"content": <?=json_encode($content)?>,
+				"teaser": "{drk_teaser}",
+				"content_type": "{drink_content_type}",
+				"html_content": {embed="iphone/menu_htmlcontent" drink_id="{entry_id}"},
+				"photo": "{fld_picture:iphone5}?v=1",
+				"banner": "{drink_banner:iphone5}?v=1",
+				"type": "{drk_level}",
+				"estId": "{drk_establishment:entry_id}"
+			}{if count != total_results},{/if}
+			{if no_results}
+				{embed="iphone/nomenu"}
+			{/if}
+		{/exp:low_search:results}
+]
+{if:else}
+	[{"status": "error", "msg": "You did not specify a bar."}]
+{/if}
+{exp:http_header content_type="application/json"}

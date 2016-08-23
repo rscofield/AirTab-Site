@@ -1,0 +1,23 @@
+{if segment_3 != ""}
+{exp:airtab:log_page_load}
+{exp:member:custom_profile_data member_id="{segment_3}"}
+	{
+        "avatar": "{exp:airtab:avatar member="{segment_3}" size="640"}",
+        {exp:airtab:get_user_info member_id="{segment_3}"}
+        {if bday_m != "" AND bday_d != ""}
+        "bday_m": "{bday_m}",
+        "bday_d": "{bday_d}",
+        {/if}
+        {exp:airtab:get_user_info}
+        "fname": "{FName}",
+        "lname": "{LName}",
+        "username": "{username}"
+    }
+	{exp:airtab:log_page_load  misc="{low_search_distance}" count="{count}" match="1"}
+	{if count < total_results},{/if}
+    {if no_results}{ "status": "error" }{/if}
+{/exp:member:custom_profile_data}
+{exp:http_header content_type="application/json"}
+{if:else}
+
+{/if}

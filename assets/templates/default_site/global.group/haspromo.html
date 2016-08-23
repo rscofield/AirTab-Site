@@ -1,0 +1,13 @@
+{if logged_out}
+{ "tester": false }
+{if:else}
+	{exp:query sql="SELECT * FROM at_skipcheckout WHERE id = {logged_in_member_id} AND (drinks_sent < drinks_limit OR drinks_limit IS NULL) LIMIT 1"}
+	    {
+	    	"hasPromoAccess": true,
+	    	"sent": "{drinks_sent}",
+	    	"limit": "{if drinks_limit == ""}0{/if}{drinks_limit}"
+	    }
+	    {if no_results}{"hasPromoAccess": false}{/if}
+	{/exp:query}
+{/if}
+{exp:http_header content_type="application/json"}

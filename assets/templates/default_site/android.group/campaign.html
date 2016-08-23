@@ -1,0 +1,75 @@
+{exp:airtab:log_page_load}
+<div ng-cloak>
+<style type="text/css">
+	.button.button-block, .button.button-full {
+		margin-top:0;
+	}
+
+	ol {
+		list-style-type: decimal !important;
+		margin-left:40px;
+		font-size: 10pt;
+		margin-bottom: 10px;
+	}
+</style>
+
+<ion-view title="Campaigns">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" padding="true" has-tabs="false" id="mydrinks" ng-init="$root.hideLoading()" ng-controller="campaignCtrl">
+
+    	<div class="card">
+    		<div class="item item-text-wrap">
+    			<p center>Send an invitation for the RNC / Trump Campaign.</p>
+     		</div>
+    	</div>
+			
+			<button class="button  button-block button-assertive" ng-click="goTo('email')" ng-show="showOptions">Send by EMail</button>
+    	<button class="button  button-block button-assertive" ng-click="goTo('text')" ng-show="showOptions">Send by Text Message</button>
+
+			<form name="myForm" ng-show="textMode">
+			<div class="card">
+				<div class="item-divider" >Send by Text Message:</div>
+				<input 
+				type="tel"
+				placeholder="Phone Number" 
+				value="1234567"					
+				data-ng-model="invite.phone"
+									data-ng-pattern="/^[0-9]+$/"
+									data-ng-maxlength="11"
+									maxlength="11">
+    	</div>			
+			
+			<button class="button  button-block button-assertive" ng-click="Submit()" ng-show="!showOptions">Send</button>
+			</form>
+			
+			<form name="myForm" ng-show="emailMode">
+			<div class="card">
+				<div class="item-divider" >Send by EMail:</div>
+				<input 
+				type="email"
+				placeholder="Email Address"
+				data-ng-model="invite.email"
+									data-ng-minlength="4">
+    	</div>			
+			
+			<button class="button  button-block button-assertive" ng-click="Submit()"  ng-show="!showOptions">Send</button>
+			</form>
+			
+    	<div class="card" ng-show="success">
+    		<div class="item item-text-wrap">
+    			<p center>Your {{ type }} message was sent successfully!</p>
+     		</div>
+    	</div>
+
+    	<div class="card" ng-show="error">
+    		<div class="item item-text-wrap">
+    			<p center>Unable to send your {{ type }} message.  Please try later.</p>
+     		</div>
+    	</div>						
+ 
+    </ion-content>
+</ion-view>
+
+</div>

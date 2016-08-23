@@ -1,0 +1,71 @@
+        
+<div id="nav-wrapper" data-nice-scroll>
+    <ul id="nav"
+        data-ng-controller="NavCtrl"
+        data-collapse-nav
+        data-highlight-active>
+        <li><a href="#/home"> <i class="fa fa-home"></i><span data-i18n="Home"></span> </a></li>
+        <li><a href="#/profile"> <i class="fa fa-user"></i><span data-i18n="My Profile"></span> </a>
+        	<ul>
+                <li><a href="#/profile/avatar"><i class="fa fa-caret-right"></i><span data-i18n="My Profile Picture"></span></a></li>
+        	</ul>
+        </li>
+		<li>
+            <a href="#/drinks"><i class="fa fa-glass"></i><span data-i18n="Drinks"></span></a>
+            <ul>
+                <li><a href="#/drinks/redeemable"><i class="fa fa-caret-right"></i><span data-i18n="Redeemable Drinks"></span>
+					<span class="badge badge-success">
+						{exp:query sql="SELECT count(*) as total FROM exp_channel_data d LEFT JOIN exp_channel_titles t ON t.entry_id = d.entry_id WHERE d.channel_id = '4' AND d.field_id_16 = '{logged_in_member_id}' and t.status='nonredeemed' "}
+							{total}
+						{/exp:query}
+					</span>
+					</a>
+				</li>
+                <li><a href="#/drinks/redeemed"><i class="fa fa-caret-right"></i><span data-i18n="Redeemed Drinks"></span>
+					<span class="badge badge-danger">
+						{exp:query sql="SELECT count(*) as total FROM exp_channel_titles t LEFT JOIN exp_channel_data d ON t.entry_id = d.entry_id WHERE d.channel_id = '4' AND d.field_id_16 = '{logged_in_member_id}' AND t.status in ('redeemed','pending') "}
+							{total}
+						{/exp:query}
+					</span>
+					</a>
+				</li>
+				<li><a href="#/drinks/sent"><i class="fa fa-caret-right"></i><span data-i18n="Sent Drinks"></span>
+					<span class="badge">
+						{exp:query sql="SELECT count(*) as total FROM exp_channel_data d WHERE d.channel_id = '4' AND d.field_id_15 = '{logged_in_member_id}' "}
+							{total}
+						{/exp:query}
+					</span>
+					</a>
+				</li>
+                <li><a href="#/drinks/favorites"><i class="fa fa-caret-right"></i><span data-i18n="Favorites"></span></a></li>
+                <li><a href="#/drinks/send_drink"><i class="fa fa-caret-right"></i><span data-i18n="Send Drink"></span></a></li>
+            </ul>
+        </li>
+		<li>
+            <a href="#/friends"><i class="fa fa-group"></i><span data-i18n="Friends"></span></a>
+            <ul>
+                <li><a href="#/friends/myfriends"><i class="fa fa-caret-right"></i><span data-i18n="My Friends"></span>
+					<span class="badge">
+						{exp:query sql="SELECT count(*) as total FROM exp_channel_data d LEFT JOIN exp_channel_titles t ON t.entry_id = d.entry_id WHERE d.channel_id = '6' AND t.status='Approved' AND (d.field_id_31 = '{logged_in_member_id}' OR d.field_id_55 = '{logged_in_member_id}')"}
+							{total}
+						{/exp:query}
+					</span>
+					</a>
+				</li>
+                <li><a href="#/friends/invitations"><i class="fa fa-caret-right"></i><span data-i18n="Invitations Pending"></span></a></li>
+                <li><a href="#/friends/invite"><i class="fa fa-caret-right"></i><span data-i18n="Invite a Friend"></span></a></li>
+            </ul>
+        </li>
+        <!-- check if bar group member (group id = 6) -->
+		{if group_id == 6}
+			<li>
+				<a href="#/establishment"><i class="fa fa-map-marker"></i><span data-i18n="Establishments"></span></a>
+				<ul>
+					{exp:query sql="SELECT * FROM v_establishment WHERE member_id = '{logged_in_member_id}'"}
+						<li><a href="#/establishment/{entry_id}"><i class="fa fa-caret-right"></i><span data-i18n="{title}"></span></a></li>
+					{/exp:query}
+				</ul>
+			</li>
+		{/if}
+    </ul>
+</div>

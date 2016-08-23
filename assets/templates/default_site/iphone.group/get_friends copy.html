@@ -1,0 +1,7 @@
+<? $member = ee()->session->userdata('member_id'); ?>
+[
+{exp:channel:entries channel="friends" search:sender_id="<?=$member?>" search:friend_id="<?=$member?>" status="Approved"}
+	{embed="iphone/friends_info" member_id="{friend_id}"}{if count < total_results},{/if}
+{/exp:channel:entries}
+]
+{exp:http_header content_type="application/json"}

@@ -1,0 +1,44 @@
+{exp:airtab:log_page_load}
+{if segment_3 == ""}
+
+{if:else}
+{exp:channel:entries channel="establishments" entry_id="{segment_3}" limit="1"}
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=792428910786784&version=v2.0";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+<div ng-cloak>
+<ion-view title="Establishment" ng-init="hideLoading()">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+
+    <ion-content has-header="true" padding="false" ng-init="hideNav()" has-tabs="true">
+    	<img src="{photo_large:iphone5}" style="width:100%;height:auto;"/>
+    	<div style="text-align:center;" padding="true">
+    		<button class="button button-clear button-assertive" ng-click='$root.launchMaps({address: "{address}", city: "{city}", state: "{state}", zip: "{zip}", title: "{title}", lat:"{latitude}", lng: "{longitude}"});'>
+	  			Navigate
+			</button>
+
+	    	<button class="button button-clear button-assertive" href="tel://{exp:low_replace find="[^0-9]" replace="" regex="yes"}{est_phone}{/exp:low_replace}">
+	  			Call
+			</button>
+		</div>
+		<div style="text-align:center;padding:10px" padding="true">
+			<h4>{title}</h4>
+			<p>{address}<br />{city}, {state} {zip}</p>
+			<p>{exp:low_replace find="NEWLINE" replace="<br />" multiple="yes"}{est_intro}{/exp:low_replace}</p>
+		</div>
+
+		<div style="padding:20px;" ng-if="$root.hasFacebook">
+			<button class="button button-full icon-left ion-social-facebook button-positive" ng-click="$root.fbShare('http://airtab.me', 'AirTab', 'An innovative and easy to use social gifting application', 'Send all of your friends, family, & co-workers drinks, tickets, & more through AirTab! You can purchase and gift friends drinks from anywhere, at any time with the click of a button.', '')">Share on Facebook</button>
+		</div>
+    </ion-content>
+</ion-view>
+</div>
+{/exp:channel:entries}
+{/if}

@@ -1,0 +1,36 @@
+{exp:airtab:log_page_load}
+{if segment_3 == ""}
+
+<div ng-cloak>
+<style type="text/css">
+	.button.button-block, .button.button-full {
+		margin-top:0;
+	}
+
+	ol {
+		list-style-type: decimal !important;
+		margin-left:40px;
+		font-size: 10pt;
+		margin-bottom: 10px;
+	}
+</style>
+
+<ion-view title= "Establishment"  >
+	 <ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+     </ion-nav-buttons>
+    
+     <ion-content has-header="true" padding="true" has-tabs="false" id="redeemmydrinks" ng-init="$root.hideLoading()" ng-controll     er="register_establishment">
+     
+      <button class="button  button-block button-assertive" ng-click='recommend( {{estId}}, "{{esttitle}}", {logged_in_member_id} )'>Recommend <br> {{esttitle}}</button>
+          
+      <button class="button  button-block button-assertive" onClick="window.location.href='//airtab.me/dashboard/#/register';">Register <br> {{esttitle}}</button>
+     
+    </ion-content>
+</ion-view>
+
+
+</div>
+{/if}
+
+

@@ -1,0 +1,10 @@
+{exp:query sql="SELECT * FROM at_skipcheckout WHERE id = {logged_in_member_id} LIMIT 1"}
+<script type="text/javascript">
+window.location.href = "#/checkout_promo/{segment_3}/{segment_4}/{segment_5}";
+</script> 
+{if no_results}
+<script type="text/javascript">
+window.location.href="/ios/#/checkout/{segment_3}/{segment_4}/{segment_5}";
+</script>
+{/if}
+{/exp:query}

@@ -1,0 +1,27 @@
+<div class="table-responsive">
+		<table class="table table-hover table-striped table-bordered">
+			<thead>
+				<tr>
+					<th>Title</th>
+					<th>Status</th>
+					<th>Price</th>
+				</tr>
+			</thead>
+			<tbody>
+				{exp:query sql="SELECT * FROM v_establishment_menu WHERE estab_id='{segment_3}' Order By title"}
+					<tr>
+						<td>
+							{title}
+						</td>
+						<td>
+							{status}
+						</td>
+						<td>
+							{Price}
+						</td>
+					</tr>
+					{if no_results} Custom menu not yet defined, Using default AirTab drink menu. {/if}
+				{/exp:query}
+			</tbody>
+		</table>
+</div>

@@ -1,0 +1,33 @@
+{!--  
+     Author: John W. Blaine
+     File Name: sql_process_friend_invite_member.html
+     Date: 01/05/2015
+     
+     Description : Invites AirTab and Phone Contact List friends.
+                   Call functions in mod.airtab.php            
+--}
+
+{if segment_3 == "airtab"}	
+	{exp:airtab:process_friend_invite_member id="{segment_4}"}
+	{/exp:airtab:process_friend_invite_member}
+	
+	
+{/if}
+
+{if segment_3 == "remove_friend"}
+	{exp:airtab:remove_friend friend_id="{segment_4}"}
+	{/exp:airtab:remove_friend}	
+{/if}
+
+ 			
+{if segment_3 == "email"}
+	{exp:airtab:process_friend_invite_email email="{segment_4}"}
+{/if}
+
+
+
+
+
+
+
+

@@ -1,0 +1,22 @@
+{exp:airtab:log_page_load}
+{if segment_3 == ""}
+<div class="modal" id="modalWindow" ng-controller="profileCtrl">
+  <ion-header-bar class="bar bar-header bar-stable">
+    <button class="button button-clear button-primary" ng-click="$root.hideModal()" id="hideModal"><i class="icon ion-arrow-left-c"></i></button>
+    <h1 class="title">Edit Profile</h1>
+  </ion-header-bar>
+  <ion-content ng-init="$root.hideLoading()">
+    <iframe src="#/profile/edit" frameborder="0" style="overflow:hidden;min-height:100%;width:100%" height="100%" width="100%"></iframe>
+  </ion-content>
+</div>
+{if:elseif segment_3 == "avatar"}
+<div class="modal" id="modalWindow" ng-controller="profileCtrl">
+  <ion-header-bar class="bar bar-header bar-stable">
+    <button class="button button-clear button-primary" ng-click="$root.hideModal()" id="hideModal"><i class="icon ion-arrow-left-c"></i></button>
+    <h1 class="title">Update Profile Photo</h1>
+  </ion-header-bar>
+  <ion-content ng-init="$root.hideLoading()">
+    <iframe src="#/profile/avatar/edit" frameborder="0" style="overflow:hidden;min-height:100%;width:100%" height="100%" width="100%"></iframe>
+  </ion-content>
+</div>
+{/if}

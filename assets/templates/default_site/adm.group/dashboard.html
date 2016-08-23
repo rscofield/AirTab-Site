@@ -1,0 +1,60 @@
+<div class="page page-general">
+<div class="row">
+        <div class="col-md-12">
+        {exp:query sql="SELECT * FROM v_reports_dashboard"}
+            <div class="row">
+                <div class="col-sm-6">
+                    <section class="panel panel-box">
+                        <div class="panel-top bg-success">
+                            <i class="fa fa-users text-large"></i>
+                        </div>
+                        <div class="panel-bottom bg-reverse">
+                            <p class="size-h1">{members}</p>
+                            <p class="text-muted">Total Users</p>
+                        </div>
+                    </section>
+                </div>
+
+                <div class="col-sm-6">
+                    <section class="panel panel-box">
+                        <div class="panel-top bg-danger">
+                            <i class="fa fa-line-chart text-large"></i>
+                        </div>
+                        <div class="panel-bottom bg-reverse">
+                            <p class="size-h1">{new_members}</p>
+                            <p class="text-muted">New Users (Last 7 Days)</p>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <section class="panel panel-box">
+                        <div class="panel-top bg-warning">
+                            <i class="fa fa-android text-large"></i>
+                        </div>
+                        <div class="panel-bottom bg-reverse">
+                            <p class="size-h1">{android_devices}</p>
+                            <p class="text-muted">Android Devices</p>
+                        </div>
+                    </section>
+                </div>
+
+                <div class="col-sm-6">
+                    <section class="panel panel-box">
+                        <div class="panel-top bg-info">
+                            <i class="fa fa-apple text-large"></i>
+                        </div>
+                        <div class="panel-bottom bg-reverse">
+                            <p class="size-h1">{ios_devices}</p>
+                            <p class="text-muted">iOS Devices</p>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            {/exp:query}
+            <!-- end Panel box -->
+            </div>
+            </div>
+
+</div>

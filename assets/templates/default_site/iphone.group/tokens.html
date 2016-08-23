@@ -1,0 +1,19 @@
+<?php
+
+$channels = ee()->db->select('member_id, m_field_id_5, m_field_id_6')
+  ->from('member_data')
+  ->where(array('m_field_id_5 <>'=>""))
+  ->get();
+
+if ($channels->num_rows() > 0)
+{
+    foreach($channels->result_array() as $row)
+    {
+    	$results = ee()->db->limit(1)
+    	->where(array("member_id"=>$row["member_id"]))
+		->get('members');
+    	echo $results->row('username') . ": " . $row['m_field_id_5'] . " - ver: " . $row['m_field_id_6'] . "<br />";
+    }
+}
+
+?>

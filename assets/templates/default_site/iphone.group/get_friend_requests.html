@@ -1,0 +1,11 @@
+<? $member = ee()->session->userdata('member_id'); ?>
+[
+{exp:query sql="SELECT * FROM v_friends WHERE status='Pending Approval' AND friend_id=<?=$member?> ORDER BY sender_screen_name ASC"}
+	{if sender_id == <?=$member?>}
+		{embed="iphone/friends_info" member_id="{friend_id}"}{if count < total_results},{/if}
+	{if:else}
+		{embed="iphone/friends_info" member_id="{sender_id}"}{if count < total_results},{/if}
+	{/if}
+{/exp:query}
+]
+{exp:http_header content_type="application/json"}

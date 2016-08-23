@@ -1,0 +1,45 @@
+{!--  
+     Author: John W. Blaine
+     File Name: sql_get_drinks.html
+     Date: 01/05/2015
+     
+     Description : Invites AirTab and Phone Contact List friends.
+                   Call functions in mod.airtab.php            
+	{exp:airtab:sql_process_friend_invite_member member_id="{logged_in_member_id}" friends_id="{segment_4}"}
+	{exp:airtab:sql_process_friend_invite_member member_id="952" friends_id="1171"}
+	{exp:airtab:sql_process_friend_invite_member member_id="{logged_in_member_id}" friends_id="{segment_4}"}
+--}
+
+{if segment_3 == "airtab"}
+{!--  
+	{exp:airtab:sql_process_friend_invite_member member_id="{segment_4}" friends_id="{logged_in_member_id}"}
+	{/exp:airtab:sql_process_friend_invite_member}
+--}
+	
+	{exp:airtab:process_friend_invite_member id="{segment_4}"}
+	{/exp:airtab:process_friend_invite_member}
+	
+	
+{/if}
+
+{if segment_3 == "remove_friend"}
+	{exp:airtab:remove_friend friend_id="{segment_4}"}
+	{/exp:airtab:remove_friend}	
+{/if}
+
+{if segment_3 == "text"}
+	{exp:airtab:sql_process_friend_invite_text member_id="{logged_in_member_id}" phone="{segment_4}" memberName="{segment_5}" first="{segment_6}"  last="{segment_7}" message="{segment_8}"   }
+	{/exp:airtab:sql_process_friend_invite_text}
+{/if}
+ 			
+{if segment_3 == "email"}
+	{exp:airtab:process_friend_invite_email email="{segment_4}"}
+{/if}
+
+
+
+
+
+
+
+

@@ -1,0 +1,49 @@
+{embed="global/meta" title="AirTab - Contact Us"}
+
+<body>
+
+	{embed="global/header"}
+	
+	<!-- Begin Static -->
+	<section id="contact" class="dynamic container">
+		<!-- Content -->
+		<div class="sixteen columns">
+			{exp:email:contact_form user_recipients="false" recipients="ray@viperss.com" charset="utf-8" return="{homepage}|Home Page"}
+				<h2 class="underline">Contact Us</h2>
+				<p>
+					<label for="from">Your Email:</label><br />
+					<input type="text" id="from" name="from" size="40" maxlength="35" />
+				</p>
+				<p>
+					<label for="subject">Subject:</label><br />
+					<input type="text" id="subject" name="subject" size="40" value="" />
+				</p>
+				<p>
+					<label for="message">Message:</label><br />
+					<textarea id="message" name="message" rows="18" cols="40"></textarea>
+				</p>
+				{if captcha}
+					<p>Please enter the word you see in the image below:</p>
+					<p>{captcha}<br />
+					<input type="text" name="captcha" value="" maxlength="20" /></p>
+				{/if}
+				<p><input name="submit" class="submit_button" type='submit' value='Send Email' /></p>	
+			{/exp:email:contact_form}
+		</div>
+	</section>
+	<!-- End Static -->
+
+
+
+	<!-- Begin Footer -->
+	<footer>
+		<div class="container">
+			<p class="copyright">&copy; 2014 Perfect Vodka. All Rights Reserved. </p>
+		</div>
+	</footer>
+	<!-- End Footer -->
+
+
+</body>
+
+</html>

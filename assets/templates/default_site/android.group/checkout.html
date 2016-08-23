@@ -1,0 +1,97 @@
+<div ng-cloak>
+    <ion-header-bar class="bar bar-header bar-stable">
+      <h1 class="title">Checkout</h1>
+      <button class="button button-clear button-primary" ng-click="$root.hideModal()" id="hideModal">Cancel</button>
+    </ion-header-bar>
+
+    <ion-content scroll="false" padding="true">
+	    {{cart.product.name}}
+		<div id="checkout_form_gateway_fields" class="list">
+			<div class="item item-divider">
+			    Billing Information
+			</div>
+				<label class="item item-input ">
+				    <input type="text" name="first_name" placeholder="First Name" id="first_name" value="{customer_first_name}" required ng-minlength="2" />
+				</label>
+
+				<label class="item item-input ">
+				    <input type="text" name="last_name" placeholder="Last Name" id="last_name" value="{customer_last_name}" required ng-minlength="2" />
+				</label>
+
+				<label class="item item-input ">
+				    <input type="text" name="address" placeholder="Street Address" id="address" value="{customer_address}" required ng-minlength="5" />
+				</label>
+
+				<label class="item item-input ">
+				    <input type="text" name="city" placeholder="City" id="city" value="{customer_city}" required ng-minlength="3" />
+				</label>
+
+				<label class="item item-input item-select">
+				    <div class="input-label">
+				      State
+				    </div>
+				</label>
+
+				<label class="item item-input ">
+				    <input type="text" name="zip" placeholder="Zip Code" id="zip" value="{customer_zip}" required ng-minlength="5" />
+				</label>
+			<div class="item item-divider">
+			    Payment Information
+			</div>
+				<label class="item item-input item-select">
+				    <div class="input-label">
+				      Payment Type
+				    </div>
+				    <select name="card_type"  id="card_type" required>
+							<option value="visa">Visa</option>
+							<option value="mc">Mastercard</option>
+							<option value="amex">American Express</option>
+							<option value="discover">Discover</option>
+						</select>
+				</label>
+
+				<label class="item item-input ">
+				    <input type="text" name="credit_card_number" placeholder="Credit Card Number" id="credit_card_number" ng-pattern="/[0-9]*/" required ng-minlength="12" ng-maxlength="19" pattern="[0-9]*" />
+				</label>
+
+				<label class="item item-input ">
+				    <input type="text" name="CVV2" id="CVV2" value="{customer_CVV2}" placeholder="CVV Number (Back of Card)" ng-pattern="/[0-9]*/" required ng-minlength="3" ng-maxlength="4" pattern="[0-9]*" />
+				</label>
+
+				<label class="item item-input item-select">
+				    <div class="input-label">
+				      Expiration Month
+				    </div>
+				    <select name="expiration_month" id="expiration_month" class="required" required>
+						<option value="01">January</option>
+						<option value="02">February</option>
+						<option value="03">March</option>
+						<option value="04">April</option>
+						<option value="05">May</option>
+						<option value="06">June</option>
+						<option value="07">July</option>
+						<option value="08">August</option>
+						<option value="09">September</option>
+						<option value="10">October</option>
+						<option value="11">November</option>
+						<option value="12">December</option>
+					</select>
+				</label>
+
+				<label class="item item-input item-select">
+				    <div class="input-label">
+				      Expiration Year
+				    </div>
+				</label>
+
+			</div>
+
+			<div class="control-group">
+				    <div class="form-actions">
+				{!-- do not add a name attribute to your submit button if you want it to work with stripe payment gateway --}
+				    <input type="submit" id="checkout_complete" class="button button-block button-assertive"  value="Complete Checkout" ng-click="submitForm($event)" />
+				</div>
+			</div>
+		</div>
+    </ion-content>
+</div>

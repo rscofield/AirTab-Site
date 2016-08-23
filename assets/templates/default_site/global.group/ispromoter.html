@@ -1,0 +1,15 @@
+{if logged_out}
+{ "error":"no results" }
+{if:else}
+	{exp:query sql="SELECT * FROM v_active_promotions WHERE member = {logged_in_member_id}" LIMIT 1}
+		{
+		"promotionID":{promotion},
+		"name":"{name}",
+		"invite_url":"{invitationURL}",
+		"count":{count},
+		"owner":{owner}
+		}
+		{if no_results}{"error":"no results"}{/if}
+	{/exp:query}
+{/if}
+{exp:http_header content_type="application/json"}

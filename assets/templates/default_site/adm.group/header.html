@@ -1,0 +1,23 @@
+	<!-- Begin Header -->
+	<header class="clearfix">
+		<div class="container">
+
+			<!-- Logo -->
+			<div id="logo" class="three columns"><img src="/assets/airtab/img/logo.png" alt=""></div>
+			
+			<!-- Navigation -->
+			<nav id="navigation" class="thirteen columns">
+				<ul class="clearfix">
+					<li class="page_item current_page_item"><a href="/adm/dashboard" title="Home">Home</a></li>	
+					<li class="page_item"><a href="/adm/member">Members</a></li>					
+					<li class="page_item"><a href="/adm/establishment">Establishments</a></li>
+					<li class="page_item"><a href="/adm/bartender">Bartenders</a></li>
+					<li class="page_item"><a href="/adm/drinkmenu/">Drink Menus</a></li>
+					<li class="page_item"><a href="/adm/redemption">Tickets Redeemed</a></li>
+					{if logged_in}  <li><a href="{path='LOGOUT'}">Logout</a></li> {/if}
+					{if logged_out}  <li><a href="/member/login'">Login</a></li> {/if}				
+				</ul>
+			</nav>
+		</div>
+	</header>
+	<!-- End Header -->

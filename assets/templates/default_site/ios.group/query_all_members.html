@@ -1,0 +1,16 @@
+[
+  	{exp:query sql="SELECT * FROM v_members 
+  	    LEFT JOIN v_avatars
+    	ON  (v_avatars.member = v_members.member_id )
+    	GROUP BY v_members.member_id
+  	    ORDER BY username LIMIT 5000" }
+  	
+	    {"airtab_usrname": "{username}", "phone": "{Phone}", "first": "{First}", "last": "{Last}", "member_id": "{member_id}", "image": "{filename}"  },  
+		{if no_results}You do not currently have any AirTab friends. Try adding some!{/if}
+		{/exp:query}
+		
+	    {"airtab_usrname": "--", "phone": "--", "first": "--", "last": "--", "member_id": "--", "image": "--"  }
+		
+]	
+
+{exp:http_header content_type="application/json"}

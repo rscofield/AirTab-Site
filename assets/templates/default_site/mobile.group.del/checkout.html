@@ -1,0 +1,152 @@
+{if logged_in}
+{preload_replace:template_group="store"}
+{preload_replace:template="index"}
+
+<ion-view title="Payment Information">
+	<ion-nav-buttons side="right">
+      <button class="button button-icon button-clear ion-navicon" ng-click="showMenu()"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" padding="true" ng-init="hideNav()">
+					<div ng-controller="checkoutController" ng-init="addModels()">
+					{if "{exp:cartthrob:total_items_count}" > 0}
+								
+						{exp:cartthrob:checkout_form
+								class="form_checkout"
+								name="form_checkout"
+								create_user="no" group_id="5"}
+ 
+								{!-- the next part handles inline errors. the error_handling=inline parameter is set
+									so standard error messages will not be shown
+									 --}
+								{if errors_exist}
+								<div class="control-group">
+									{!-- not a fan of inline JS, but the if_errors conditional works only inside the checkout form 
+										so if you want to use JS, you'll need to use inline JS.
+										--}
+									<script type="text/javascript">
+										jQuery(document).ready(function($){
+								 			{errors}
+												{if field_error}
+													$("#{field}").closest(".control-group").addClass("error");
+													$("#{field}").after('<span class="help-inline">{error}</span>');
+												{/if} 
+											{/errors}
+										});
+									</script>
+									{errors}
+										{if first_error}
+										<div class="alert alert-error">
+										<strong>Alert</strong> There are <span class="badge badge-warning">{error:total_results}</span> error(s). Please correct the errors listed below
+										</div>
+										{/if}
+											
+											<p>
+												{if field_error}<span class="label label-important">{field}</span>{/if} 
+												{if global_error}<span class="label label-important">Error</span>{/if} 
+												{error}
+											</p>
+ 									{/errors}
+									
+								</div>
+								{/if}
+							{if {exp:cartthrob:view_setting allow_gateway_selection="yes"}}
+							
+							{!-- note: stripe payment gateway does not work well with this gateway switching method
+								stripe adds its own JS after the form close, and even when changing the gateway, this JS 
+								is not removed, which can lead to erroneous error messages. 
+								--}
+								<div class="control-group">
+							 		<label for="gateway" class="control-label">Select a payment method</label>
+								    <div class="controls">
+										{exp:cartthrob:customer_info}{exp:cartthrob:gateway_select id="gateway" selected="{gateway}"}{/exp:cartthrob:customer_info} 
+									</div>
+			 					</div>
+							{/if}
+
+							<div id="checkout_form_gateway_fields" class="list">
+								<div class="item item-divider">
+								    Payment Information
+								</div>
+									<label class="item item-input item-select">
+									    <div class="input-label">
+									      Payment Type
+									    </div>
+									    <select name="card_type"  id="card_type">
+												<option value="visa">Visa</option>
+												<option value="mc">Mastercard</option>
+												<option value="amex">American Express</option>
+												<option value="discover">Discover</option>
+											</select>
+									</label>
+
+									<label class="item item-input ">
+									    <input type="text" name="credit_card_number" placeholder="Credit Card Number" id="credit_card_number" ng-pattern="/[0-9]*/" required ng-minlength="12" ng-maxlength="19" pattern="[0-9]*" />
+									</label>
+
+									<label class="item item-input ">
+									    <input type="text" name="CVV2" id="CVV2" placeholder="CVV Number (Back of Card)" ng-pattern="/[0-9]*/" required ng-minlength="3" ng-maxlength="4" pattern="[0-9]*" />
+									</label>
+
+									<label class="item item-input item-select">
+									    <div class="input-label">
+									      Expiration Month
+									    </div>
+									    <select name="expiration_month"  id="expiration_month" class="required">
+											<option value="01">January</option>
+											<option value="02">February</option>
+											<option value="03">March</option>
+											<option value="04">April</option>
+											<option value="05">May</option>
+											<option value="06">June</option>
+											<option value="07">July</option>
+											<option value="08">August</option>
+											<option value="09">September</option>
+											<option value="10">October</option>
+											<option value="11">November</option>
+											<option value="12">December</option>
+										</select>
+									</label>
+
+									<label class="item item-input item-select">
+									    <div class="input-label">
+									      Expiration Year
+									    </div>
+									    <select name="expiration_year"  id="expiration_year" class="required">
+											<option value="2014">2014</option>
+											<option value="2015">2015</option>
+											<option value="2016">2016</option>
+											<option value="2017">2017</option>
+											<option value="2018">2018</option>
+											<option value="2019">2019</option>
+											<option value="2020">2020</option>
+											<option value="2021">2021</option>
+											<option value="2022">2022</option>
+											<option value="2023">2023</option>
+										</select>
+									</label>
+
+							</div>
+
+							<div class="control-group">
+	 						    <div class="form-actions">
+								{!-- do not add a name attribute to your submit button if you want it to work with stripe payment gateway --}
+								    <input type="submit" id="checkout_complete" class="button button-block button-assertive"  value="Complete Checkout" ng-click="submitForm($event)" ng-disabled="!canSubmit()" />
+								</div>
+		 					</div>
+		 					<input type="hidden" name="order_recipient_id" value="<?=substr(ee()->uri->segment(3), 32)?>">
+		 					<input type="hidden" name="order_recipient_type" value="{segment_4}">
+		 					<input type="hidden" name="description" value="Send a drink to {embed="payment/recipient" member_id="<?=substr(ee()->uri->segment(3), 32)?>"} (<?=substr(ee()->uri->segment(3), 32)?>)">
+	 					{/exp:cartthrob:checkout_form}
+	 					<checkoutform>Loading Form...</checkoutform>
+	 			{if:else}	
+	 					<h1>Checkout</h1>
+						 <p>You have no items in your cart. </p>
+						<a href="{path={template_group}}" class="button button-block button-assertive">Continue shopping.</a> 
+				{/if}
+				</div>
+    </ion-content>
+</ion-view>	
+
+{if:else}
+	<iframe src="airtab:notLoggedIn" style="display:none">
+{/if}

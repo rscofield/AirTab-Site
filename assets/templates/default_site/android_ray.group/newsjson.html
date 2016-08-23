@@ -1,0 +1,71 @@
+{exp:airtab:log_page_load}
+[
+        {exp:channel:entries channel="est_news" orderby="random" search:news_ispinned="= Yes"}
+            {
+                "id": "{entry_id}",
+                {if news_isevent=="event"}
+                "is_event": "yes",
+                "event_id": "{news_event:entry_id}",
+                {if:else}
+                "is_event": "no",
+                "event_id": "",
+                {/if}
+                "estId": "{news_establishment:entry_id}",
+                "type": "{est_news_type}",
+                "title": "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{exp:mah_eencode decode="yes"}{news_establishment:title}{/exp:mah_eencode}{/exp:low_replace}",
+                "est_photo": "{news_establishment:photo_large}",
+                "latitude": "{news_establishment:latitude}",
+                "longitude": "{news_establishment:longitude}",
+                "address": "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{news_establishment:address}{/exp:low_replace}",
+                "city": "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{news_establishment:city}{/exp:low_replace}",
+                "zip": "{news_establishment:zip}",
+                "state": "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{news_establishment:state}{/exp:low_replace}",
+                "content": "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|\\n" multiple="yes"}{news_content}{/exp:low_replace}",
+                "image": "{news_establishment:est_photo:iphone5}",
+                {if est_news_type == "full_banner"}
+                "banner": "{banner_image:iphone5}?v=1",
+                {if:else}
+                "banner": "",
+                {/if}
+                "content_type": "{est_news_content_type}",
+                "content_banner": "{est_news_content_banner}",
+                "starts": "{entry_date format="%D, %F %d, %Y - %h:%i %A"}",
+                "ends": "{expiration_date format="%D, %F %d, %Y - %h:%i %A"}"
+            },
+        {/exp:channel:entries}
+        {exp:channel:entries channel="est_news" orderby="random" limit="10" search:news_ispinned="=not Yes"}
+            {
+                "id": "{entry_id}",
+                {if news_isevent=="event"}
+                "is_event": "yes",
+                "event_id": "{news_event:entry_id}",
+                {if:else}
+                "is_event": "no",
+                "event_id": "",
+                {/if}
+                "estId": "{news_establishment:entry_id}",
+                "type": "{est_news_type}",
+                "title": "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{exp:mah_eencode decode="yes"}{news_establishment:title}{/exp:mah_eencode}{/exp:low_replace}",
+                "est_photo": "{news_establishment:photo_large}",
+                "latitude": "{news_establishment:latitude}",
+                "longitude": "{news_establishment:longitude}",
+                "address": "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{news_establishment:address}{/exp:low_replace}",
+                "city": "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{news_establishment:city}{/exp:low_replace}",
+                "zip": "{news_establishment:zip}",
+                "state": "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{news_establishment:state}{/exp:low_replace}",
+                "content": "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|\\n" multiple="yes"}{news_content}{/exp:low_replace}",
+                "image": "{news_establishment:est_photo:iphone5}",
+                {if est_news_type == "full_banner"}
+                "banner": "{banner_image:iphone5}?v=1",
+                {if:else}
+                "banner": "",
+                {/if}
+                "content_type": "{est_news_content_type}",
+                "content_banner": "{est_news_content_banner}",
+                "starts": "{entry_date format="%D, %F %d, %Y - %h:%i %A"}",
+                "ends": "{expiration_date format="%D, %F %d, %Y - %h:%i %A"}"
+            }{if count != total_results},{/if}
+        {/exp:channel:entries}
+]
+
+{exp:http_header content_type="application/json"}

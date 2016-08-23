@@ -1,0 +1,25 @@
+
+{!--  establishment news block    --}
+
+{exp:channel:entries channel="est_news"  return="/establishment/news/{segment_3}" entry_id="{segment_3}"}
+<div class="page" id="estNews" data-ng-controller="SubmitCtrl">
+
+    <section class="panel panel-default">
+        <div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span> {title}</strong></div>
+        <div class="panel-body">
+        
+			<h2>{title}</h2>
+			{if est_news_type == "full_banner"}
+				{banner_image}
+				<img src="/uploads/news_banners/{file_name}" width="960" height="480"/>
+				{/banner_image}					
+			{/if}				
+			<br />
+			{news_content}
+
+        </div>
+    </section> 
+
+</div>
+
+{/exp:channel:entries}

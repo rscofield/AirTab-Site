@@ -1,0 +1,66 @@
+{exp:airtab:log_page_load}
+<div ng-cloak>
+{if segment_3 == "senddrink"}
+<ion-view title="Send A Drink" ng-init="hideLoading()">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" padding="true" id="sendDrinkContacts">
+		  <div class="card">
+        <div class="item item-text-wrap">
+          <h1 center style="font-size:16pt">Why Join AirTab?</h1>
+          <h2 center>As an AirTab member, this area would allow you to send drinks to all of your friends.</h2>
+        </div>
+      </div>
+      <button class="button button-block button-assertive" ng-click="$root.login();">Log in / Register</button>
+    </ion-content>
+</ion-view>
+{/if}
+
+{if segment_3 == "mydrinks"}
+<ion-view title="My Drinks" ng-init="hideLoading()">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" padding="true" id="sendDrinkContacts">
+		<div class="card">
+	        <div class="item item-text-wrap">
+	          <h1 center style="font-size:16pt">Why Join AirTab?</h1>
+	          <h2 center>As an AirTab member, this area would display a list of all the drinks sent to you by your friends.</h2>
+	        </div>
+     	</div>
+    	<button class="button button-block button-assertive" ng-click="$root.login();">Log in / Register</button>
+    </ion-content>
+</ion-view>
+{/if}
+
+{if segment_3 == "friends"}
+<ion-view title="My Friends" ng-init="hideLoading()">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" padding="true" id="sendDrinkContacts">
+		  <div class="card">
+        <div class="item item-text-wrap">
+          <h1 center style="font-size:16pt">Why Join AirTab?</h1>
+          <h2 center>As an AirTab member, this area would show you a list of your friends on AirTab.</h2>
+        </div>
+      </div>
+      <button class="button button-block button-assertive" ng-click="$root.login();">Log in / Register</button>
+    </ion-content>
+</ion-view>
+{/if}
+
+{if segment_3 == "messages"}
+<ion-view title="My Messages" ng-init="hideLoading()">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" padding="true" id="sendDrinkContacts">
+		<div>Messages</div>
+		<button class="button button-block button-assertive" ng-click="$root.login();">Log in / Register</button>
+    </ion-content>
+</ion-view>
+{/if}
+
+</div>

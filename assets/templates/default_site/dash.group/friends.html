@@ -1,0 +1,61 @@
+<div class="page">
+
+	<section class="panel panel-default">
+		<div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span> 
+		{if segment_3 == 'myfriends'}Your AirTab Friends
+		{if:elseif segment_3 == 'invitations'}Your Pending Friend Invitations
+		{if:elseif segment_3 == 'invite'}Invite A Friend
+		{/if}
+		
+		</strong></div>
+		<div class="panel-body">
+        
+			{!--  Member dashboard, drinks  --}
+
+			{if segment_3 == 'myfriends' }
+				{exp:query sql="SELECT * FROM v_friends WHERE sender_id='{logged_in_member_id}' or friend_id='{logged_in_member_id}'"}
+					<div class="row">
+						{if sender_id == {logged_in_member_id}}
+							<div class="col-sm-3">
+								{friend_screen_name}
+							</div>
+							<div class="col-sm-3">
+								{friend_email}
+							</div>
+						{if:else}
+							<div class="col-sm-3">
+								{sender_screen_name}
+							</div>
+							<div class="col-sm-3">
+								{sender_email}
+							</div>						
+						{/if}
+					</div>
+				{/exp:query}	
+
+			{if:elseif segment_3 == 'invitations'}
+			
+				{exp:channel:entries channel="friends" status="Pending Approval" search:sender_id="{logged_in_member_id}"}
+					<div class="row">
+						{exp:member:custom_profile_data member_id="{friend_id}"}
+							<div class="col-sm-2">
+								{screen_name}
+							</div>
+							<div class="col-sm-2">
+								{email}
+							</div>
+						{/exp:member:custom_profile_data}							
+					</div>
+				{/exp:channel:entries}	
+				
+			{if:elseif segment_3 == 'invite'}
+			
+
+			
+			{/if}
+				
+		</div>
+		</div>
+	</section> 
+
+</div>

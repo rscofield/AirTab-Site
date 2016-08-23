@@ -1,0 +1,7 @@
+{exp:channel:entries channel="orders" search:order_transaction_id = "{segment_4}" dynamic="no" limit="1" status="Completed"}
+	{exp:cartthrob:order_items order_id="{entry_id}" }
+		{exp:airtab:senddrink type="{segment_3}" recipient="{order_recipient_id}" drinkType="{item:product_type}" order_id="{order_id}" transaction_id="{segment_4}"}
+			{json}
+		{/exp:airtab:senddrink}
+	{/exp:cartthrob:order_items}
+{/exp:channel:entries}

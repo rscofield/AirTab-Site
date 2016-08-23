@@ -1,0 +1,63 @@
+{embed="global/meta" title="AirTab - Login"}
+
+<body>
+
+	{embed="global/header"}
+
+
+	<!-- Begin Static -->
+	<section id="section1" class="static container" style="height:600px !important;">
+
+		<!-- Content -->
+		<div class="sixteen columns offset-by-six">
+		{if logged_in}
+			<h2>You are already logged in!</h2>
+		{if:else}
+			<h2>Login</h2>
+			{exp:member:login_form return="/dashboard"}
+        <p>
+                <label>Username</label><br>
+                <input type="text" name="username" value="" maxlength="32" size="25">
+        </p>
+        <p>
+                <label>Password</label><br>
+                <input type="password" name="password" value="" maxlength="32" size="25">
+        </p>
+        {if auto_login}
+                <p><input type="checkbox" name="auto_login" value="1"> Auto-login on future visits</p>
+        {/if}
+
+        <p><input type="checkbox" name="anon" value="1" checked="checked"> Show my name in the online users list</p>
+        <p><input type="submit" name="submit" value="Submit"></p>
+        <p><a href="{path='member/forgot_password'}">Forgot your password?</a></p>
+				<p>Not an AirTab member? <a href="/register">Register now!</a></p>
+{/exp:member:login_form}
+		{/if}
+		</div>
+		<div class="clear">
+	</section>
+	<!-- End Static -->
+
+	<!-- Begin Footer -->
+	<footer>
+		<div class="container">
+			<p class="copyright">&copy; 2014 Software Development Associates. All Rights Reserved.</p>
+		</div>
+	</footer>
+	<!-- End Footer -->
+
+		<script src="/assets/airtab/js/libs/prototype.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/assets/airtab/js/libs/scriptaculous.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/assets/airtab/js/libs/sizzle.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/assets/airtab/js/smoothscroll.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/assets/airtab/js/jquery.easing.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/assets/airtab/js/jquery.scrollto.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/assets/airtab/js/jquery.localscroll.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/assets/airtab/js/jquery.bxslider.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/assets/airtab/js/waypoints.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/assets/airtab/js/loupe.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/assets/airtab/js/notifications.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/assets/airtab/js/init.js" type="text/javascript" charset="utf-8"></script>
+</body>
+
+</html>

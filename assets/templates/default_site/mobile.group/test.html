@@ -1,0 +1,31 @@
+<div class="page">
+	<div class="panel panel-success">
+
+
+	{exp:query sql="SELECT * FROM v_invites WHERE title='{segment_3}' Limit 1"}
+
+		{if invite_type == "Drink"}
+			    <div class="panel-heading">
+			        <h3 class="panel-title">Drink Accepted!</h3>
+			    </div>
+			    <div class="panel-body">
+			        You have successfully accepted the drink sent by {sender_username}.
+							<br /><br />
+							This drink will now appear in the My Drinks section in your AirTab App for you to redeem at your convenience.
+			    </div>				
+		{if:else}
+			    <div class="panel-heading">
+			        <h3 class="panel-title">Friend Request Accepted!</h3>
+			    </div>
+			    <div class="panel-body">
+			        You have successfully accepted the friend reqeest from {sender_username}.
+							<br /><br />
+							{sender_username} will now appear in the My Friends section in your AirTab App.
+			    </div>				
+		{/if}
+
+	{/exp:query}
+
+
+	</div>
+</div>

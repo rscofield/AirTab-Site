@@ -1,0 +1,21 @@
+{if logged_out}
+{}
+{if:else}
+	[
+		{exp:query sql="SELECT * FROM v_messaging_threads WHERE user_id = {logged_in_member_id} AND status = 1"}
+		    {
+		    	"thread_id": "{thread_id}",
+		    	"user_thread_id": "{user_thread_id}",
+		    	"participants": {embed="messaging/participants" thread="{thread_id}"},
+		    	"last_message": "{if last_message_user_id == {logged_in_member_id}}You{if:else}{if last_message_first AND last_message_last}{last_message_first} {last_message_last}{if:else}{last_message_username}{/if}{/if}: {last_message}",
+		    	{if "{current_time format="%n/%j/%y"}" == "{last_message_created format="%n/%j/%y"}"}
+		    		"last_message_time": "{last_message_created format="%g:%i %A"}"
+		    	{if:else}
+		    		"last_message_time": "{last_message_created format="%n/%j/%y"}"
+		    	{/if}
+		    }{if count < total_results},{/if}
+		    {if no_results}{}{/if}
+		{/exp:query}
+	]
+{/if}
+{exp:http_header content_type="application/json"}

@@ -1,0 +1,17 @@
+{exp:airtab:log_page_load}
+{if segment_3 != "" AND segment_4 != ""}
+[
+        {exp:low_search:results channel="est_news" distance:from="{segment_3}|{segment_4}" distance:to="news_latitude|news_longitude" distance:radius="{segment_5}" distance:unit="mi" limit:"25"}
+            {
+                "id": "{entry_id}",
+								"title": "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{exp:mah_eencode decode="yes"}{news_establishment:title}{/exp:mah_eencode}{/exp:low_replace}",
+								"distance": {low_search_distance},
+                "banner": "{banner_image:iphone5}?v=1"
+            }{if count != total_results},{/if}
+        {/exp:low_search:results}
+]
+
+{exp:http_header content_type="application/json"}
+{if:else}
+
+{/if}

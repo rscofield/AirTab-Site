@@ -1,0 +1,22 @@
+{exp:airtab:log_page_load}
+<div ng-cloak>
+<div class="modal" id="modalWindow" ng-controller="SenddrinkCtrl">
+  <ion-header-bar class="bar bar-header bar-stable">
+    <h1 class="title">Checkout</h1>
+    <button class="button button-clear button-primary" ng-click="hideModal()" id="hideModal">Cancel</button>
+  </ion-header-bar>
+{exp:airtab:has_promo_rights}
+
+  <ion-content scroll="false">
+    <iframe src="#/promo/{segment_3}/{segment_4}/{segment_5}/{remaining}" frameborder="0" style="overflow:hidden;min-height:100%;width:100%" height="100%" width="100%"></iframe>
+  </ion-content>
+
+{if no_results}
+  <ion-content scroll="false">
+    <iframe src="#/payment/{segment_3}/{segment_4}/{segment_5}" frameborder="0" style="overflow:hidden;min-height:100%;width:100%" height="100%" width="100%"></iframe>
+  </ion-content>
+{/if}
+{/exp:airtab:has_promo_rights}
+
+</div>
+</div>

@@ -1,0 +1,6 @@
+<?php
+ee()->session->destroy();
+	echo json_encode(array("status"=>"success", "msg"=>"Successfully logged user out."));
+?>
+{exp:airtab:log_page_load}
+{exp:http_header content_type="application/json"}

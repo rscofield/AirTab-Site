@@ -1,0 +1,66 @@
+<?php
+        $id = $_GET['id']; // Friend ID
+        $msg = $_GET['message'];
+
+        //return "test";
+
+        if($id && $msg) {
+            $results = ee()->db->limit(1)
+                ->where('member_id', $id)
+                ->get('member_data');
+            
+            $deviceToken = $results->row('m_field_id_5');
+
+            if(!$deviceToken) echo "Error";
+            
+            // My private key's passphrase here:
+            $passphrase = 'pw4airtabdev';
+            
+            // My alert message here:
+            $message = $msg;
+            
+            //badge
+            $badge = 1;
+            
+            $ctx = stream_context_create();
+            stream_context_set_option($ctx, 'ssl', 'local_cert', '/var/www/vhosts/airtab.me/httpdocs/push/apns-dev.pem');
+            stream_context_set_option($ctx, 'ssl', 'passphrase', $passphrase);
+            
+            // Open a connection to the APNS server
+            $fp = stream_socket_client(
+                    'ssl://gateway.sandbox.push.apple.com:2195', $err,
+                    $errstr, 60, STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, $ctx);
+            
+            if (!$fp) echo "error, no stream";
+            //exit("Failed to connect: $err $errstr" . PHP_EOL);
+            
+            //echo 'Connected to APNS' . PHP_EOL;
+            
+            // Create the payload body
+            $body['aps'] = array(
+                    'alert' => $message,
+                    //'badge' => $badge,
+                    'sound' => "glass-clink-2.aiff"
+            );
+            
+            // Encode the payload as JSON
+            $payload = json_encode($body);
+            
+            // Build the binary notification
+            $msg = chr(0) . pack('n', 32) . pack('H*', $deviceToken) . pack('n', strlen($payload)) . $payload;
+            
+            // Send it to the server
+            $result = fwrite($fp, $msg, strlen($msg));
+            
+            if (!$result) {
+                echo "error sending notification";
+            } else {
+                echo "success";
+            }
+            
+            // Close the connection to the server
+            fclose($fp);
+        }
+
+        echo "didnt send";
+?>

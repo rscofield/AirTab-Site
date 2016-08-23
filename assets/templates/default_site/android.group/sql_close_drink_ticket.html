@@ -1,0 +1,21 @@
+{!--  
+     Author: John W. Blaine
+     File Name: sql_close_drink_ticket.html
+     Date: 01/05/2015
+     
+     Description :  
+{exp:airtab:sql_close_drink_ticket ticket_id="{segment_3}" }
+{exp:airtab:sql_close_drink_ticket ticket_id="promoticket-1422544376952" }
+{/exp:airtab:sql_close_drink_ticket}
+ $sql = "UPDATE v_drink_ticket_fields SET v_drink_ticket_fields.status = 'closed' WHERE v_drink_ticket_fields.title = '$ticket_id' ";                   
+
+--}
+
+
+{exp:airtab:sql_close_drink_ticket ticket_id="{segment_3}" }
+{/exp:airtab:sql_close_drink_ticket}
+
+
+
+  			
+  	

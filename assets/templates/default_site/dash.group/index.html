@@ -1,0 +1,123 @@
+{if logged_out}
+	{embed="dash/login" return="{current_path}" redirect="yes"}
+{if:else}
+    <!-- check if bar group member (group id = 6) and default dashboard to first establihment linked -->
+		{if group_id == 6}
+					{exp:query sql="SELECT * FROM v_establishment WHERE member_id = '{logged_in_member_id}' Limit 1"}
+					{if total_results == 1}
+						<script type="text/javascript">
+							window.location = "#/establishment/{entry_id}";
+						</script>
+					{/if}
+					{/exp:query}
+		{/if}
+{exp:airtab:log_page_load}
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+<div class="page">
+
+	<section class="panel panel-default">
+		<div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span> Member Dashboard</strong></div>
+		<div class="panel-body">
+
+			{!--  Member dashboard  --}
+			<div class="grid-structure">
+			<div class="row">
+				<div class="col-sm-9">
+				
+					<div class="grid-structure">
+						<div class="row" style="height:300px">
+							{if group_id == 6}
+								{exp:channel:entries channel="site_static_pages" url_title="bar-dashboard" limit="1"}
+									{page_body}
+								{/exp:channel:entries}	
+							{if:else}
+								{exp:channel:entries channel="site_static_pages" url_title="member-dashboard" limit="1"}
+									{page_body}
+								{/exp:channel:entries}								
+							{/if}
+						</div>
+						<div class="row">
+							<div class="col-sm-4">
+								<div class="panel panel-info"  style="height:460px">
+									{exp:channel:entries channel="site_static_pages" category="9" orderby="random" limit="1"}
+										<div class="panel-heading">
+											<h3 class="panel-title">{title}</h3>
+										</div>
+										<div class="panel-body">
+											{page_body}
+										</div>
+									{/exp:channel:entries}	
+								</div>								
+							</div>
+							<div class="col-sm-4">
+								<div class="panel panel-info"  style="height:460px">
+									<div class="panel-heading">
+										<h3 class="panel-title">Register Establishment</h3>
+									</div>
+									<div class="panel-body" style="height:45%">
+										Know a bar or restaurant you would like to see join AirTab?
+								    </div>
+									<hl>
+									<div class="panel-body" style="height:45%">
+										Are you the owner or manager of a bar or restaurant you would like to see AirTab friendly?
+								    </div>
+								</div>									
+							</div>
+							<div class="col-sm-4">
+								<div class="panel panel-info"  style="height:460px">
+									<div class="panel-heading">
+										<h3 class="panel-title">Find us on Facebook</h3>
+									</div>
+									<div class="panel-body">
+										<div class="fb-like-box" data-href="https://www.facebook.com/airtabapp" data-colorscheme="light" data-show-faces="false" data-header="false" data-stream="true" data-show-border="false"></div>
+								   </div>
+								</div>	
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<div class="col-sm-3">
+			
+					<div class="panel panel-dark">
+						<div class="panel-heading">
+							<h3 class="panel-title">News & Events</h3>
+						</div>
+						<div class="panel-body">
+		
+							{exp:channel:entries channel="est_news" orderby="random" limit="3"}
+								<div class="panel panel-info">
+									<div class="panel-heading">
+										<h3 class="panel-title"><a href="#/events/{entry_id}">{title}</a></h3>
+									</div>
+									<div class="panel-body">
+										{if est_news_type == "full_banner"}
+											{banner_image}
+											<img src="/uploads/news_banners/{file_name}" height="120" class="col-sm-12"/>
+											{/banner_image}
+										{if:else}
+											<br /><br />
+											{news_content}
+										{/if}				
+								   </div>
+								</div>	
+							{/exp:channel:entries}	
+
+						</div>
+					</div>					
+				</div>
+			</div>
+			</div>
+		</div>
+	</section> 
+
+</div>
+{/if}

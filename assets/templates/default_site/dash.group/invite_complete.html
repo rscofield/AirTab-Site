@@ -1,0 +1,347 @@
+{exp:airtab:log_page_load}
+<?php
+	$error = null;
+
+	if(handle_invite($this)) {
+		goto output;
+	} else {
+		goto error;
+	}
+
+	function handle_invite($t)
+	{
+		if(!ee()->session->userdata('member_id')) {
+			$t->error['message'] = "You are not logged in. Please login and try again.";
+			return false;
+		}
+
+		$m              = get_member_data(ee()->session->userdata('member_id'));
+		$m['invite_id'] = ee()->uri->segment(3);
+		$member_id = ee()->session->userdata('member_id');
+		
+		if ($m['invite_id'] != "") {
+			$results = ee()->db->select('*')->from('channel_titles')->where(array("title"=>$m['invite_id']))->get();
+			
+			if ($results->num_rows() > 0) {
+				if($results->row("status") == "Accepted") {
+					$t->error['message'] = "That invitation has already been accepted.";
+					return false;
+				}
+				if(!update_invite($results->row('entry_id'), $member_id, $t)) return false; //Change Invite to Accepted and add new user's ID
+				if(!update_friends($results->row('entry_id'), $member_id, $m, $t)) return false; // Add User As Friend
+				if(!update_tickets($results->row('entry_id'), $member_id, $m, $t)) return false;
+
+				return true;
+			} else {
+				$t->error['message'] = "No invitation with that ID was found.";
+				return false;
+			}
+		} else {
+			$t->error['message'] = "You did not specify an invitation id.";
+			return false;
+		}
+	}
+
+	function update_tickets($id, $member_id, $m, $t) {
+
+		$invite = ee()->db->select('*')->from('channel_data')->where(array('entry_id'=>$id, 'field_id_146'=>"Drink" ))->limit(1)->get();
+        
+		if ($invite->num_rows() > 0) {
+			//This is a drink invite
+
+			ee()->db->update(
+			    'channel_data',
+			    array(
+			        'field_id_16'  => $member_id,		//redeem_member
+			        'field_id_145' => "Member ID"		//recipient_type
+			    ),
+			    array(
+			        'field_id_46' => $m['invite_id'] 	//tck_invitation_id
+			    )
+			);
+
+			if(ee()->db->affected_rows() == 0) {
+				$t->error['message'] = "Invitation was not successfully accepted. Unable to update drink ticket with your member ID. Please contact AirTab support.";
+				return false;
+			}
+
+		}
+		return true;
+	}
+	
+	//Update the invitation channel to reflect the registration
+	function update_invite($id, $member_id, $t)
+	{
+		$invite = ee()->db->select('field_id_51 AS member_id, field_id_53 AS sender_id, field_id_50 AS email, field_id_54 AS phone')->from('channel_data')->where(array("entry_id"=>$id))->limit(1)->get();
+        
+		if ($invite->num_rows() > 0) {
+			if($invite->row("member_id") != $member_id) {
+				//Add new member's id to the invite for tracking purposes
+				ee()->db->update(
+				    'channel_data',
+				    array(
+				        'field_id_51'  => $member_id		//inv_member_id
+				    ),
+				    array(
+				        'entry_id' => $id
+				    )
+				);
+
+				if(ee()->db->affected_rows() == 0) {
+					$t->error['message'] = "Invitation was not successfully accepted. Unable to update invitation with your member id.";
+					return false;
+				}
+			}
+		}
+		
+		//Update Status
+		ee()->db->update(
+		    'channel_titles',
+		    array(
+		        'status'  => "Accepted"
+		    ),
+		    array(
+		        'entry_id' => $id
+		    )
+		);
+
+		if(ee()->db->affected_rows() == 0) {
+			$t->error['message'] = "Invitation was not successfully accepted. Unable to update invitation status to accepted.";
+			return false;
+		}
+		
+		//Update phone in member data
+		/*
+		ee()->db->update(
+		    'member_data',
+		    array(
+		        'm_field_id_3'  => $invite->row("phone")
+		    ),
+		    array(
+		        'entry_id' 			=> $member_id,
+						'm_field_id_3' 	=> NULL
+		    )
+		);
+		*/
+		return true;
+	}
+	
+	// Make the two members friends, and then search for additional invites to the member and create requests
+	function update_friends($id, $member_id, $m, $t)
+	{
+		$invite = ee()->db->select('field_id_51 AS member_id, field_id_53 AS sender_id, field_id_50 AS email, field_id_54 AS phone')->from('channel_data')->where(array("entry_id"=>$id))->limit(1)->get();
+        
+		if ($invite->num_rows() > 0) {
+
+			//Check if already friends
+			if( ee()->db->select('entry_id')->from('channel_data')->where(array("field_id_31"=>$member_id, "field_id_55" => $invite->row("sender_id")))->limit(1)->get()->num_rows() == 0 && ee()->db->select('entry_id')->from('channel_data')->where(array("field_id_55"=>$member_id, "field_id_31" => $invite->row("sender_id")))->limit(1)->get()->num_rows() == 0) {
+
+				//add friend
+				ee()->load->library('api');
+				ee()->api->instantiate('channel_entries');
+				
+				//Add inviter to invitee's friends
+				$data = array(
+				    'title'         => "fnd" . time() . $invite->row('sender_id'),
+				    'field_id_31'   => $member_id,
+				    'field_id_55'	=> $invite->row('sender_id'),
+				    'status'		=> "Approved"
+				);
+				
+				if(ee()->api_channel_entries->save_entry($data, 6) === FALSE) {
+					$t->error['message'] = "The invitation was accepted, however, the sender was not added as a friend.";
+					return false;
+				}
+
+			}
+		}
+
+		//notify($invite->row('sender_id'), $m);
+
+		return true;
+		
+		//find_related($id, $member_id, $m);
+		
+	}
+	
+	
+	// Search for invites to this user that were sent by other members. Create friend requests
+	function find_related($id, $member_id, $m) {
+		
+	}
+	
+	function notify($id, $m) {
+
+		$results = ee()->db->limit(1)
+		->where('member_id', $id)
+		->get('member_data');
+	
+		$deviceToken = $results->row('m_field_id_5');
+		
+		if($deviceToken != "") {
+			$passphrase = 'pw4airtabdev';
+			
+			// My alert message here:
+			$message = $m['username'] . " accepted your invitation! They have been added to your friends.";
+			
+			//badge
+			$badge = 1;
+			
+			$ctx = stream_context_create();
+			stream_context_set_option($ctx, 'ssl', 'local_cert', '/var/www/vhosts/airtab.me/httpdocs/push/apns-dev.pem');
+			stream_context_set_option($ctx, 'ssl', 'passphrase', $passphrase);
+			
+			// Open a connection to the APNS server
+			$fp = stream_socket_client(
+			    'ssl://gateway.sandbox.push.apple.com:2195', $err,
+			    $errstr, 60, STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, $ctx);
+			
+			if (!$fp)
+			exit("Failed to connect: $err $errstr" . PHP_EOL);
+			
+			//echo 'Connected to APNS' . PHP_EOL;
+			
+			// Create the payload body
+			$body['aps'] = array(
+			    'alert' => $message,
+			    //'badge' => $badge,
+			    'sound' => "glass-clink-2.aiff"
+			);
+			
+			// Encode the payload as JSON
+			$payload = json_encode($body);
+			
+			// Build the binary notification
+			$msg = chr(0) . pack('n', 32) . pack('H*', $deviceToken) . pack('n', strlen($payload)) . $payload;
+			
+			// Send it to the server
+			$result = fwrite($fp, $msg, strlen($msg));
+			
+			if (!$result) {
+			    //echo 'Error, notification not sent' . PHP_EOL;
+			} else {
+			    //echo 'notification sent!' . PHP_EOL;
+			}
+			
+			// Close the connection to the server
+			fclose($fp);
+		}
+	}
+	
+	function get_member_data($member_id)
+	{
+		// I want to pull all possible information I can about this user now including
+		// custom fields.
+		$member_fields = array();
+		$sql           = 'SELECT
+        m_field_id
+        , m_field_name as field_name
+        , m_field_label as field_label
+        , m_field_description as field_description
+      FROM exp_member_fields
+      WHERE m_field_reg = \'y\'
+      ORDER BY m_field_order ASC';
+		$result        = ee()->db->query($sql);
+		if ($result->num_rows() > 0) {
+			foreach ($result->result_array() as $row) {
+				$id = intval($row['m_field_id']);
+				unset($row['m_field_id']);
+				$member_fields['m_field_id_' . $id] = $row;
+			}
+		}
+		
+		$member_data = array();
+		$sql         = 'SELECT DISTINCT
+      exp_members.group_id
+      , exp_members.username
+      , exp_members.screen_name
+      , exp_members.email
+      , exp_members.url
+      , exp_members.location
+      , exp_members.ip_address
+      , exp_members.join_date
+      , exp_members.language
+      , exp_members.time_format
+      , exp_members.timezone
+      , exp_member_groups.group_title
+      , exp_member_groups.group_description
+      , exp_member_data.*
+    FROM exp_members
+    INNER JOIN exp_member_groups ON exp_member_groups.group_id = exp_members.group_id
+    INNER JOIN exp_member_data ON exp_member_data.member_id = exp_members.member_id
+    WHERE exp_members.member_id = \'' . $member_id . '\'';
+		$result      = ee()->db->query($sql);
+		if ($result->num_rows() > 0) {
+			$member_data = $result->result_array();
+			$member_data = $member_data[0];
+		}
+		foreach ($member_fields as $field => $ar) {
+			if (isset($member_data[$field])) {
+				$member_data[$ar['field_name']]                  = $member_data[$field];
+				$member_data[$ar['field_name'] . '_label']       = $ar['field_label'];
+				$member_data[$ar['field_name'] . '_name']        = $ar['field_name'];
+				$member_data[$ar['field_name'] . '_description'] = $ar['field_description'];
+				unset($member_data[$field]);
+			}
+		}
+		return $member_data;
+	}
+error:
+?>
+
+<div class="page">
+			<div class="panel panel-danger">
+			    <div class="panel-heading">
+			        <h3 class="panel-title">Invitation Error</h3>
+			    </div>
+			    <div class="panel-body">
+			        <?=$this->error['message'];?>
+			    </div>
+			</div>
+
+			{exp:member:custom_profile_data}
+				{if invite_id == segment_3}
+					{embed="dash/download_app"}
+				{/if}
+			{/exp:member:custom_profile_data}
+</div>
+
+<?
+goto end;
+
+output:
+?>
+<div class="page">
+			<div class="panel panel-success">
+				{exp:query sql="SELECT * FROM v_invites WHERE title='{segment_3}' Limit 1"}
+					{if invite_type == "Drink"}
+								<div class="panel-heading">
+										<h3 class="panel-title">Drink Accepted!</h3>
+								</div>
+								<div class="panel-body">
+										You have successfully accepted the drink sent by {sender_username}.
+										<br /><br />
+										This drink will now appear in the My Drinks section in your AirTab App for you to redeem at your convenience.
+								</div>				
+					{if:else}
+								<div class="panel-heading">
+										<h3 class="panel-title">Friend Request Accepted!</h3>
+								</div>
+								<div class="panel-body">
+										You have successfully accepted the friend reqeest from {sender_username}.
+										<br /><br />
+										{sender_username} will now appear in the My Friends section in your AirTab App.
+								</div>				
+					{/if}
+				{/exp:query}
+			</div>
+			{exp:member:custom_profile_data}
+				{if invite_id == segment_3}
+					{embed="dash/download_app"}
+				{/if}
+			{/exp:member:custom_profile_data}
+</div>
+<?
+
+end:
+?>

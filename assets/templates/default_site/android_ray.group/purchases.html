@@ -1,0 +1,54 @@
+
+{if logged_out}
+	{redirect="mobile/login"}
+{/if}
+{exp:airtab:log_page_load}
+<div ng-cloak>
+<style type="text/css">
+	.button.button-block, .button.button-full {
+		margin-top:0;
+	}
+</style>
+{if segment_3 == ""}
+<ion-view title="My Purchases">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" padding="true" has-tabs="true" id="mydrinks" ng-init="$root.hideLoading()">
+    	<div class="list">
+    		{exp:query sql="SELECT * FROM v_user_purchases WHERE tck_p_member='{logged_in_member_id}' OR inv_p_member='{logged_in_member_id}' ORDER BY entry_date DESC"}
+    							<!--{entry_id}-->
+								<div class="row">
+									<div class="col">
+										{if channel_id == 4}
+											{tck_purchase_date format="%m/%d/%y" timezone="America/New_York"}
+										{if:elseif channel_id == 11}
+											{entry_date format="%m/%d/%y" timezone="America/New_York"}
+										{/if}
+									</div>
+									<div class="col" style="text-align:center">
+										{if status == "pending" || status == "redeemed"}<span class="color-demo dark-bg dark-border" style="padding:5px 0 5px 0;color:#fff">Redeemed</span>{if:else}<span class="color-demo balanced-bg balanced-border" style="padding:5px 0 5px 0;color:#000">Sent</span>{/if}
+									</div>
+									<div class="col" style="text-align:right">
+										{if channel_id == 4}
+											{if r_member_username}
+												{r_member_username}
+											{if:else}
+												Unavailable
+											{/if}
+										{if:elseif channel_id == 11}
+											{inv_phone}{inv_email}
+										{/if}
+									</div>
+								</div>
+							{/exp:query}
+		</div>
+    </ion-content>
+    <ion-footer-bar align-title="center" class="bar-dark">
+		<button class="button button-block button-assertive" ng-click="$root.changeState('app.senddrink');">
+		  Send A Drink
+		</button>
+	</ion-footer-bar>
+</ion-view>
+{/if}
+</div>

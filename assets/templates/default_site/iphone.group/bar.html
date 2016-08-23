@@ -1,0 +1,25 @@
+{exp:airtab:log_page_load}
+{if {segment_3}}
+[
+		{exp:channel:entries channel="establishments" entry_id="{segment_3}"}
+			{
+				"barId": "{entry_id}",
+				"title": "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{exp:mah_eencode decode="yes"}{title}{/exp:mah_eencode}{/exp:low_replace}",
+				"est_photo": "{photo_large}",
+				"phone": "{est_phone}",
+				"est_intro": "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|\\n" multiple="yes"}{est_intro}{/exp:low_replace}",
+				"latitude": "{latitude}",
+				"longitude": "{longitude}",
+				"address": "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{address}{/exp:low_replace}",
+				"city": "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{city}{/exp:low_replace}",
+				"zip": "{zip}",
+				"state": "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{state}{/exp:low_replace}",
+				"image": "{est_photo:iphone5}",
+				"bg": "{photo_large:iphone5}"
+			}{if count != total_results},{/if}
+		{/exp:channel:entries}
+]
+{if:else}
+	[{"status": "error", "msg": "You did not specify a bar."}]
+{/if}
+{exp:http_header content_type="application/json"}

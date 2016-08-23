@@ -1,0 +1,234 @@
+<?php
+$first = ee()->input->post('first_name');
+$last = (ee()->input->post('last_name')) ? ee()->input->post('last_name') : "";
+$phone = ee()->input->post('phone');
+$member = ee()->session->userdata('member_id');
+
+$phone = substr(preg_replace('/\D+/', '', $phone), -10);
+
+$success = false;
+
+if(!$member) {
+	$error = array("msg"=>"You are not logged in", "title"=>"Invitation Error");
+	goto output;
+}
+
+//Check required fields
+if( $first && $phone) {
+	//All the Required Fields are present
+	$name = ($last != "") ? $first . " " . $last : $first;
+	switch(checkInvite($first, $last, $phone, $member)) {
+		case "friended":
+			$error = array("msg"=>"A friend request has been successfully sent to $first $last!", "title"=>"Friend Request Sent");
+			goto output;
+			break;
+		case "exists":
+			$error = array("msg"=>"You have already invited $first $last", "title"=>"Invitation Error");
+			goto output;
+			break;
+		case "alreadyfriend":
+			$error = array("msg"=>"A friend request has already been sent to $name.", "title"=>"Invitation Error");
+			goto output;
+			break;
+		case "frienderror":
+			$error = array("msg"=>"$name is already a member. However, there was an error sending a friend request.", "title"=>"Invitation Error");
+			goto output;
+			break;
+		case "AddInvite":
+			break;
+		default: 
+			$error = array("msg"=>"An unknown error occurred while inviting $first $last", "title"=>"Invitation Error");
+			goto output;
+	}
+	
+	$invId = "inv" . time() . $member;
+	
+	switch(addInvite($first, $last, $phone, $member, $invId)) {
+		case "invited":
+			$success = true;
+			goto output;
+			break;
+		default:
+			$error = array("msg"=>"An unknown error occurred while inviting $first $last", "title"=>"Invitation Error");
+			goto output;
+			break;
+	}
+} else {
+	//Missing Fields
+	$error = array("msg"=>"One or more fields are missing. The contact must have a First name, and a phone number.", "title"=>"Invitation Error");
+	goto output;
+}
+
+// Check if the person has already been invited/is already a member
+function checkInvite($first, $last, $phone, $member) {
+
+	// Check if a member with this email already exists
+/*	$results = ee()->db->limit(1)
+		->where('m_field_id_3', $phone)
+		->get('member_data');
+	
+	if ($results->num_rows() > 0)
+	{
+		$id = $results->row('member_id');
+		return addFriend($id, $phone, $first, $last, $member);
+	}
+*/	
+	// Check if an invite for this member exists
+	$results = ee()->db->limit(1)
+		->where(array('field_id_54'=>$phone, 'field_id_53'=>$member))
+		->get('channel_data');
+	
+	if ($results->num_rows() > 0)
+	{
+		return "exists";
+	}
+	return "AddInvite";
+}
+
+// Add the invite to the database
+function addInvite($first, $last, $phone, $member, $invId)
+{
+	
+	ee()->load->library('api');
+	ee()->api->instantiate('channel_entries');
+	
+	
+	
+	$data = array(
+	    'title'         => $invId,
+	    'entry_date'    => time(),
+	    'edit_date'     => time(),
+	    'field_id_48'    => $first,
+	    'field_id_49'    => $last,
+	    'field_id_54'   => $phone,
+	    'field_id_53'   => $member,
+	    'status'		=> "Pending"
+	);
+	
+	if (ee()->api_channel_entries->save_entry($data, 11) === FALSE)
+	{
+	    return;
+	} else {
+		return "invited";
+	}
+}
+
+// Add friend if user is already member
+function addFriend($id, $phone, $first, $last, $member) {
+		
+	$results = ee()->db->select('entry_id')
+	  ->from('channel_data')
+	  ->where(array(
+	        	'field_id_55' => $id,
+				'field_id_31' => $member
+			))
+	  ->get();
+	
+	if ($results->num_rows() == 0)
+	{
+		//Didn't Find Friend Request, Try switching sender/receiver
+		$results = ee()->db->select('entry_id')
+		  ->from('channel_data')
+		  ->where(array(
+		        	'field_id_31' => $id,
+					'field_id_55' => $member
+				))
+		  ->get();
+		
+		if ($results->num_rows() == 0)
+		{
+			//Friend doesn't already exist.
+	    	ee()->load->library('api');
+			ee()->api->instantiate('channel_entries');
+			
+			$data = array(
+			    'title'         => "fnd" . time() . $member,
+			    'entry_date'    => time(),
+			    'edit_date'     => time(),
+			    'field_id_31'   => $id,
+			    'field_id_55'   => $member,
+			    'status'		=> "Pending Approval"
+			);
+			
+			if (ee()->api_channel_entries->save_entry($data, 6) === FALSE)
+			{
+			    return "frienderror";
+			} else {
+				//Friend request was added, send push notification to friended member
+				$results = ee()->db->limit(1)
+					->where('member_id', $id)
+					->get('member_data');
+				
+				$deviceToken = $results->row('m_field_id_5');
+				pushNotify($deviceToken);
+				return "friended";
+			}
+		}
+	}
+	
+	return "alreadyfriend";
+}
+
+function pushNotify($deviceToken) {
+
+	if($deviceToken) {
+		
+		// My private key's passphrase here:
+		$passphrase = 'pw4airtabdev';
+		
+		// My alert message here:
+		$message = ee()->session->userdata('screen_name') . " sent you a friend request!";
+		
+		//badge
+		$badge = 1;
+		
+		$ctx = stream_context_create();
+		stream_context_set_option($ctx, 'ssl', 'local_cert', '/var/www/vhosts/airtab.me/httpdocs/push/apns-dev.pem');
+		stream_context_set_option($ctx, 'ssl', 'passphrase', $passphrase);
+		
+		// Open a connection to the APNS server
+		$fp = stream_socket_client(
+		    'ssl://gateway.sandbox.push.apple.com:2195', $err,
+		    $errstr, 60, STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, $ctx);
+		
+		if (!$fp) return;
+		//exit("Failed to connect: $err $errstr" . PHP_EOL);
+		
+		//echo 'Connected to APNS' . PHP_EOL;
+		
+		// Create the payload body
+		$body['aps'] = array(
+		    'alert' => $message,
+		    //'badge' => $badge,
+		    'sound' => "glass-clink-2.aiff"
+		);
+		
+		// Encode the payload as JSON
+		$payload = json_encode($body);
+		
+		// Build the binary notification
+		$msg = chr(0) . pack('n', 32) . pack('H*', $deviceToken) . pack('n', strlen($payload)) . $payload;
+		
+		// Send it to the server
+		$result = fwrite($fp, $msg, strlen($msg));
+		
+		if (!$result) {
+		    //echo 'Error, notification not sent' . PHP_EOL;
+		} else {
+		    //echo 'notification sent!' . PHP_EOL;
+		}
+		
+		// Close the connection to the server
+		fclose($fp);
+	}
+}
+
+output:
+?>
+<? if( $success ): ?>
+[{"status":"success", "msg":"<?=$first?> <?=$last?> was successfully invited.", "title":"Invite Sent", "text": "Hey <?=$first?>, I'd love to be able to send you a drink via AirTab. Sign up at http://airtab.me/register/invite/<?=$invId?>", "inviteId": "<?=$invId?>"}]
+<? else: ?>
+[{"status":"error", "msg":"<?=$error['msg']?>", "title":"<?=$error['title']?>"}]
+<? endif; ?>
+
+{exp:http_header content_type="application/json"}

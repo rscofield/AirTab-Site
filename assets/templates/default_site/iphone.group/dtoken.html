@@ -1,0 +1,33 @@
+{exp:airtab:log_page_load}
+<?php
+$this->EE =& get_instance();
+if(!ee()->session->userdata('member_id')) {
+	echo json_encode(array("status"=>"error", "msg"=>"User is not logged in."));
+} else {
+	if ($this->EE->input->post('token') === FALSE)
+	{
+	    echo json_encode(array("status"=>"error", "msg"=>"You did not specify a token."));
+	}
+	else
+	{
+		if(strpos(ee()->input->user_agent(), "AirTab/dev") !== false) {
+			$dev = "Yes";
+		} else {
+			$dev = "No";
+		}
+	    $member_id = ee()->session->userdata('member_id');
+		$token = $this->EE->input->post('token');
+		$version = str_replace("build dev", "Development Build", $this->EE->input->post('version'));
+		$data = array('m_field_id_5' => $token, "m_field_id_6"=> $version, "m_field_id_17" => $dev);
+		
+		$this->EE->db->where('member_id', $member_id);
+		$this->EE->db->update('member_data', $data);
+		$dev = ($dev == "Yes") ? 1 : 0;
+		$this->EE->db->query("INSERT INTO at_devicetokens (token, type, member, updated, dev) VALUES ('$token', 'ios', $member_id, '" . time() . "', $dev) ON DUPLICATE KEY UPDATE member=$member_id, updated='" . time() . "'");
+		echo json_encode(array("status"=>"success", "msg"=>"Token Updated"));
+	}
+}
+
+?>
+
+{exp:http_header content_type="application/json"}

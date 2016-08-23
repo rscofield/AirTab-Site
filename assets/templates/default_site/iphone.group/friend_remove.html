@@ -1,0 +1,63 @@
+<?php
+
+$title = "Remove Friend";
+
+$friend = ee()->input->post('friend'); // Friend ID
+$member = ee()->session->userdata('member_id'); // Get Current User's ID
+//$member = ee()->input->post('member');
+
+
+if(!$friend) {
+	$status = "error";
+	$msg = "You did not specify a member ID.";
+	goto output;
+}
+
+//Get Entry ID for friend request
+
+$results = ee()->db->select('entry_id')
+  ->from('channel_data')
+  ->where(array(
+        	'field_id_55' => $friend,
+			'field_id_31' => $member
+		))
+  ->get();
+
+if ($results->num_rows() == 0)
+{
+	//Didn't Find Friend Request, Try switching sender/receiver
+	$results = ee()->db->select('entry_id')
+	  ->from('channel_data')
+	  ->where(array(
+	        	'field_id_31' => $friend,
+				'field_id_55' => $member
+			))
+	  ->get();
+	
+	if ($results->num_rows() == 0)
+	{
+    	$status = "error";
+		$msg = "Could not find friend request.";
+		goto output;
+	}
+}
+
+//Friend Entry Found, Delete It
+ee()->load->library('api');
+ee()->api->instantiate('channel_entries');
+	
+if(ee()->api_channel_entries->delete_entry(array($results->row('entry_id'))) === FALSE) {
+	$status = "error";
+	$msg = "There was an error removing that friend.";
+	$errors = $this->EE->api_channel_entries->errors;
+	file_put_contents("/var/www/vhosts/airtab.me/httpdocs/assets/templates/default_site/iphone.group/error_log", print_r($errors, true));
+	goto output;
+}
+
+$status = "success";
+$msg = "The friend was successfully removed.";
+
+output:
+?>
+[{"status": "<?=$status?>", "msg": "<?=$msg?>", "title": "<?=$title?>"}]
+{exp:http_header content_type="application/json"}

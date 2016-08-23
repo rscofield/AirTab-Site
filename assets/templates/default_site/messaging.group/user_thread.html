@@ -1,0 +1,9 @@
+{if segment_3 == "delete"}
+{exp:airtab_messaging:modify_user_thread act="delete" id="{segment_4}"}
+{/if}
+
+{if segment_3 == "archive"}
+{exp:airtab_messaging:modify_user_thread act="archive" id="{segment_4}"}
+{/if}
+
+{exp:http_header content_type="application/json"}

@@ -1,0 +1,20 @@
+{exp:airtab:log_page_load}
+<div ng-cloak>
+<ion-view title="News/Event Details" ng-init="checkLogin();">
+  <ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+  <ion-content padding="true" header="true" ng-controller="NewsCtrl">
+    {exp:channel:entries channel="est_news" entry_id="{segment_3}" limit="1" dynamic="no"}
+      <div class="card" ng-init="$root.hideLoading()">
+        <div class="item item-image">
+          <img src="{est_news_content_banner}" width="100%" />
+        </div>
+      </div>
+      <button class="button button-block button-assertive" ng-click="showEstInfo({news_establishment:entry_id})">
+          Establishment Details
+      </button>
+    {/exp:channel:entries}
+  </ion-content>
+</ion-view>
+</div>

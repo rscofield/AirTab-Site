@@ -1,0 +1,74 @@
+{redirect="/dashboard/#/register/establishment"}
+{embed="global/meta" title="AirTab - Establishment Registration"}
+
+<body>
+
+	{embed="global/header"}
+
+	<!-- Begin Static -->
+	<section id="section1" class="static container">
+		<h2 class="twelve columns offset-by-four">Establishment Registration</h2>
+		<!-- Content -->
+		<div class="twelve columns offset-by-six">
+    {exp:freemember:register return="account" error_handling="inline" error_delimiters='<span class="error">|</span>'}
+
+        <p>
+            <label for="email">Email</label><br />
+            {field:email}<br />
+            {error:email}
+        </p>
+
+        <p>
+            <label for="password">Password</label><br />
+            {field:password}<br />
+            {error:password}
+        </p>
+
+        <p>
+            <label for="password_confirm">Confirm Password</label><br />
+            {field:password_confirm}<br />
+            {error:password_confirm}
+        </p>
+
+        <p>
+            {field:accept_terms} <label for="accept_terms">Accept Terms</label><br />
+            {error:accept_terms}
+        </p>
+
+        <p>
+            <input type="submit" value="Submit" />
+        </p>
+
+    {/exp:freemember:register}
+		</div>
+	</section>
+	<!-- End Static -->
+
+
+
+
+	<!-- Begin Footer -->
+	<footer>
+		<div class="container">
+			<p class="copyright">© 2014 Perfect Vodka. All Rights Reserved. </p>
+		</div>
+	</footer>
+	<!-- End Footer -->
+
+
+	<!-- Javascript -->
+	<script src="/assets/airtab/js/libs/prototype.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/assets/airtab/js/libs/scriptaculous.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/assets/airtab/js/libs/sizzle.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/assets/airtab/js/smoothscroll.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/assets/airtab/js/jquery.easing.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/assets/airtab/js/jquery.scrollto.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/assets/airtab/js/jquery.localscroll.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/assets/airtab/js/jquery.bxslider.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/assets/airtab/js/waypoints.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/assets/airtab/js/loupe.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/assets/airtab/js/notifications.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/assets/airtab/js/init.js" type="text/javascript" charset="utf-8"></script>
+</body>
+
+</html>

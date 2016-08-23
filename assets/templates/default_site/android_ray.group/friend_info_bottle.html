@@ -1,0 +1,31 @@
+{if embed:type == "senddrink"}
+{exp:member:custom_profile_data member_id="{embed:member_id}"}
+	<a class="item item-avatar-left item-icon-right " ng-click="checkoutBottle('{logged_in_member_id}', '{embed:recipient}', 'airtab')">
+	{exp:query sql="SELECT email as mail FROM exp_members WHERE member_id = '{embed:member_id}'"}
+      <img src="{exp:airtab:avatar member="{embed:member_id}" size="90"}" width="40" height="40">
+    {/exp:query}
+    {if FName == "" OR LName == ""}
+      <h2>{screen_name}</h2>
+    {if:else}
+      <h2>{FName} {LName}</h2>
+    {/if}
+      <span>{username}</span><br>
+      <i class="icon ion-chevron-right icon-accessory"></i>
+    </a>
+{/exp:member:custom_profile_data}
+{if:else}
+{exp:member:custom_profile_data member_id="{embed:member_id}"}
+	<a class="item item-avatar-left item-icon-right " href="{embed:href}">
+	{exp:query sql="SELECT email as mail FROM exp_members WHERE member_id = '{embed:member_id}'"}
+      <img src="{exp:airtab:avatar member="{embed:member_id}" size="90"}" width="40" height="40">
+    {/exp:query}
+      {if FName == "" OR LName == ""}
+      <h2>{screen_name}</h2>
+    {if:else}
+      <h2>{FName} {LName}</h2>
+    {/if}
+      <span>{username}</span>
+      <i class="icon ion-chevron-right icon-accessory"></i>
+    </a>
+{/exp:member:custom_profile_data}
+{/if}

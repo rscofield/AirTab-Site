@@ -1,0 +1,49 @@
+
+{!--  
+     When the establishment is not an AirTab member, the app allows the user to recommend the place.
+     Insert the name of establishment, establishment ID and member ID into the database.
+     The PHP "at_user_recommend" module/function is in mod.airtab.php file.
+     
+     Example:
+        Establishemnt = 'FavPlace'
+        member_id = 444
+        establishment_id = 555
+        logged_in_member_id
+        
+        http://www.airtab.me/ios/sql_insert_at_user_recommend/john/444/555
+        
+ {exp:airtab:sql_senddrink_promo type="4" recipient="952" drinkType="premium" message="Enjoy"}
+	{json}
+{/exp:airtab:sql_senddrink_promo}
+        
+        SELECT field_id_15, field_id_152  FROM airtab_ee.exp_channel_data  where channel_id = 4 AND field_id_16 = 952;
+        
+        		    'title'         => "promoticket-" . time() . $member,
+		    'entry_date'    => time(),
+		    'edit_date'     => time(),
+		    'field_id_14'    => time(),
+		    'field_id_15'    => ee()->session->userdata('member_id'),
+		    'field_id_16'   => $recipientId,
+		    'field_id_22'   => $typeId,
+		    'field_id_41'	=> $transaction_id,
+		    'field_id_46'	=> $invId,
+		    'field_id_145'	=> $recipient_id_type,
+		    'status'		=> "nonredeemed"
+{exp:query sql="SELECT field_id_14, field_id_15, field_id_16, field_id_22, field_id_41, field_id_46, field_id_145, field_id_152  FROM airtab_ee.exp_channel_data  where channel_id = 4 AND field_id_16 = 1171"}
+{field_id_14}, {field_id_15}, {field_id_16}, {field_id_22}, {field_id_41}, {field_id_46}, {field_id_145}, {field_id_152}
+{/exp:query}
+{exp:http_header content_type="application/json"}
+
+{exp:airtab:sql_get_friends_list member_id="30"}
+{/exp:airtab:sql_get_friends_list}
+        
+--}
+ 			
+{exp:airtab:sql_get_all_airtab_members member_id="{logged_in_member_id}"}
+{/exp:airtab:sql_get_all_airtab_members}
+
+
+
+
+
+

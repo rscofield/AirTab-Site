@@ -1,0 +1,22 @@
+{exp:airtab:log_page_load}
+<div class="modal" ng-controller="estController" ng-init="getPlaceInfo('{segment_3}')">
+  <ion-header-bar class="bar bar-header bar-stable">
+    <button class="button button-clear button-primary" ng-click="hideModal()"><i class="icon ion-arrow-left-c"></i></button>
+    <h1 class="title">Place Details</h1>
+  </ion-header-bar>
+  <ion-content>
+    <div id="placeMap_{segment_3}" style="width:100%;height:300px"></div>
+    <h4 center>{{pInfo.name}}</h4>
+    <p center>{{pInfo.formatted_address}}</p>
+    <div style="text-align:center">
+      <button class="button button-clear button-assertive" ng-click='$root.launchMaps({address: pInfo.address_components[0].long_name + " " + pInfo.address_components[1].long_name, city: pInfo.address_components[2].long_name, state: pInfo.address_components[4].long_name, zip: pInfo.address_components[6].long_name, title: pInfo.name, lat:pInfo.geometry.location.lat(), lng: pInfo.geometry.location.lng()});'>
+          Navigate
+      </button>
+
+      <button class="button button-clear button-assertive" ng-click="$root.callPhone(pInfo.international_phone_number);">
+          Call
+      </button>
+    </div>
+    <div id="placeAttribs"></div>
+  </ion-content>
+</div>

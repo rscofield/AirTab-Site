@@ -1,0 +1,44 @@
+<?php
+
+	$invite_id = ee()->input->post('invite_id');
+	$member = ee()->session->userdata('member_id');
+	
+	if ($invite_id != "") {
+		// Find invite and check it exists and hasn't been accepted
+		$results = ee()->db->select('*')->from('channel_titles')->where(array("title"=>$invite_id))->get();
+		
+		if ($results->num_rows() < 1) {
+			$status = "Error";
+			goto output;
+		}
+		
+		if($results->row("status") == "Accepted") {
+			$status = "Error";
+			goto output;
+		}	
+		
+		// Get invite data to run additional checks
+		$results = ee()->db->select('entry_id, field_id_51 AS member_id, field_id_53 AS sender_id')->from('channel_data')->where(array("entry_id"=>$results->row('entry_id')))->get();
+		
+		if($results->row("sender_id") != $member) {
+			$status = "Error";
+			goto output;
+		}
+		
+		ee()->load->library('api');
+		ee()->api->instantiate('channel_entries');
+		
+		ee()->api_channel_entries->delete_entry(array($results->row('entry_id')));
+		
+		$status = "success";
+		goto output;
+		
+	}
+
+output:
+if($status == "success") $msg = "The invitation has been successfully removed";
+if($status == "error") $msg = "The invitation was not removed";
+?>
+
+[{"status": "<?=$status?>", "msg":"<?=$msg?>"}]
+{exp:http_header content_type="application/json"}

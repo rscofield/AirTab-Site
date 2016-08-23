@@ -1,0 +1,129 @@
+<!-- Drink activity Table -->
+    <div class="page page-table" data-ng-controller="drinkActivityCtrl" ng-init="settings('getDrinkActivity')">
+   
+        <section class="panel panel-default table-dynamic">
+            <div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span> Drink Activity Report</strong></div>
+    
+            <div class="table-filters">
+                <div class="row">
+                    <div class="col-sm-4 col-xs-6">
+                        <form>
+                            <input type="text"
+                                   placeholder="search"
+                                   class="form-control"
+                                   data-ng-model="searchKeywords"
+                                   data-ng-keyup="search()">
+                        </form>
+                    </div>
+                    <div class="col-sm-3 col-xs-6 filter-result-info">
+                        <span>
+                            Showing {{filteredData.length}}/{{data.length}} entries
+                        </span>              
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped table-responsive">
+                    <thead>
+                        <tr>
+                            <th><div class="th">
+                                Sender
+                                <span class="glyphicon glyphicon-chevron-up"
+                                      data-ng-click=" order('username') "
+                                      data-ng-class="{active: row == 'username'}"></span>
+                                <span class="glyphicon glyphicon-chevron-down"
+                                      data-ng-click=" order('-username') "
+                                      data-ng-class="{active: row == '-username'}"></span>
+                            </div></th>
+                            <th><div class="th">
+                                Sent
+                                <span class="glyphicon glyphicon-chevron-up"
+                                      data-ng-click=" order('purchased') "
+                                      data-ng-class="{active: row == 'purchased'}"></span>
+                                <span class="glyphicon glyphicon-chevron-down"
+                                      data-ng-click=" order('-purchased') "
+                                      data-ng-class="{active: row == '-purchased'}"></span>
+                            </div></th>
+                            <th><div class="th">
+                                Sent To
+                                <span class="glyphicon glyphicon-chevron-up"
+                                      data-ng-click=" order('sent_username') "
+                                      data-ng-class="{active: row == 'sent_username'}"></span>
+                                <span class="glyphicon glyphicon-chevron-down"
+                                      data-ng-click=" order('-sent_username') "
+                                      data-ng-class="{active: row == '-sent_username'}"></span>
+                            </div></th>
+                            <th><div class="th">
+                                Redeemed
+                                <span class="glyphicon glyphicon-chevron-up"
+                                      data-ng-click=" order('redeemed') "
+                                      data-ng-class="{active: row == 'redeemed'}"></span>
+                                <span class="glyphicon glyphicon-chevron-down"
+                                      data-ng-click=" order('-redeemed') "
+                                      data-ng-class="{active: row == '-redeemed'}"></span>
+                            </div></th>
+                            <th><div class="th">
+                                Establishment
+                                <span class="glyphicon glyphicon-chevron-up"
+                                      data-ng-click=" order('estab_name') "
+                                      data-ng-class="{active: row == 'estab_name'}"></span>
+                                <span class="glyphicon glyphicon-chevron-down"
+                                      data-ng-click=" order('-estab_name') "
+                                      data-ng-class="{active: row == '-estab_name'}"></span>
+                            </div></th>
+                            <th><div class="th">
+                                Redeemed Drink
+                                <span class="glyphicon glyphicon-chevron-up"
+                                      data-ng-click=" order('redeemed_drink') "
+                                      data-ng-class="{active: row == 'redeemed_drink'}"></span>
+                                <span class="glyphicon glyphicon-chevron-down"
+                                      data-ng-click=" order('-redeemed_drink') "
+                                      data-ng-class="{active: row == '-redeemed_drink'}"></span>
+                            </div></th>
+                         </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-ng-repeat="data in currentPageData">
+                            <td>{{data.username}}</td>
+                            <td>{{data.purchased}}</td>
+														<td>{{data.sent_username}}</td>
+                            <td>{{data.redeemed}}</td>
+														<td>{{data.estab_name}}</td>
+														<td>{{data.redeemed_drink}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!--<p class="text-right" style="padding-right:10px"><i class="fa fa-square color-warning"></i> <strong><small>Premium Drink</small></strong>&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-square color-success"></i> <strong><small>Standard Drink</small></strong></p>-->
+    
+            
+        </section>
+
+        <footer class="table-footer">
+                <div class="row">
+                    <div class="col-md-6 page-num-info">
+                        <span>
+                            Show 
+                            <select data-ng-model="numPerPage"
+                                    data-ng-options="num for num in numPerPageOpt"
+                                    data-ng-change="onNumPerPageChange()">
+                            </select> 
+                            entries per page
+                        </span>
+                    </div>
+                    <div class="col-md-6 text-right pagination-container">
+                        <pagination class="pagination-sm"
+                                    page="currentPage"
+                                    total-items="filteredData.length"
+                                    max-size="4"
+                                    on-select-page="select(page)"
+                                    items-per-page="numPerPage"
+                                    rotate="false"
+                                    boundary-links="true"></pagination>
+                    </div>
+                </div>
+            </footer>
+    
+    </div>                  
+<!-- Redeemed Table -->

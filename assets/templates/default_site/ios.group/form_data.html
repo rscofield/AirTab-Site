@@ -1,0 +1,19 @@
+{if segment_3 == "addFriendByText"}
+	{exp:airtab:get_form_fields name="addFriendByText"}
+{/if}
+
+{if segment_3 == "addFriendByText_via_contact_list"}
+	{exp:airtab:get_form_fields name="addFriendByText_via_contact_list"}
+{/if}
+
+{if segment_3 == "addFriendByContactText"}
+	{exp:airtab:get_form_fields name="addFriendByContactText" phone="{segment_4}" first_name="{segment_5}" last_name="{segment_6}"}
+{/if}
+
+{if segment_3 == "addFriendByEmail"}
+	{exp:airtab:get_form_fields name="addFriendByEmail"}
+{/if}
+
+{if segment_3 == "addFriendByContactEmail"}
+	{exp:airtab:get_form_fields name="addFriendByContactEmail" email="{segment_4}" first_name="{segment_5}" last_name="{segment_6}"}
+{/if}

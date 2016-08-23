@@ -1,0 +1,11 @@
+{exp:channel:entries channel="Charities"}
+{if count == 1}<div class="item item-input item-stacked-label item-select">
+	<div class="input-label">Select a Charity</div>
+	<select  name="charity" id="charity" required>
+			<option value="0" selected>No Thank You</option>
+{/if}			
+			<option value="{entry_id}">{title}</option>
+{if count == total_results}	</select>
+</div>
+{/if}
+{/exp:channel:entries}

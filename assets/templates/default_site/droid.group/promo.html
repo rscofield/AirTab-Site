@@ -1,0 +1,124 @@
+{if logged_in}
+{exp:airtab:log_page_load}
+{exp:cartthrob:clear_cart}
+{preload_replace:template_group="store"}
+{preload_replace:template="index"}
+<div ng-cloak>
+<style>
+.item-select select {
+	position: inherit !important;
+	top:0 !important;
+	right:0 !important;
+	padding:5px !important;
+	direction: ltr !important;
+	width:100% !important;
+	max-width: 100% !important;
+	text-indent: 0 !important;
+}
+
+.item-select .input-label {
+	display: block !important;
+}
+
+.item-select:after {
+	top: 50px !important;
+}
+</style>
+
+
+<ion-view title="Send A Drink" ng-controller="promoController">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" padding="true" ng-init="$root.hideLoading()">
+	
+		{exp:channel:entries 
+			channel="products"
+			entry_id="278"
+			dynamic="no"
+			limit="1"}
+	{!-- using twitter bootstrap here to lay out the form niceley... hence the form-horizontal class set here --}
+
+	<div class="list">
+		<div class="item item-text-wrap">
+		    You have chosen to send a drink to a friend. Below are your order details.
+		  </div>
+		<div class="item item-input item-stacked-label">
+			<span class="input-label">Recipient</span>
+			{if segment_3 == "airtab" OR segment_3 == "username"}
+				<p>{embed="payment/recipient" member_id="{segment_5}"}</p>
+			{/if}
+
+			{if segment_3 == "email" OR segment_3 == "text"}
+				<p>{segment_5}</p>
+			{/if}
+		</div>
+			{exp:cartthrob:item_options entry_id="{entry_id}"}
+				{options}
+					{if option_value == segment_4}
+		<div class="item item-input item-stacked-label">
+			<span class="input-label">Drink Type</span>
+			<p>{option_name}</p>
+		</div>
+
+		<div class="item item-input item-stacked-label">
+			<span class="input-label">Purchase Total</span>
+			<p>{option_price}</p>
+		</div>
+
+		{if segment_3 == "email" OR segment_3 == "text"}
+			<div class="control-group">
+			  <label class="item item-input">
+			    <textarea placeholder="Custom Message (Optional)" ng-model="input.message"></textarea>
+			  </label>
+			</div>
+		{/if}
+		
+		<div class="item item-input item-stacked-label item-select">
+			{embed="droid/charities"}
+		</div>	
+		
+		<input type="hidden" name="item_options[product_type]" value="{option_value}">
+					
+					{/if}
+				{/options}
+		  	  	
+	        {/exp:cartthrob:item_options}
+	    <input type="hidden" name="recipient_id" value="{segment_5}">
+
+		<div class="control-group">
+		{if "{inventory}" == "0" }
+			<p><strong>This item is out of stock</strong></p>
+	 	{if:else}
+				<input type="hidden" id="product_quantity" class="input-medium"  placeholder='1' name="quantity" size="8" value="1"  />
+		{/if}
+		</div>
+		
+	</div>
+
+	{if segment_4 == "email" OR segment_4 == "text"}
+
+			  <label class="item item-input">
+			    <textarea placeholder="Custom Message (Optional)" ng-model="input.message"></textarea>
+			  </label>
+			</div>
+			{/if}
+ 
+
+	
+		<div class="control-group">
+			<div class="form-actions">
+				<h5 style="text-align:center">{if segment_6 == "unlimited"}You have promotional access. You will not be charged.{if:else}You have {segment_6} promotional drinks remaining. You will not be charged.{/if}</h5>
+				<input type="submit" id="checkout_complete" class="button button-block button-assertive"  value="Send Drink" ng-click="createTicket('{segment_3}', '{segment_5}', '{segment_4}')" />
+      		</div>
+		</div>
+
+		{/exp:channel:entries}
+	
+    </ion-content>
+</ion-view>
+</div>
+
+{if:else}
+	<iframe src="airtab:notLoggedIn" style="display:none"></iframe>
+{/if}

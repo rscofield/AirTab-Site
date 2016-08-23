@@ -1,0 +1,74 @@
+
+{if segment_3 == ""}
+
+{if:else}
+<style type="text/css">
+	h1[center], h2[center], h3[center], h4[center], h5[center], p[center] {
+	text-align: center;
+}
+
+.list:last-child.card {
+	margin-bottom:0;
+}
+
+.menu {
+	background: #f5f5f5;
+}
+
+.scroll-content {
+	background:#f5f5f5;
+}
+
+.item-stacked-label {
+	background: #fff;
+}
+</style>
+<ion-view title="Establishments">
+	<ion-nav-buttons side="left">
+      <button class="button button-icon button-clear ion-navicon" ng-click="showMenu()"></button>
+    </ion-nav-buttons>
+    {if logged_out}<iframe src="airtab:login" style="width:0;height:0;"></iframe>{/if}
+    <ion-tabs class="tabs-dark" type="bar-frosted">
+
+	  <ion-tab title="All Establishments">
+	  	<ion-content has-header="true" padding="true" ng-init="hideNav()" has-tabs="true">
+		    {exp:low_search:results channel="establishments" distance:from="{segment_3}|{segment_4}" distance:to="latitude|longitude" distance:radius="0" distance:unit="mi" limit="50"}
+		    	<div class="list card" ng-click="loadEstMenu({entry_id})">
+					<div class="item item-image">
+						<img src="{photo_large:iphone5}">
+					</div>
+					<div class="item" style="text-align:center">
+					<h2 center>{title}</h2>
+					{if low_search_distance > 50}{city}{if:else}{city} - {low_search_distance} Miles Away{/if}
+					</div>
+					{exp:airtab:log_page_load  misc="{low_search_distance}" count="{count}" match="1"}
+				</div>
+			{/exp:low_search:results}
+		</ion-content>
+	  </ion-tab>
+
+	  <ion-tab title="Near Me">
+	  	<ion-content has-header="true" padding="true" ng-init="hideNav()" has-tabs="true">
+	  		{exp:low_search:results channel="establishments" distance:from="{segment_3}|{segment_4}" distance:to="latitude|longitude" distance:radius="5" distance:unit="mi" limit="50"}
+		    	<div class="list card">
+		    		<a class="item assertive"  style="text-align:center" href="#">
+						{title}
+					</a>
+					<div class="item item-image">
+						<img src="{photo_large:iphone5}">
+					</div>
+
+					
+					<div class="item" style="text-align:center">
+					{if low_search_distance > 50}{city}{if:else}{city} - {low_search_distance} Miles Away{/if}
+					</div>
+
+				</div>
+				{if no_results}{embed="mobile/nolocations" latitude="{segment_3}" longitude="{segment_4}"}{/if}
+			{/exp:low_search:results}
+	    </ion-content>
+	  </ion-tab>
+
+	</ion-tabs>		
+</ion-view>
+{/if}

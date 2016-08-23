@@ -1,0 +1,9 @@
+
+	{exp:member:custom_profile_data member_id="{embed:sender}"}
+	<div class="item item-avatar-left item-icon-right " ng-controller="myDrinks" {if embed:modal != ""}ng-init="isModal = true"{/if} ng-click="drinkClicked('{embed:ticket_id}','{if FName != "" AND LName != ""}{FName} {LName}{if:else}{username}{/if}','{embed:purchase_date}')">
+	    <img src="{exp:airtab:avatar member="{embed:sender}" size="90"}" width="60" height="60">
+		<h2>Drink from: {if FName != "" AND LName != ""}{FName} {LName}{if:else}{username}{/if}</h2>
+		<div><small>Sent On: {embed:purchase_date}.</small></div>
+		<i class="icon ion-chevron-right icon-accessory"></i>
+	</div>
+	{/exp:member:custom_profile_data}

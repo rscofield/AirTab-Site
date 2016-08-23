@@ -1,0 +1,11 @@
+				{exp:cartthrob:submitted_order_info}
+ 				        {if authorized}
+ 				        	{embed="payment/createticket" order_id="{order_id}" transaction_id="{transaction_id}"}
+				        {if:elseif processing}
+				            <iframe src="airtab:purchaseProcessing:Payment Processing:Your Order is Currently being processed: {error_message}" style="display:none">
+				        {if:elseif declined}
+				            <iframe src="airtab:purchaseDeclined:{error_message}" style="display:none">
+				        {if:elseif failed}
+				            <iframe src="airtab:purchaseFailed:Your Payment Failed:{error_message}" style="display:none">
+				        {/if}
+ 				{/exp:cartthrob:submitted_order_info}

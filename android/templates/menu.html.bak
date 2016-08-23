@@ -1,0 +1,91 @@
+<ion-side-menus ng-controller="AppCtrl">
+
+  <ion-pane ion-side-menu-content>
+    <ion-nav-bar class="bar-stable" animation="nav-title-android">
+      <ion-nav-back-button class="button-clear"><i class="icon ion-arrow-left-c"></i></ion-nav-back-button>
+    </ion-nav-bar>
+
+    <ion-nav-view ui-view animation="fade-implode"></ion-nav-view>
+  </ion-pane>
+
+  <ion-side-menu side="left">
+    <header class="bar bar-header bar-stable">
+      <h1 class="title">AirTab</h1>
+    </header>
+    <ion-content class="has-header">
+      <ion-list>
+        <ion-item class="item-icon-left" nav-clear menu-close href="#/app/establishments">
+          <i class="icon ion-ios7-home"></i>
+          Establishments
+        </ion-item>
+        <ion-item class="item-icon-left" nav-clear menu-close href="#/app/news">
+          <i class="icon ion-ios7-calendar"></i>
+          News &amp; Events
+        </ion-item>
+       
+       <ion-item class="item-icon-left" nav-clear menu-close href="#/app/senddrink">
+          <i class="icon ion-ios7-paperplane"></i>
+          Send A Drink
+        </ion-item>
+                       
+         <ion-item class="item-icon-left" nav-clear menu-close href="#/app/sendbottle/main/Meal">
+          <i class="icon ion-ios7-paperplane"></i>
+          Send Gift
+        </ion-item>		
+        		
+         <ion-item class="item-icon-left" nav-clear menu-close href="#/app/sendbottle/main/Bottle" ng-show="$root.tester">
+          <i class="icon ion-ios7-paperplane"></i>
+          Send Bottle
+        </ion-item>				
+               
+        		
+        <ion-item class="item-icon-left" ng-class="(drinkCount > 0) ? 'item-icon-right' : '';" nav-clear menu-close href="#/app/mydrinks">
+          <i class="icon ion-ios7-wineglass"></i>
+          My Drinks & Gifts
+          <span class="badge badge-assertive" ng-if="drinkCount > 0">{{ drinkCount }}</span>
+        </ion-item>
+        <ion-item class="item-icon-left" nav-clear menu-close href="#/app/friends">
+          <i class="icon ion-ios7-people"></i>
+          My Friends
+        </ion-item>
+        
+        <ion-item class="item-icon-left" nav-clear menu-close href="#/app/how_it_works/redeem">
+          <i class="icon ion-ios7-information"></i>
+          How To Redeem
+        </ion-item>
+        
+        <ion-item class="item-icon-left" nav-clear menu-close href="#/app/profile" ng-show="isLogged()">
+          <i class="icon ion-ios7-person"></i>
+          My Profile
+        </ion-item>
+        <ion-item class="item-icon-left" nav-clear menu-close href="#/app/purchases" ng-show="isLogged()">
+          <i class="icon ion-cash"></i>
+          My Purchases
+        </ion-item>
+        <ion-item class="item-icon-left" nav-clear menu-close href="#/app/messages" ng-show="$root.tester">
+          <i class="icon ion-ios7-chatboxes"></i>
+          Messages
+        </ion-item>
+        <div class="item item-divider">
+          Other
+        </div>
+        <ion-item class="item-icon-left" nav-clear menu-close ng-click="promoInvite()" ng-show="isPromoVolunteer()">
+          <i class="icon ion-ios7-paperplane"></i>
+          Send {{ promotion_list.name }}
+        </ion-item>
+        <ion-item class="item-icon-left" nav-clear menu-close ng-click="logout()" ng-show="isLogged()">
+          <i class="icon ion-ios7-locked"></i>
+          Logout
+        </ion-item>
+        <ion-item class="item-icon-left" nav-clear menu-close ng-click="login()" ng-show="!isLogged()">
+          <i class="icon ion-ios7-unlocked"></i>
+          Login / Register
+        </ion-item>
+        <ion-item class="item-icon-left" nav-clear menu-close href="#/app/about">
+          <i class="icon ion-ios7-information"></i>
+          About
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-side-menu>
+</ion-side-menus>

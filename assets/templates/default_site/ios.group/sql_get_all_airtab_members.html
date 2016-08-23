@@ -1,0 +1,24 @@
+
+{!--  
+     When the establishment is not an AirTab member, the app allows the user to recommend the place.
+     Insert the name of establishment, establishment ID and member ID into the database.
+     The PHP "at_user_recommend" module/function is in mod.airtab.php file.
+     
+     Example:
+        Establishemnt = 'FavPlace'
+        member_id = 444
+        establishment_id = 555
+        logged_in_member_id
+        
+        http://www.airtab.me/ios/sql_insert_at_user_recommend/john/444/555
+         
+--}
+ 			
+{exp:airtab:sql_get_all_airtab_members member_id="{logged_in_member_id}"}
+{/exp:airtab:sql_get_all_airtab_members}
+
+
+
+
+
+

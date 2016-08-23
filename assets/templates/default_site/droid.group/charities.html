@@ -1,0 +1,7 @@
+<div class="input-label">Select a Charity</div>
+<select  name="charity" id="charity" required>
+		<option value="0" selected>No Thank You</option>
+		{exp:channel:entries channel="Charities"}
+		<option value="{entry_id}">{title}</option>
+		{/exp:channel:entries}
+</select>

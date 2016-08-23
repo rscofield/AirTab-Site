@@ -1,0 +1,13 @@
+
+    {exp:cartthrob:submitted_order_info}
+		{if authorized}
+			You gift has been sent!</br></br>
+			Transaction ID: {transaction_id}</br>
+			Your total: {cart_total}</br>
+			Your order ID: {order_id}
+		{if:elseif declined}
+			Your credit card was declined: {error_message}
+		{if:elseif failed}
+			Your payment failed: {error_message}
+		{/if}
+    {/exp:cartthrob:submitted_order_info}

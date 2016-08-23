@@ -1,0 +1,5 @@
+        <?php $member = ee()->session->userdata('member_id');?>
+        {exp:query sql="SELECT * FROM v_drink_ticket_fields WHERE r_member = <?=$member?> AND status='nonredeemed' ORDER BY purchase_date DESC"}
+            {embed="android/ticket_info" {if segment_3 == "modal"}modal="true"{/if} sender="{p_member}" ticket_id="{entry_id}" purchase_date="{purchase_date format="%F %d, %Y"}" drink_msg="Enjoy"}
+            {if no_results}You have no drinks to redeem.{/if}
+        {/exp:query}

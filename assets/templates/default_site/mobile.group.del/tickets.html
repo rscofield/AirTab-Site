@@ -1,0 +1,44 @@
+<?php
+$this->EE->load->library('auth');
+if(ee()->input->get('callback')) $callback = ee()->input->get('callback');
+if(ee()->input->post('callback')) $callback = ee()->input->post('callback');
+
+$status = (ee()->uri->segment(3) === FALSE) ? "not -1" : ee()->uri->segment(3);
+$username = ee()->input->get('username');
+$password = ee()->input->get('password');
+
+if(!empty($username) && !empty($password)) {
+	$loggedin = $this->EE->auth->authenticate_username($username, $password);
+	if($loggedin) $loggedin->start_session();
+}
+
+$memberid = ee()->session->userdata('member_id');
+
+echo <<<EOF
+
+$callback([
+    {exp:channel:entries channel="drink_ticket" status="$status" search:tck_redeem_member="$memberid"}
+    {
+    	"id": "{entry_id}",
+        "code": "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{title}{/exp:low_replace}",
+        "status": "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{status}{/exp:low_replace}",
+        "date": "{tck_purchase_date}",
+		{embed="mobile/tickets_member" memberid="{tck_p_member}"}
+        "redeemed": "{tck_redeem_date}",
+        {if tck_redeemed_at}
+        {tck_redeemed_at}
+        "location": {"id": "{tck_redeemed_at:entry_id}"},
+        {/tck_redeemed_at}
+        {if:else}
+        "location": "",
+        {/if}
+        {drink}
+        "drink": {"id": "{drink:entry_id}", "name": "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{drink:title}{/exp:low_replace}", "type": "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{drink:drk_level}{/exp:low_replace}"}
+        {/drink}
+    }{if count < total_results},{/if}
+    {if no_results}{/if}
+    {/exp:channel:entries}
+])
+
+EOF;
+?>

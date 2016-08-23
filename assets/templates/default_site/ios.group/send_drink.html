@@ -1,0 +1,317 @@
+{embed="ios/update"}
+{exp:airtab:log_page_load}
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=792428910786784&version=v2.0";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+<div ng-cloak>
+{if segment_3 == ""}
+<ion-view title="Send A Drink" ng-controller="SenddrinkCtrl">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+        
+    <ion-content class="has-header" padding="true" ng-init="hideLoading();">
+    	<div class="list card">
+
+			<a href="#/app/senddrink/airtab" class="item item-icon-left item-icon-right" ng-click="$root.showLoading()">
+				<i class="icon ion-android-friends"></i>
+				AirTab Friend
+				<i class="icon ion-chevron-right icon-accessory"></i>
+			</a>
+
+			<a href="#/app/senddrink/username" class="item item-icon-left item-icon-right" ng-click="$root.showLoading()">
+				<i class="icon ion-person"></i>
+				By AirTab Username
+				<i class="icon ion-chevron-right icon-accessory"></i>
+			</a>
+			
+			{if {logged_in_member_id} == "952" || {logged_in_member_id} == "1171" || {logged_in_member_id} == "30" }      
+					<a ng-click="sendDrinkByContacts()" class="item item-icon-left item-icon-right">
+						<i class="icon ion-iphone"></i>
+						Select A Phone Contact 
+						<i class="icon ion-chevron-right icon-accessory"></i>
+					</a>			
+
+			{if:else}
+					<a ng-click="sendDrinkByContacts()" class="item item-icon-left item-icon-right">
+						<i class="icon ion-iphone"></i>
+						Select A Phone Contact 
+						<i class="icon ion-chevron-right icon-accessory"></i>
+					</a>			
+			
+			  {!--
+			
+					<a href="#/app/senddrink/contacts" class="item item-icon-left item-icon-right" ng-click="$root.showLoading()">
+							<i class="icon ion-iphone"></i>
+							Select A Phone Contact
+						<i class="icon ion-chevron-right icon-accessory"></i>
+					</a>
+		      --}
+			{/if}
+			
+			<a href="#/app/senddrink/email" class="item item-icon-left item-icon-right" ng-click="$root.showLoading()">
+				<i class="icon ion-email"></i>
+				By Email
+				<i class="icon ion-chevron-right icon-accessory"></i>
+			</a>
+
+			<a href="#/app/senddrink/text" class="item item-icon-left item-icon-right" ng-click="$root.showLoading()">
+				<i class="icon ion-ios7-telephone"></i>
+				By Text Message
+				<i class="icon ion-chevron-right icon-accessory"></i>
+			</a>
+			<!--
+			<a href="#/senddrink/facebook" class="item item-icon-left item-icon-right">
+				<i class="icon ion-android-friends"></i>
+				Facebook
+				<i class="icon ion-chevron-right icon-accessory"></i>
+			</a>
+			-->
+		</div>
+		<div style="padding:20px;" ng-if="$root.hasFacebook">
+			<button class="button button-full icon-left ion-social-facebook button-positive" ng-click="$root.fbShare('http://airtab.me', 'AirTab', 'An innovative and easy to use social gifting application', 'Send all of your friends, family, & co-workers drinks, tickets, & more through AirTab! You can purchase and gift friends drinks from anywhere, at any time with the click of a button.', '')">Share on Facebook</button>
+			<!--<button class="button button-full icon-left ion-social-facebook button-positive" onClick="openNewWindow('https://www.facebook.com/265377460285889')">Share on Facebook</button>-->
+		</div>
+    </ion-content>
+</ion-view>
+
+{/if}
+
+{if segment_3 == "airtab"}
+<?php $member = ee()->session->userdata('member_id'); ?>
+<div class="bar bar-subheader bar-dark">
+  <h4 class="title smaller-title">Select a recipient for this drink.</h4>
+</div>
+<ion-view title="Send A Drink">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" padding="true" ng-init="hideLoading()" id="checkoutModal" class="has-subheader">
+    	<div class="list">
+    	{exp:query sql="SELECT * FROM v_friends WHERE status = 'Approved' and ( sender_id=<?=$member?> or friend_id=<?=$member?> ) ORDER BY CASE friend_id WHEN <?=$member?>  THEN sender_screen_name ELSE friend_screen_name END ASC"}
+			{if sender_id == <?=$member?>}
+				{embed="ios/friend_info" member_id="{friend_id}" status="{status}" drinkType="Premium" recipient="{friend_id}" type="senddrink"}
+			{if:else}
+				{embed="ios/friend_info" member_id="{sender_id}" status="{status}" drinkType="Premium" recipient="{sender_id}" type="senddrink"}
+			{/if}
+			{if no_results}You do not currently have any AirTab friends. Try adding some!{/if}
+		{/exp:query}
+
+		</div>
+    </ion-content>
+</ion-view>
+{/if}
+
+{if segment_3 == "contacts"}
+
+<ion-view title="Send Drink Via Contacts" ng-controller="sendDrinkTextViaContacts">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    
+    <ion-content has-header="true" padding="true">
+
+	    <div style="width:100%" id="widthTest">
+				<input ng-model="query" placeholder="Search">
+		</div>
+
+    	<div class="list" ng-init="getContactList()" ng-controller="sendDrinkTextViaContacts">
+			
+		       		<div ng-repeat="myfriend in phoneFriendsList | filter:query" >
+		       		
+						<div class="list card" ng-click="sendDrinkViaContacts( '{{myfriend.phone[0]}}', '{logged_in_member_id}' );">
+						  	
+						  	{!-- 	
+							<div class="item item-image">
+								{{myfriend.first}} {{myfriend.last}}<br> {{myfriend.phone[0]}}
+							</div>
+							 --}
+							 
+						<a class="item item-avatar" >
+					      <img src="/images/ios7-telephone.png" width="30" height="30">
+					      <p>{{myfriend.first}} {{myfriend.last}}<br>
+					      {{myfriend.phone[0]}}</p>
+					    </a>
+					    														
+ 					    </div>
+			       </div>
+		</div>
+ 					
+    </ion-content>
+    
+</ion-view>
+
+			{!--       
+			     
+				<ion-view title="Contacts">
+					<ion-nav-buttons side="{{$root.menuSide}}">
+				      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+				    </ion-nav-buttons>
+				    <ion-content has-header="true" padding="true" ng-init="hideLoading()">
+				    	<div class="list">
+				
+				    		<a href="#/app/senddrink/email" class="item item-icon-left item-icon-right">
+								<i class="icon ion-email"></i>
+								By Email
+								<i class="icon ion-chevron-right icon-accessory"></i>
+							</a>
+				
+							<a href="#/app/senddrink/text" class="item item-icon-left item-icon-right">
+								<i class="icon ion-ios7-telephone"></i>
+								By Text Message
+								<i class="icon ion-chevron-right icon-accessory"></i>
+							</a>
+				
+						</div>
+				    </ion-content>
+				</ion-view>
+			--}
+	
+	
+{/if}
+
+{if segment_3 == "facebook"}
+<ion-view title="Facebook Friend">
+	<ion-nav-buttons side="right">
+      <button class="button button-icon button-clear ion-navicon" ng-click="showMenu()"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" padding="true">
+    	<div class="list">
+
+		</div>
+    </ion-content>
+</ion-view>
+{/if}
+
+{if segment_3 == "username"}
+<ion-view title="Send By Username">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    	<ion-content has-header="true" padding="true" ng-init="hideLoading()">
+		<form name="inviteFormUsername" ng-submit="submitForm()" ng-controller="sendDrinkByUsername">
+			<div class="list">
+				<div class="item-divider">Enter the AirTab username of the person to which you would like to send a drink:</div>
+				<label class="item item-input">
+					<input 
+					type="text"
+					placeholder="AirTab Username"
+					data-ng-model="invite.username"
+                    required
+                    data-ng-minlength="4">
+				</label>
+			</div>
+			<button type="submit" class="button button-block button-assertive" ng-disabled="!canSubmit()">Send Drink</button>
+		</form>
+		
+    </ion-content>
+</ion-view>
+{/if}
+
+{if segment_3 == "email"}
+<ion-view title="Send By Email" ng-init="hideLoading()">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" padding="true" id="sendDrinkContacts" ng-controller="sendDrinkEmail">
+		<form name="form_sendDrinkEmail" ng-submit="submitForm()">
+			<div class="list">
+				<label class="item item-input">
+					<input 
+						type="email" 
+						name="email" 
+						placeholder="Enter Email Address"
+						data-ng-model="invite.email"
+                        required
+                        data-ng-minlength="4">
+				</label>
+				<!--
+				<label class="item item-input">
+					<textarea rows="6" name="message" placeholder="Your Message"
+						data-ng-model="invite.message"
+                        data-ng-maxlength="250"></textarea>
+				</label>-->
+			</div>
+			<input type="submit" name="submit" class="button button-block button-assertive" value="Send Drink" ng-disabled="!canSubmit()" />
+		</form>
+    </ion-content>
+</ion-view>
+{/if}
+
+{if segment_3 == "text"}
+<ion-view title="Send By Text" ng-init="hideLoading()">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" padding="true" id="sendDrinkContacts" ng-controller="sendDrinkText">
+		<form name="form_sendDrinkText" ng-submit="submitForm()">
+			<div class="list">
+				<label class="item item-input">
+					<input 
+						type="text" 
+						name="phone" 
+						placeholder="Enter Phone Number"
+						data-ng-model="invite.phone"
+                        ng-pattern="/\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}/"
+                        required ng-minlength="10"
+                        ng-maxlength="15"
+                        pattern="[0-9]*">
+				</label>
+				<!--
+				<label class="item item-input">
+					<textarea rows="6" name="message" placeholder="Your Message"
+						data-ng-model="invite.message"
+                        data-ng-maxlength="250"></textarea>
+				</label>-->
+			</div>
+			<input type="submit" name="submit" class="button button-block button-assertive" value="Send Drink" ng-disabled="!canSubmit()" />
+		</form>
+    </ion-content>
+</ion-view>
+{/if}
+
+{if segment_3 == "guest"}
+<ion-view title="Send A Drink" ng-init="hideLoading()">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" padding="true" id="sendDrinkContacts" ng-controller="sendDrinkText">
+		<div>Test</div>
+    </ion-content>
+</ion-view>
+{/if}
+
+
+{if segment_3 == "regift"}
+<?php $member = 952; ?>
+<div class="bar bar-subheader bar-dark">
+  <h4 class="title smaller-title">Select a recipient for this drink.</h4>
+</div>
+<ion-view title="Send A Drink">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" padding="true" ng-init="hideLoading()" id="checkoutModal" class="has-subheader">
+    	<div class="list">
+    	{exp:query sql="SELECT * FROM v_friends WHERE sender_id=<?=$member?> or friend_id=<?=$member?> ORDER BY CASE friend_id WHEN <?=$member?>  THEN sender_screen_name ELSE friend_screen_name END ASC"}
+			{if sender_id == <?=$member?>}
+				{embed="ios/friend_info" member_id="{friend_id}" status="{status}" drinkType="Premium" recipient="{friend_id}" type="senddrink"}
+			{if:else}
+				{embed="ios/friend_info" member_id="{sender_id}" status="{status}" drinkType="Premium" recipient="{sender_id}" type="senddrink"}
+			{/if}
+			{if no_results}You do not currently have any AirTab friends. Try adding some!{/if}
+		{/exp:query}
+
+		</div>
+    </ion-content>
+</ion-view>
+{/if}
+
+
+
+</div>

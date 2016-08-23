@@ -1,0 +1,93 @@
+{if logged_in}
+{exp:airtab:log_page_load}
+<div ng-cloak>
+<style>
+.item-select select {
+	position: inherit !important;
+	top:0 !important;
+	right:0 !important;
+	padding:5px !important;
+	direction: ltr !important;
+	width:100% !important;
+	max-width: 100% !important;
+	text-indent: 0 !important;
+}
+
+.item-select .input-label {
+	display: block !important;
+}
+
+.item-select:after {
+	top: 50px !important;
+}
+</style>
+
+
+<ion-view title="Send A Drink" ng-controller="promoController">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" padding="true" ng-init="$root.hideLoading()">
+	
+
+	<div class="list">
+	
+
+		<?php 
+			$this->EE =& get_instance();
+			$segment_4 = $this->EE->uri->segment(4);
+			$item_key = $segment_4;
+			if ($item_key == "Premium")  $item_key = "13889069";		
+		?>
+		{exp:query sql="SELECT * FROM v_products WHERE item_id = <?php echo $item_key;?>"}
+	
+		<div class="item-divider">
+		    You have chosen to send a {drk_level} to a friend. Below are your order details.
+		</div>
+		<div class="item item-input item-stacked-label">
+			<span class="input-label">Recipient</span>
+			{if segment_3 == "airtab" OR segment_3 == "username"}
+				<p>{embed="payment/recipient" member_id="{segment_5}"}</p>
+			{/if}
+
+			{if segment_3 == "email" OR segment_3 == "text"}
+				<p>{segment_5}</p>
+			{/if}
+		</div>
+		<div class="item item-input item-stacked-label">
+			<span class="input-label">Item Description</span>
+			<p>{name}</p>
+		</div>
+		<div class="item item-input item-stacked-label">
+			<span class="input-label">Purchase Total</span>
+			<p>{price}</p>
+		</div>
+
+		{/exp:query}		
+		
+		{if segment_3 == "email" OR segment_3 == "text"}
+			<div class="item-divider">
+	          Optional Message For Recipient
+	    </div>
+			<label class="item item-input">
+				<textarea placeholder="Enter your custom message here..." ng-model="input.message"></textarea>
+			</label>
+		{/if}
+
+		{embed="android/charities"}
+				
+		<div class="control-group">
+			<div class="form-actions">
+				<h5 style="text-align:center">{if segment_6 == "unlimited"}You have promotional access and will not be charged.{if:else}You have {segment_6} promotional drinks remaining. You will not be charged.{/if}</h5>
+				<input type="submit" id="checkout_complete" class="button button-block button-assertive"  value="Send Drink.." ng-click="createTicket('{segment_3}', '{segment_5}', '{segment_4}')" />
+      </div>
+		</div>
+
+
+    </ion-content>
+</ion-view>
+</div>
+
+{if:else}
+	<iframe src="airtab:notLoggedIn" style="display:none"></iframe>
+{/if}

@@ -1,0 +1,10 @@
+{exp:member:custom_profile_data member_id="{embed:sender}"}
+<a class="item item-avatar-left item-icon-right " href="airtab:redeemDrink:{embed:ticket_id}:{screen_name}:{embed:purchase_date}">
+	{exp:query sql="SELECT email as mail FROM exp_members WHERE member_id = '{embed:sender}'"}
+      <img src="{exp:gravatar email="{mail}" rating="R" size='80'}" width="40" height="40">
+    {/exp:query}
+	<h2>{screen_name}</h2>
+	<p>Sent On: {embed:purchase_date}.</p>
+	<i class="icon ion-chevron-right icon-accessory"></i>
+</a>
+{/exp:member:custom_profile_data}

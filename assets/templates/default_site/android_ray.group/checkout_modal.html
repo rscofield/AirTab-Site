@@ -1,0 +1,87 @@
+<div ng-cloak>
+      <style>
+      .item-select select {
+        position: inherit !important;
+        top:0 !important;
+        right:0 !important;
+        padding:5px !important;
+        direction: ltr !important;
+        width:100% !important;
+        max-width: 100% !important;
+        text-indent: 0 !important;
+      }
+
+      .item-select .input-label {
+        display: block !important;
+      }
+
+      .item-select:after {
+        top: 50px !important;
+      }
+      </style>
+{exp:airtab:log_page_load}
+  <ion-view title="Send A Drink">
+    <ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+
+    <ion-content class="has-header" padding="true">
+
+      {!-- using twitter bootstrap here to lay out the form niceley... hence the form-horizontal class set here --}
+      <div class="list" ng-init="loadProduct(1, '{segment_3}', {segment_5})">
+        <div class="item-divider">
+          You have chosen to send a drink to a friend. Below are your order details.
+        </div>
+        <div class="item item-input item-stacked-label">
+          <span class="input-label">Recipient</span>
+          {if segment_3 == "airtab" OR segment_3 == "username"}
+            <p>{embed="payment/recipient" member_id="{segment_5}"}</p>
+          {/if}
+
+          {if segment_3 == "email" OR segment_3 == "text"}
+            <p>{segment_5}</p>
+          {/if}
+        </div>
+
+        <div class="item item-input item-stacked-label">
+          <span class="input-label">Drink Type</span>
+          <p>{{cart.product.name}}</p>
+        </div>
+
+        <div class="item item-input item-stacked-label">
+          <span class="input-label">Purchase Total</span>
+          <p>${{cart.product.price}}</p>
+        </div>
+        
+        {embed="android/charities"}
+
+        <div class="list">
+          <div class="item item-input item-select item-stacked-label">
+            <div class="input-label">
+              Payment Method
+            </div>
+            <select name="payment_profile" id="payment_profile" class="required" required>
+              <option value="{{profile.customerPaymentProfileId}}" ng-repeat="profile in cart.payment.payment_profiles" ng-selected="$first">Card Ending in {{profile.payment.creditCard.cardNumber}}</option>
+              <option value="new">Add New Card</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="item-divider">
+          Optional Message For Recipient
+        </div>
+
+        <label class="item item-input">
+          <textarea placeholder="Comments"></textarea>
+        </label>
+      </div>
+
+      <div class="control-group">
+        <div class="form-actions">
+          <button type="submit" ng-click="showPaymentDetails()" class="button  button-block button-assertive">Complete Purchase</button>
+            </div>
+      </div>
+
+    </ion-content>
+  </ion-view>
+</div>

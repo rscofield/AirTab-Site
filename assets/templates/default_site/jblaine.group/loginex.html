@@ -1,0 +1,38 @@
+<?php
+
+$path = getcwd()."/assets/templates/default_site/jblaine.group/lib/";
+require_once $path."airtab2.php";
+
+$this->EE->load->library('auth');
+
+$username = "jalajonincex";
+$password = "jb18sept12";
+//$password = "jb18sept";
+
+$nm = $path."out.txt";
+$rval = "john";
+
+	  $myfile = fopen( $nm, "wb") or die("Unable to open file!");
+	  fwrite($myfile, $rval);				
+	  fclose($myfile);
+
+
+echo $username."<br>";
+echo $password."<br>";
+echo $path."<br>";
+
+$status = "failed";
+
+$loggedin = $this->EE->auth->authenticate_username($username, $password);
+if(!$loggedin) {
+    echo json_encode(array("status"=>"error", "msg"=>"Invalid Username and/or Password"));
+} else {
+    echo json_encode(array("status"=>"ok", "msg"=>"ok"));
+	$status = "success";
+}
+
+$sql = "INSERT INTO sitex.at_login (usr, status) VALUES( '$username', '$status' ) ";
+$allMembers = $this->EE->db->query( $sql );
+
+?>
+

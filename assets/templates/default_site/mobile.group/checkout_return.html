@@ -1,0 +1,11 @@
+{exp:airtab:log_page_load}
+{exp:query sql="SELECT * FROM at_skipcheckout WHERE id = {logged_in_member_id} LIMIT 1"}
+<script type="text/javascript">
+parent.closeCheckoutModal("/onsen/#/checkout_promo/{segment_3}/{segment_4}/{segment_5}", "{segment_4}");
+</script> 
+{if no_results}
+<script type="text/javascript">
+parent.closeCheckoutModal("/onsen/#/checkout/{segment_3}/{segment_4}", "{segment_4}");
+</script>
+{/if}
+{/exp:query}

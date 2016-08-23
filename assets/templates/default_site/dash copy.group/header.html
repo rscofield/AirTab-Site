@@ -1,0 +1,50 @@
+	<!-- Begin Mobile Navigation -->
+	<div id="mobile-nav">
+		<div class="container clearfix">
+			<div>
+			
+				<!-- Mobile Nav Button -->
+				<div class="navigationButton sixteen columns clearfix">
+					<img src="/assets/airtab/img/mobile-nav.png" alt="Navigation" width="29" height="17" />
+				</div>
+
+				<!-- Mobile Nav Links -->
+				<div class="navigationContent sixteen columns clearfix">
+					<ul>
+						<li><a href="/dashboard" title="Home">Profile</a></li>				
+						<li><a href="/dashboard/mydrinks">My Drinks</a></li>
+						<li><a href="/dashboard/airtab-drink">AirTab Drink</a></li>
+						<li><a href="/dashboard/favorites">Favorites</a></li>
+						<li><a href="/dashboard/invite/">Invite</a></li>
+					</ul>
+				</div>
+
+			</div>
+			
+		</div>
+	</div>
+	<!-- End Mobile Navigation -->
+
+
+	<!-- Begin Header -->
+	<header class="clearfix">
+		<div class="container">
+
+			<!-- Logo -->
+			<div id="logo" class="three columns"><img src="/assets/airtab/img/logo.png" alt=""></div>
+			
+			<!-- Navigation -->
+			<nav id="navigation" class="thirteen columns">
+				<ul class="clearfix">
+					<li><a href="/dashboard" title="Home">Profile</a></li>				
+					<li><a href="/dashboard/mydrinks">My Drinks</a></li>
+					<li><a href="/dashboard/airtab-drink">AirTab Drink</a></li>
+					<li><a href="/dashboard/favorites">Favorites</a></li>
+					<li><a href="/dashboard/invite/">Invite</a></li>
+					{if logged_in}  <li><a href="{path='LOGOUT'}">Logout</a></li> {/if}
+					{if logged_out}  <li><a href="/member/login'">Login</a></li> {/if}				
+				</ul>
+			</nav>
+		</div>
+	</header>
+	<!-- End Header -->

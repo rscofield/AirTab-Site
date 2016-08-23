@@ -1,0 +1,9 @@
+{if logged_out}
+{ "tester": false }
+{if:else}
+	{exp:query sql="SELECT user_id FROM at_testers WHERE user_id = {logged_in_member_id} LIMIT 1"}
+	    {"tester": true}
+	    {if no_results}{"tester": false}{/if}
+	{/exp:query}
+{/if}
+{exp:http_header content_type="application/json"}

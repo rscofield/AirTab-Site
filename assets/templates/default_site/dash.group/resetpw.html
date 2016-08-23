@@ -1,0 +1,64 @@
+{exp:airtab:log_page_load}
+<div class="page-signin">
+
+    <div class="signin-header">
+        <div class="container text-center">
+            <section class="logo">
+                <a href="#/">AirTab</a>
+            </section>
+        </div>
+    </div>
+
+    <div class="signin-body">
+        <div class="container">
+            <div class="form-container">
+            
+
+                {exp:freemember:reset_password return="/dashboard/#/resetpw_complete" form_class="form-horizontal" secure_action="yes"}
+
+								{if no_results}
+											<p>Sorry, the link you clicked does not appear to be valid, or has expired.</p>
+									{/if}
+
+									<p>To reset your password, please enter a new password below:</p>
+
+								
+								
+                    <fieldset>
+                        <div class="form-group">
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-user"></span>
+                                </span>
+                                <input type="password"
+                                		name="password"
+                                    class="form-control"
+                                    placeholder="password"
+                                >
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-lock"></span>
+                                </span>
+                                <input type="password"
+                                       class="form-control"
+                                       placeholder="password confirm"
+                                       name="password_confirm"
+                                       >
+                            </div>
+                        </div> 
+ 
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-lg btn-block">Submit</button>
+                        </div>
+                    </fieldset>
+                {/exp:freemember:reset_password}
+
+                
+            </div>
+        </div>
+    </div>
+
+</div>

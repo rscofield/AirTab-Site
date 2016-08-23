@@ -1,0 +1,48 @@
+{exp:airtab:log_page_load}
+<div class="page-signin">
+
+    <div class="signin-header">
+        <div class="container text-center">
+            <section class="logo">
+                <a href="#/">AirTab</a>
+            </section>
+        </div>
+    </div>
+
+    <div class="signin-body">
+        <div class="container">
+            <div class="form-container">
+            
+
+                {exp:freemember:forgot_password  reset="/dashboard/#/resetpw"  return="/dashboard" form_class="form-horizontal" secure_action="yes"}
+								
+										<p>To reset your password, please enter the email address associated with your account and instructions with be sent shortly.</p>
+								
+                    <fieldset>
+                        <div class="form-group">
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-user"></span>
+                                </span>
+                                <input type="text"
+                                		name="email"
+                                    class="form-control"
+                                    placeholder="email"
+                                >
+                            </div>
+                        </div>
+  
+                        <div class="form-group">
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-lg btn-block">Submit</button>
+                        </div>
+                    </fieldset>
+                {/exp:freemember:forgot_password}
+
+                
+            </div>
+        </div>
+    </div>
+
+</div>

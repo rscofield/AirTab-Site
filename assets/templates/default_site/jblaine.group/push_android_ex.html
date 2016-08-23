@@ -1,0 +1,71 @@
+<?php
+    echo "My first PHP script!". "<br>";
+    
+    //$fname =  __FILE__;
+    $recipientId = "1286";
+    //	$recipientId = "952";
+    //$message = "push: " . date("Y.m.d H:i:s"). " " .$fname;
+    $message = "push: " ;
+    $title = "title";
+    $tag = "Push";
+    
+    define( 'API_ACCESS_KEY', 'AIzaSyDQ7oEmA8JCJBKNBdZYZbLqMbssHKUAF28' );
+    
+    //John Blaine
+    //$id = 'APA91bEAaYb61fN_54z1u_ZAPQHWHf5SmjuxXCnUOwVlH_wkyl91nmTzZTKbooyhP7PUOCkwtgSxd1ozZpR495TP4Fy6pEYCfIx5z44IuYDDzccmte9Wg5bRs8kZnQbWQh7fn8OkBKlGXA9Wocc3E5rQ0zocw7gGjA';
+   // $id = 'APA91bEAaYb61fN_54z1u_ZAPQHWHf5SmjuxXCnUOwVlH_wkyl91nmTzZTKbooyhP7PUOCkwtgSxd1ozZpR495TP4Fy6pEYCfIx5z44IuYDDzccmte9Wg5bRs8kZnQbWQh7fn8OkBKlGXA9Wocc3E5rQ0zocw7gGjA';
+    $id = 'APA91bHQEXTE98nCCSGdiXWi3lDt0rHHiXt_UayDfnB6bMOhriZ8iCeP7k4RVaU8wGjrHgZxsx-u3wBoH_5cKdjO62xs1hJ8tBEo1SwsI4T5g5RYhpR0B-z972W7HuaaQ09a7joXXi6oFp176qZRZUPj-W1FQeKY6A';
+
+    // Samantha Humphrey
+    //$recipientId = "1240";
+    //$id = 'APA91bGmzv7lj4ovuGBYLJ-85yX3g53mmx-2JwtFzqB3UAcjOmOv107p0NphE5BCT4EXOglQEgwAd-wSUdh9lYHO7CZSnzZruwhg1OiUlGsM4MDH0knpV1QEGgqLJ-X4UMKa5uJ78w-xYcqvZRMYoto1CpXcz0lKbw';
+    
+    
+    
+    $registrationIds = array($id);
+    
+    // prep the bundle
+    $msg = array (
+                  'tag' 			=> 'Push',
+                  'title'			=> 'title',
+                  'subtitle'		=> 'hello',
+                  'vibrate'		=> true,
+                  'sound'			=> true
+                  );
+    
+    
+    $fields = array (
+                     'registration_ids' 	=> $registrationIds,
+                     'data'				=> $msg
+                     );
+    
+    $headers = array (
+                      'Authorization: key=' . API_ACCESS_KEY,
+                      'Content-Type: application/json'
+                      );
+    
+    //-------------------------------------------
+    
+    $ch = curl_init();
+    curl_setopt( $ch,CURLOPT_URL, 'https://android.googleapis.com/gcm/send' );
+    curl_setopt( $ch,CURLOPT_POST, true );
+    curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
+    curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
+    curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
+    curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
+    $result = curl_exec($ch );
+    curl_close( $ch );
+    
+    $fld = json_encode( $fields );
+    $hdr = json_encode( $headers );
+    
+    echo "<br><br><br><br><br>";
+    echo $fld. "<br>";
+    echo $hdr. "<br>";
+    
+    echo "<br><br><br><br><br>";
+  
+    echo "My first PHP script! 69". "<br>";
+    echo "test!!!". "<br>".$fname;
+    
+    ?>

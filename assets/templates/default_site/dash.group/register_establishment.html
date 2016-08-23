@@ -1,0 +1,122 @@
+<link href="{path=css/_ee_channel_form_css}" type="text/css" rel="stylesheet" media="screen">
+<div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span> Establishment Registration</strong>
+<h5>Enter the information for your establishment.</h5></div>
+{exp:channel:form channel="establishments"  return="/dashboard/#/establishment/ENTRY_ID" include_jquery="yes" json="yes" status="Waiting Approval"}
+<div class="page" id="estEdit" data-ng-controller="SubmitCtrl">
+		<div class="form-group">
+			<div class="row">
+				<div class="col-sm-10">
+					<label for="title" class="control-label">Establishment Name</label>
+					<input tooltip="Establishment Name" type="text" class="form-control" name="title" id="title" value="{title}" size="50" maxlength="100">
+				</div>
+			</div>
+			
+			<div class="divider"></div>
+			
+			<div class="row">
+				<div class="col-sm-4">
+					<label for="address" class="ccontrol-label">Address</label>
+					<input type="text" class="form-control" name="address" id="address" value="{address}">
+				</div>
+				<div class="col-sm-4">
+					<label for="city" class="control-label">City</label>
+					<input type="text" class="form-control" name="city" id="city" value="{city}">
+				</div>
+				<div class="col-sm-1">
+					<label for="state" class="control-label">State</label>
+					<input type="text" class="form-control" name="state" id="state" value="{state}">	
+				</div>
+				<div class="col-sm-1">
+					<label for="zip" class="control-label">Zip</label>
+					<input type="text" class="form-control" name="zip" id="zip" value="{zip}">			
+				</div>
+			</div>
+			
+			<div class="divider"></div>
+			
+			<div class="row">
+				<div class="col-sm-5">
+					<label for="contact" class="control-label">Contact Name</label>
+					<input type="text" class="form-control" name="contact" id="contact" value="{if contact}{contact}{if:else}{exp:member:custom_profile_data}{FName} {LName}{/exp:member:custom_profile_data}">
+				</div>
+				<div class="col-sm-5">
+					<label for="est_phone" class="control-label">Phone Number</label>
+					<input type="text" class="form-control" name="est_phone" id="est_phone" value="{if est_phone}{est_phone}{if:else}{exp:member:custom_profile_data}{Phone}{/exp:member:custom_profile_data}">
+				</div>
+			</div>
+			
+			<div class="divider"></div>
+			
+			<div class="row">
+				<div class="col-sm-10">
+					<label for="est_intro" class="control-label">Establishment BIO</label>
+					<textarea rows="5" class="form-control" name="est_intro" id="est_intro">{est_intro}</textarea>			
+				</div>
+			</div>
+
+			<div class="divider"></div>
+			<input type="hidden" name="latitude" value="0" id="lat" />
+			<input type="hidden" name="longitude" value="0" id="lng" />
+			<input type="hidden" name="est_member_id" value="{logged_in_member_id}" />
+			<input type="hidden" name="status" value="Waiting Approval" />
+
+			<button type="button" onClick="geoCode()" id="submit" class="btn btn-primary btn-lg">Submit</button>
+		</div>
+
+
+
+
+</div>
+ 
+<script type="text/javascript">
+                        $(document).ready(function(){
+                    		$.getScript("/admin/scripts/jquery.form.js", function() {
+  
+                    		});
+                        });
+
+                        function formSubmit() {
+                        	$.getScript("/admin/scripts/jquery.form.js", function() {
+
+                        		$("#publishForm").ajaxSubmit({
+						    	dataType: 'json',
+                                success: function(data) {
+                                        if (data.success) {
+                                        	angular.element('#estEdit').scope().notify("success", "{title} has been successfully updated.");
+                                        	window.location.href="/dash/establishment_complete/" + data.entry_id;
+                                        } else {
+                                        	angular.element('#estEdit').scope().notify("error", 'Failed with the following errors: '+JSON.stringify(data.field_errors));
+                                        }
+                                }
+						    }); 
+						    // return false to prevent normal browser submit and page navigation 
+						    return false; 
+  
+                    		});
+                        }
+
+                        function geoCode() {
+                        	var street = $("#address").val();
+                        	var city = $("#city").val();
+                        	var state = $("#state").val();
+                        	var zip = $("#zip").val();
+
+                        	var geocoder = new google.maps.Geocoder();
+		                    	geocoder.geocode( 
+		                    		{ 'address': street + ", " + city + ", " + state+ " " + zip},
+		                    		function(results, status) {
+							      if (status == google.maps.GeocoderStatus.OK) {
+							        var location = results[0].geometry.location;
+		                    		$("#lat").val(location.lat());
+		                    		$("#lng").val(location.lng());
+		                    		// attach handler to form's submit event 
+		                    		formSubmit();
+									
+							      } else {
+							      	angular.element('#estEdit').scope().notify("error", "Geocode was not successful for the following reason: " + status);
+							      }
+
+						    });
+                        }
+</script>
+{/exp:channel:form}

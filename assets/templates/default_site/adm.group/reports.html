@@ -1,0 +1,50 @@
+{if segment_3 == "useractivity"}
+[
+	{exp:query sql="SELECT * FROM v_reports_useractivity limit 250"}
+	{
+		"member_id": "{member_id}",
+		"username": "{username}",
+		"email": "{email}",
+		"joined": "{join_date format="%m/%d/%y - %h:%i%a" timezone="America/New_York"}",
+		"last_activity": "{last_activity format="%m/%d/%y - %h:%i%a" timezone="America/New_York"}",
+		"first_name": "{m_field_id_1}",
+		"last_name": "{m_field_id_2}",
+		"devices": "{if ios > 0 AND android > 0}Android ({android}) / iOS ({ios}){if:elseif ios > 0}iOS ({ios}){if:elseif android > 0}Android ({android}){if:else} {/if}"
+	}{if count < total_results},{/if}
+	{/exp:query}
+]
+{/if}
+{if segment_3 == "redeemed"}
+[
+	{exp:channel:entries channel="drink_ticket" status="redeemed|pending" search:tck_redeem_member="={logged_in_member_id}"}
+	{
+		"tr_class": "{if "{drink_type:title}" == "Standard"}success{if:else}warning{/if}",
+    	"order_id": "{entry_id}",
+    	"redeem_date": "{tck_redeem_date format="%m/%d/%y - %h:%i%a" timezone="America/New_York"}",
+        "sender": "{embed="dash/screenname" member_id="{tck_p_member}"}",
+        "redeemed_at": "{tck_redeemed_at:title}",
+        "drink": "{redeemed_drink:title}"
+    }{if count < total_results},{/if}
+	{/exp:channel:entries}
+]
+{/if}
+{if segment_3 == "drinkactivity"}
+[
+	{exp:query sql="SELECT * FROM v_drink_tickets limit 200"}
+	{
+		"member_id": "{tck_p_member}",
+		"username": "{p_member_username}",
+		"purchased": "{tck_purchase_date format="%m/%d/%y - %h:%i%a" timezone="America/New_York"}",
+		"sent_id": "{tck_r_member}",
+		"sent_username": "{r_member_username}",
+		"status": "{status}",
+		"redeemed": "{if "{tck_redeem_date}" > 0}{tck_redeem_date format="%m/%d/%y - %h:%i%a" timezone="America/New_York"}{if:else} {/if}",
+		"ticket_id": "{ticket_id}",
+		"redeemed_at_id": "{redeemed_at_id}",
+		"estab_name": "{estab_name}",
+		"redeemed_drink": "{redeemed_drink}"
+	}{if count < total_results},{/if}
+	{/exp:query}
+]
+{/if}
+{exp:http_header content_type="application/json"}

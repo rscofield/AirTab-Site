@@ -1,0 +1,73 @@
+<?php
+$lat = ee()->input->get('latitude');
+$lng = ee()->input->get('longitude');
+?>
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>My App</title>
+    <!-- Path to Framework7 Library CSS-->
+    <link rel="stylesheet" href="/assets/f7/css/framework7.css">
+    <!-- Path to your custom app styles-->
+    <link rel="stylesheet" href="/assets/f7/css/my-app.css">
+  </head>
+  <body>
+    <!-- Panels overlay-->
+    <div class="panel-overlay"></div>
+    <!-- Left panel with reveal effect-->
+    <div class="panel panel-left panel-reveal">
+      <div class="content-block">
+        <p>Left panel content goes here</p>
+      </div>
+    </div>
+    <!-- Right panel with cover effect-->
+    <div class="panel panel-right panel-cover">
+      <div class="content-block">
+        <p>Right panel content goes here</p>
+      </div>
+    </div>
+    <!-- Views-->
+    <div class="views">
+      <!-- Your main view, should have "view-main" class-->
+      <div class="view view-main">
+        <!-- Top Navbar-->
+
+        <!-- Pages, because we need fixed-through navbar and toolbar, it has additional appropriate classes-->
+        <div class="pages navbar-through toolbar-through">
+          <!-- Page, data-page contains page name-->
+          <div data-page="index" class="page">
+            <!-- Scrollable page content-->
+            <div class="page-content">
+            {exp:channel:entries channel="est_news"}
+            {if est_news_type == "standard"}
+            	<div class="content-block-title"><a href="AirTab:act=showbar&lat={news_establishment:latitude}&lng={news_establishment:longitude}&address={news_establishment:address}" class="external">{news_establishment:title}</a></div>
+				<div class="content-block">
+				<a href="AirTab:act=showbar&lat={news_establishment:latitude}&lng={news_establishment:longitude}&address={news_establishment:address}" class="external">
+				<div class="content-block-inner">
+					<p>{news_content}</p>
+				</div>
+				</a>
+				</div>
+			{if:elseif est_news_type=="full_banner"}
+				<div class="content-block" style="padding-left:0;">
+					<a href="AirTab:act=showbar&lat={news_establishment:latitude}&lng={news_establishment:longitude}&address={news_establishment:address}" class="external"><p style="text-align:center">{banner_image:iphone5 wrap="image"}<br /><span style="font-size:8pt;">Brought to you by: <a href="AirTab:act=showbar&lat={news_establishment:latitude}&lng={news_establishment:longitude}&address={news_establishment:address}" class="external">{news_establishment:title}</a></span></p></a>
+				</div>
+			{/if}
+			{/exp:channel:entries}
+            </div>
+          </div>
+        </div>
+        <!-- Bottom Toolbar-->
+      </div>
+    </div>
+    <!-- Path to Framework7 Library JS-->
+    <script type="text/javascript" src="/assets/f7/js/framework7.js"></script>
+    <!-- Path to your app js-->
+    <script type="text/javascript" src="/assets/f7/js/my-app.js"></script>
+  </body>
+</html>

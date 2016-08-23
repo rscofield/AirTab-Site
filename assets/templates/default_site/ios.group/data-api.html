@@ -1,0 +1,49 @@
+{if segment_3 == "drink-ticket"}
+[
+{exp:query sql="SELECT * FROM v_drink_tickets WHERE entry_id = {segment_4}"}
+"type":"drink ticket",
+"id":"{entry_id}",
+"ticket_id": "{ticket_id}",
+"status":"{status}",
+"purchase_date":"{tck_purchase_date format="%F %d, %Y"}",
+"p_member_id":"{tck_p_member}",
+"p_member_username":"{p_member_username}"
+"r_member_id":"{tck_r_member}",
+"r_member_username":"{r_member_username}"
+{if no_results}"error":"no results"{/if}
+{/exp:query}
+]
+
+{if:elseif segment_3 == "newslist"}
+[
+{exp:channel:entries channel="est_news" orderby="random" search:news_ispinned="= Yes"}
+	{
+	"id":"{entry_id}",
+	"content_banner":"{est_news_content_banner}"
+	},
+{/exp:channel:entries}
+{exp:channel:entries channel="est_news" orderby="random" limit="10" search:news_ispinned="=not Yes"}
+	{
+	"id":"{entry_id}",
+	"content_banner":"{est_news_content_banner}"
+	}{if count != total_results},{/if}
+{/exp:channel:entries}
+]
+
+{if:elseif segment_3 == "friendslist"}
+[
+{exp:query sql="SELECT * FROM v_friends WHERE friend_id = {segment_4} or sender_id = {segment_4}"}
+	{	
+		"friend_id":"{friend_id}",
+		"friend_username":"{friend_screen_name}",
+		"sender_id": "{sender_id}",
+		"sender_username":"{sender_screen_name}"
+	}{if count < total_results},{/if}
+	{if no_results}"error":"no results"{/if}
+	{/exp:query}
+]
+
+{if:else}
+{/if}
+
+{exp:http_header content_type="application/json"}

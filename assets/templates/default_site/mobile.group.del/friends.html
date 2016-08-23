@@ -1,0 +1,60 @@
+
+{if logged_out}
+	{redirect="mobile/login"}
+{/if}
+{exp:airtab:log_page_load}
+{if segment_3 == ""}
+<?php $member = ee()->session->userdata('member_id'); ?>
+<ion-view title="AirTab Friend">
+	<ion-nav-buttons side="left">
+      <button class="button button-icon button-clear ion-navicon" ng-click="showMenu()"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" padding="true" ng-init="hideNav()" has-tabs="true">
+    	<div class="list">
+    	{exp:query sql="SELECT * FROM v_friends WHERE sender_id=<?=$member?> or friend_id=<?=$member?> ORDER BY CASE friend_id WHEN <?=$member?>  THEN sender_screen_name ELSE friend_screen_name END ASC"}
+			{if sender_id == <?=$member?>}
+				{embed="mobile/friend_info" member_id="{friend_id}" status="{status}" href="#/friends/options/{friend_id}"}
+			{if:else}
+				{embed="mobile/friend_info" member_id="{sender_id}" status="{status}" href="#/friends/options/{sender_id}"}
+			{/if}
+			{if no_results}You do not currently have any AirTab friends. Try adding some!<? echo $member ?>{/if}
+		{/exp:query}
+
+		</div>
+    </ion-content>
+    <ion-footer-bar align-title="center" class="bar-dark">
+		<button class="button button-block button-assertive" onClick="window.location.href='#/addfriend';">
+		  Add Friend
+		</button>
+	</ion-footer-bar>
+</ion-view>
+{/if}
+
+{if segment_3 == "options"}
+<ion-view title="AirTab Friends">
+	<ion-nav-buttons side="right">
+      <button class="button button-icon button-clear ion-navicon" ng-click="showMenu()"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" padding="true" ng-init="hideNav()" has-tabs="true" id="checkoutModal" ng-controller="sendDrinkFriend">
+			<div class="list">
+				<div class="item item-avatar-left item-icon-right ">
+					{exp:member:custom_profile_data member_id="{segment_4}"}
+						{exp:query sql="SELECT email as mail FROM exp_members WHERE member_id = '{segment_4}'"}
+								<img src="{exp:gravatar email="{mail}" rating="R" size='80'}" width="40" height="40">
+						{/exp:query}
+						<h2>{screen_name}</h2>
+						<p>{username}</p>
+					{/exp:member:custom_profile_data}		
+				</div>
+			</div>
+			<button class="button  button-block icon ion-wineglass button-assertive" ng-click="showModal('Premium', '{segment_4}')"> Send Drink</button>
+			<div ng-controller="friendController">
+			<button class="button  button-block icon ion-trash-a button-assertive" ng-click="confirmRemove({segment_4})"> Remove from Friends</button>
+			</div>
+    </ion-content>
+</ion-view>
+{/if}
+
+{if segment_3 == "remove"}
+	{exp:airtab:remove_friend friend_id="{segment_4}"}
+{/if}

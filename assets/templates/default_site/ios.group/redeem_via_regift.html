@@ -1,0 +1,18 @@
+{exp:airtab:log_page_load}
+
+{exp:airtab:regift_drink ticket="{segment_3}" establishment="{segment_4}" drink="{segment_5}" server="{segment_6}" recipientId="{segment_7}"}
+{if success AND server_image AND est AND server_id AND drink_count}
+{
+	"status":"success",
+	"msg": "You have successfully redeemed your selected drink. Don't forget to tip your server.",
+	"title":"Drink Redeemed",
+	"count": "{drink_count}",
+	{embed="global/serverimage" server_image="{server_image}"}
+}
+{if:else}
+	{error}
+{/if}
+{/exp:airtab:regift_drink}
+
+
+{exp:http_header content_type="application/json"}

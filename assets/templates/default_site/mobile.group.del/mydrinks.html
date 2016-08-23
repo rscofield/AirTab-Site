@@ -1,0 +1,50 @@
+
+{if logged_out}
+	{redirect="mobile/login"}
+{/if}
+{if segment_3 == ""}
+<?php $member = ee()->session->userdata('member_id');?>
+<ion-view title="My Drinks">
+	<ion-nav-buttons side="left">
+      <button class="button button-icon button-clear ion-navicon" ng-click="showMenu()"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" padding="true" ng-init="hideNav()" has-tabs="true">
+    	<div class="list">
+    	{exp:query sql="SELECT * FROM v_drink_ticket_fields WHERE r_member = <?=$member?> AND status='nonredeemed' ORDER BY purchase_date DESC"}
+			{embed="mobile/ticket_info" sender="{p_member}" ticket_id="{entry_id}" purchase_date="{purchase_date format="%F %d, %Y"}"}
+			{if no_results}You do not currently have any AirTab friends. Try adding some!<? echo $member ?>{/if}
+		{/exp:query}
+
+		</div>
+    </ion-content>
+    <ion-footer-bar align-title="center" class="bar-dark">
+		<button class="button button-block button-assertive" onClick="window.location.href='#/senddrink';">
+		  Send A Drink
+		</button>
+	</ion-footer-bar>
+</ion-view>
+{/if}
+
+{if segment_3 == "options"}
+<ion-view title="AirTab Friends">
+	<ion-nav-buttons side="right">
+      <button class="button button-icon button-clear ion-navicon" ng-click="showMenu()"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" padding="true" ng-init="hideNav()" has-tabs="true">
+			<div class="list">
+				<div class="item item-avatar-left item-icon-right ">
+					{exp:member:custom_profile_data member_id="{segment_4}"}
+						{exp:query sql="SELECT email as mail FROM exp_members WHERE member_id = '{segment_4}'"}
+								<img src="{exp:gravatar email="{mail}" rating="R" size='80'}" width="40" height="40">
+						{/exp:query}
+						<h2>{screen_name}</h2>
+						<p>{username}</p>
+					{/exp:member:custom_profile_data}		
+				</div>
+			</div>
+			<button class="button  button-block icon ion-wineglass button-assertive" onClick="window.location.href='#/payment/Premium/{segment_4}';"> Send Drink</button>
+			<button class="button  button-block icon ion-trash-a button-assertive"> Remove from Friends</button>
+
+    </ion-content>
+</ion-view>
+{/if}

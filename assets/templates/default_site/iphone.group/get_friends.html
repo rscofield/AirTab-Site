@@ -1,0 +1,14 @@
+<? $member = ee()->session->userdata('member_id'); ?>
+[
+
+{exp:query sql="SELECT * FROM v_friends WHERE sender_id='<? echo $member;?>' or friend_id='<?echo $member;?>'"}
+	{if sender_id == <?echo $member;?>}
+		{embed="iphone/friends_info" member_id="{friend_id}" status="{status}"}
+	{if:else}
+		{embed="iphone/friends_info" member_id="{sender_id}" status="{status}"}
+	{/if}
+	{if count < total_results},{/if}
+{/exp:query}
+
+]
+{exp:http_header content_type="application/json"}

@@ -1,0 +1,44 @@
+<?php
+    echo "My first PHP script xx--xx!". "<br>";
+    
+    $recipientId = "1286";
+    $message = "push: " ;
+    $title = "title";
+    $tag = "Push";
+    
+    define( 'API_ACCESS_KEY', 'AIzaSyDQ7oEmA8JCJBKNBdZYZbLqMbssHKUAF28' );
+    
+    $id = 'APA91bHQEXTE98nCCSGdiXWi3lDt0rHHiXt_UayDfnB6bMOhriZ8iCeP7k4RVaU8wGjrHgZxsx-u3wBoH_5cKdjO62xs1hJ8tBEo1SwsI4T5g5RYhpR0B-z972W7HuaaQ09a7joXXi6oFp176qZRZUPj-W1FQeKY6A';
+
+    $registrationIds = array($id);
+
+    $msg = array (
+                  'tag' 			=> 'Push',
+                  'title'			=> 'title',
+                  'subtitle'		=> 'hello john',
+                  'vibrate'		=> true,
+                  'sound'			=> true
+                  );
+    
+    
+    $fields = array (
+                     'registration_ids' 	=> $registrationIds,
+                     'data'				=> $msg
+                     );
+    
+    $headers = array (
+                      'Authorization: key=' . API_ACCESS_KEY,
+                      'Content-Type: application/json'
+                      );
+
+    $ch = curl_init();
+    curl_setopt( $ch,CURLOPT_URL, 'https://android.googleapis.com/gcm/send' );
+    curl_setopt( $ch,CURLOPT_POST, true );
+    curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
+    curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
+    curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
+    curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
+    $result = curl_exec($ch );
+    curl_close( $ch );
+
+    ?>

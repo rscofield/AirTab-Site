@@ -1,0 +1,59 @@
+{exp:airtab:log_page_load}
+{if segment_3 == ""}
+	No establishment provided!
+{if:else}
+<div ng-cloak>
+<style type="text/css">
+	.button.button-block, .button.button-full {
+		margin-top:0;
+	}
+</style>
+<div class="bar bar-subheader bar-dark" ng-if="$root.redeem">
+  <h4 class="title smaller-title">Which drink would you like to redeem?</h4>
+</div>
+
+<ion-view ng-if="!isDrinkView()" title="Menu" ng-controller="estController" ng-init="hideLoading()">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" padding="true" has-tabs="true" ng-class="($root.redeem) ? 'has-subheader' : ''">
+		{exp:channel:entries channel="establishments" entry_id="{segment_3}"}
+			<div class="panel-body text-center" style="padding: 10px 20px 0 20px">
+				<h3>{title}</h3>
+			</div>
+		{/exp:channel:entries}	
+    	<div class="list">
+    		{exp:low_search:results channel="drinks" child:drk_establishment="{segment_3}" search:drk_level="Premium"}
+    		<a class="item item-thumbnail-left" ng-click="drinkInfo({entry_id})">
+				<img src="{fld_picture:iphone5}?v=1" width="80" height="80">
+				<h2>{title}</h2>
+				<p>{fld_body}</p>
+		    </a>
+
+		    {if no_results}
+				{embed="android/nomenu"}
+			{/if}
+		    {/exp:low_search:results}
+
+		</div>
+    </ion-content>
+    <ion-footer-bar align-title="center" class="bar-dark" style="padding:0;">
+    	<div class="row" style="padding:0 !important;">
+			<div class="col" style="text-align:center">
+				<button class="button  button-block button-assertive" onClick="window.location.href='#/app/establishments/info/{segment_3}';">
+				  Establishment Info
+				</button>
+			</div>
+			
+    		<div class="col" style="text-align:center">
+				<button class="button  button-block button-assertive" ng-click="$root.changeState('app.senddrink')">
+				  Send A Drink
+				</button>
+			</div>
+			
+			
+		</div>
+	</ion-footer-bar>
+</ion-view>
+</div>
+{/if}

@@ -1,0 +1,143 @@
+<?php
+
+$title = "Friend Request";
+
+$act = ee()->input->post('act'); // Accept or Reject
+$friend = ee()->input->post('friend'); // Friend ID
+$member = ee()->session->userdata('member_id'); // Get Current User's ID
+//$member = ee()->input->post('member');
+
+if(!$act) {
+	$status = "error";
+	$msg = "You did not specify an action.";
+	goto output;
+}
+
+if(!$friend) {
+	$status = "error";
+	$msg = "You did not specify a member ID.";
+	goto output;
+}
+
+if($act != "accept" && $act!= "decline") {
+	$status = "error";
+	$msg = "You can only accept or reject a friend request";
+	goto output;
+}
+
+//Get Entry ID for friend request
+
+$results = ee()->db->select('entry_id')
+  ->from('channel_data')
+  ->where(array(
+        	'field_id_55' => $friend,
+			'field_id_31' => $member
+		))
+  ->get();
+
+if ($results->num_rows() == 0)
+{
+    $status = "error";
+    $msg = "Could not find friend request.";
+    goto output;
+}
+
+//Update Friend Request Status to Accepted
+if($act == "accept") {
+	ee()->db->update(
+	    'channel_titles',
+	    array(
+	        'status'  => "Approved"
+	    ),
+	    array(
+	        'entry_id' => $results->row("entry_id")
+	    )
+	);
+	
+	if(ee()->db->affected_rows() > 0) {
+		$status = "success";
+		$msg = "The friend request was successfully accepted.";
+		goto notify;
+	}
+} else {
+	ee()->load->library('api');
+	ee()->api->instantiate('channel_entries');
+		
+	ee()->api_channel_entries->delete_entry(array($results->row('entry_id')));
+	
+	$status = "success";
+	$msg = "The friend request was successfully declined.";
+	goto output;
+}
+
+//Send Push Notification to Request Creator letting them know the request was accepted.
+
+notify:
+
+	$results = ee()->db->limit(1)
+		->where('member_id', $friend)
+		->get('member_data');
+	
+		$deviceToken = $results->row('m_field_id_5');
+	
+	$deviceToken = $results->row('m_field_id_5');
+	
+	$results = ee()->db->limit(1)
+		->where('member_id', $member)
+		->get('members');
+	
+	$screen_name = $results->row('screen_name');
+	
+	if($deviceToken != "") {
+		$passphrase = 'pw4airtabdev';
+		
+		// My alert message here:
+		$message = $screen_name . " accepted your friend request!";
+		
+		//badge
+		$badge = 1;
+		
+		$ctx = stream_context_create();
+		stream_context_set_option($ctx, 'ssl', 'local_cert', '/var/www/vhosts/airtab.me/httpdocs/push/apns-dev.pem');
+		stream_context_set_option($ctx, 'ssl', 'passphrase', $passphrase);
+		
+		// Open a connection to the APNS server
+		$fp = stream_socket_client(
+		    'ssl://gateway.sandbox.push.apple.com:2195', $err,
+		    $errstr, 60, STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, $ctx);
+		
+		if (!$fp)
+		exit("Failed to connect: $err $errstr" . PHP_EOL);
+		
+		//echo 'Connected to APNS' . PHP_EOL;
+		
+		// Create the payload body
+		$body['aps'] = array(
+		    'alert' => $message,
+		    //'badge' => $badge,
+		    'sound' => "glass-clink-2.aiff"
+		);
+		
+		// Encode the payload as JSON
+		$payload = json_encode($body);
+		
+		// Build the binary notification
+		$msg1 = chr(0) . pack('n', 32) . pack('H*', $deviceToken) . pack('n', strlen($payload)) . $payload;
+		
+		// Send it to the server
+		$result = fwrite($fp, $msg1, strlen($msg1));
+		
+		if (!$result) {
+		    //echo 'Error, notification not sent' . PHP_EOL;
+		} else {
+		    //echo 'notification sent!' . PHP_EOL;
+		}
+		
+		// Close the connection to the server
+		fclose($fp);
+	}
+
+output:
+?>
+[{"status": "<?=$status?>", "msg": "<?=$msg?>", "title": "<?=$title?>"}]
+{exp:http_header content_type="application/json"}

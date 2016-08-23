@@ -1,0 +1,9 @@
+{exp:low_search:results channel="drinks" child:drk_establishment="248" child:drk_level="Premium" orderby="entry_date" sort="asc"}
+{if drk_level == "Premium"}
+<a class="item item-thumbnail-left" ng-click="drinkInfo({entry_id})">
+	<img src="{fld_picture:iphone5}?v=1" width="80" height="80">
+	<h2>{title}</h2>
+	<p>{drk_teaser}</p>
+</a>
+{/if}
+{/exp:low_search:results}

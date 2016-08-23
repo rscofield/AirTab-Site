@@ -1,0 +1,16 @@
+<div style="text-align:center;margin-bottom:15px"><strong>Pending establishments were found.</strong></div>
+ <ion-list data-ng-controller="noestabController" ng-init="loadNearby({segment_3}, {segment_4})">
+
+        <ion-item ng-repeat="item in items" 
+                  item="item"
+                  class="item-avatar"
+                  ng-click="showModal('{{item.place_id}}')">
+                  	<img src="{{ item.icon }}" height="40px">
+          			<h2>{{ item.name }}</h2>
+          			<p>{{ item.vicinity }}</p>
+        </ion-item>
+
+</ion-list>
+
+<div id="placesAttribs"></div>
+<div style="text-align:center;margin-top:15px"><img src="/assets/img/powered-by-google-on-white.png" /></div>

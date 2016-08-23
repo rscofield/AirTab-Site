@@ -1,0 +1,27 @@
+{if segment_3 != "" AND segment_4 != ""}
+[
+{exp:low_search:results channel="establishments" distance:from="{segment_3}|{segment_4}" distance:to="latitude|longitude" distance:radius="{segment_5}" distance:unit="mi" limit="25"}
+	{
+      "index": "{count}",
+      "type": "airtab",
+  		"id": "{entry_id}",
+    	"title": "{exp:low_replace find="&#8217;|QUOTE|NEWLINE|&amp;" replace="'|\QUOTE|SPACE|&" multiple="yes"}{title}{/exp:low_replace}",
+      "latitude": "{latitude}",
+      "longitude": "{longitude}",
+      "address": "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{address}{/exp:low_replace}",
+      "city": "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{city}{/exp:low_replace}",
+      "state": "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{state}{/exp:low_replace}",
+      "zip": "{zip}",
+      "distance": {if low_search_distance > 50} "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{city}{/exp:low_replace}" {if:else} "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{city}{/exp:low_replace} - {low_search_distance} Miles Away"{/if},
+      "bg": "{photo_large:android}?v=1",
+      "phone": "{est_phone}"
+    }
+	{exp:airtab:log_page_load  misc="{low_search_distance}" count="{count}" match="1"}
+	{if count < total_results},{/if}
+    {if no_results}{ "type": "Google Places" }{/if}
+{/exp:low_search:results}
+]
+{exp:http_header content_type="application/json"}
+{if:else}
+
+{/if}

@@ -1,0 +1,44 @@
+<?php
+
+	$path = getcwd()."/assets/templates/default_site/jblaine.group/lib";
+
+	 require_once $path.'/airtab2.php';
+
+	 $fname = $_FILES['uploadedfile']['name'];
+	 $fname_with_path = $path . '/' .$fname;
+	 $tmp =  $_FILES['uploadedfile']['tmp_name'];
+	     	 
+	 //move_uploaded_file( $tmp, $fname_with_path);
+	//================================================
+     $encrypt = true;
+      
+     if($encrypt == false) {
+
+	    move_uploaded_file( $tmp, $fname_with_path);
+   		
+        $myfile = fopen( $tmp, "r") or die("Unable to open file!");
+		$data = fread($myfile, filesize($tmp));
+		fclose($myfile);
+		
+        echo $data;
+
+	 } else {     
+
+   		$myfile = fopen( $tmp, "r") or die("Unable to open file!");
+		$data = fread($myfile, filesize($tmp));
+		fclose($myfile);
+
+		$key = airtab2::genKey($fname);
+    	$rval = airtab2::dec($data, $key);
+
+		$myfile = fopen( $fname_with_path, "w") or die("Unable to open file!");
+		fwrite($myfile, $rval);				
+		fclose($myfile);
+
+    	$rval = airtab2::enc($rval, $key);
+
+	    echo $rval;
+	}
+
+?>
+

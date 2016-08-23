@@ -1,0 +1,29 @@
+
+	{exp:member:custom_profile_data member_id="{embed:sender}"}
+	<div class="item item-avatar-left item-icon-right " ng-controller="myDrinks" {if embed:modal != ""}ng-init="isModal = true"{/if} ng-click="drinkClicked('{embed:ticket_id}','{if FName != "" AND LName != ""}{FName} {LName}{if:else}{username}{/if}','{embed:purchase_date}')">
+	    <img src="{exp:airtab:avatar member="{embed:sender}" size="90"}" width="60" height="60">
+		<h2>Drink from: {if FName != "" AND LName != ""}{FName} {LName}{if:else}{username}{/if}</h2>
+		<div><small>Sent On: {embed:purchase_date}.</small></div>
+		<div><small> </small></div>
+		
+		<i class="icon ion-chevron-right icon-accessory"></i>
+	</div>
+	{/exp:member:custom_profile_data}
+		
+	{!--  
+	
+	  	{exp:query sql="SELECT * FROM exp_channel_data 
+  	    where channel_id = 4 AND field_id_16 = 1171" }
+  	
+		
+		<div class="item item-avatar-left item-icon-right " ng-controller="myDrinks" {if embed:modal != ""}ng-init="isModal = true"{/if} ng-click="drinkClicked('{embed:ticket_id}','{if FName != "" AND LName != ""}{FName} {LName}{if:else}{username}{/if}','{embed:purchase_date}')">
+		<h2>Drink from: {field_id_15} {field_id_16}</h2>
+		<div><small>Sent On: {field_id_14} </small></div>
+		<div><small>Message: {field_id_152} </small></div>
+		
+		<i class="icon ion-chevron-right icon-accessory"></i>
+	</div>
+		
+		{/exp:query}
+	--}
+	

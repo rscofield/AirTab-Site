@@ -1,0 +1,36 @@
+{exp:airtab:log_page_load}
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=792428910786784&version=v2.0";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+<div ng-cloak>
+<ion-view title="News &amp; Events" ng-init="checkLogin();">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+
+  	<ion-content has-header="true" padding="true" has-tabs="true" delegate-handle="scrollCtrl" ng-controller="NewsCtrl" ng-init="doScroll();loadNews();">
+  		<ion-refresher
+		    pulling-text="Pull to refresh..."
+		    on-refresh="doRefresh()">
+		</ion-refresher>
+  		<div ng-repeat="news in $root.news">
+	    	<div class="list card" ng-click="showEvent({{news.id}});">
+	    		
+				<div class="item item-image">
+					<img src="{{news.banner}}">
+				</div>
+
+			</div>
+		</div>
+		<div style="padding:20px;" ng-if="$root.hasFacebook">
+			<button class="button button-full icon-left ion-social-facebook button-positive" ng-click="$root.fbShare('http://airtab.me', 'AirTab', 'An innovative and easy to use social gifting application', 'Send all of your friends, family, & co-workers drinks, tickets, & more through AirTab! You can purchase and gift friends drinks from anywhere, at any time with the click of a button.', '')">Share on Facebook
+			</button>
+		</div>
+	</ion-content>
+</ion-view>
+</div>

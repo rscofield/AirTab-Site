@@ -1,0 +1,202 @@
+{if segment_3 == ""}
+<div ng-cloak>
+<style type="text/css">
+	.button.button-block, .button.button-full {
+		margin-top:10px;
+	}
+
+	.item-avatar i:first-child {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    font-size: 36px;
+    max-width: 40px;
+    max-height: 40px;
+    width: 100%;
+    border-radius: 4px; }
+
+    .item h2 {
+    	margin-right:45px;
+    }
+
+    .item-options .button {
+    	line-height:75px;
+    }
+</style>
+<ion-view title="Messages" ng-controller="messagingCtrl">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+    	<button class="button button-icon button-clear" ng-click="newMessage()">
+		  <i class="icon ion-plus"></i>
+		</button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" padding="true">
+    	<ion-list ng-init="getThreads()" can-swipe="true">
+    	<div ng-if="!threads">You do not currently have any active conversations.</div>
+    	<div ng-repeat="thread in threads">
+    		<ion-item class="item-avatar" href="#/app/messages/conversation/{{thread.thread_id}}">
+		      <img src="{{thread.participants[0].avatar}}" ng-if="!thread.participants[1].username">
+		      <img src="/assets/img/group_chat.png" ng-if="thread.participants[1].username">
+		      <h2><span ng-repeat="user in thread.participants">{{user.display_name}}<span ng-if="!$last">, </span></span><p style="position:absolute;right:16px;top:16px; font-size:9px !important;">{{thread.last_message_time}}</p></h2>
+		      <p>{{thread.last_message}}</p>
+		      <!--<ion-option-button class="button-dark"
+                       ng-click="share(item)">
+			      Archive
+			    </ion-option-button>-->
+			    <ion-option-button class="button-assertive"
+			                       ng-click="userThreadDelete(thread.user_thread_id)">
+			      Delete
+			    </ion-option-button>
+		    </ion-item>
+    	</div>
+
+
+		</ion-list>
+		<button class="button button-block button-assertive" ng-click="newMessage()">
+		  New Message
+		</button>
+    </ion-content>
+</ion-view>
+</div>
+{/if}
+
+{if segment_3 == "participants"}
+	{exp:airtab_messaging:get_thread_participants thread="{segment_4}"}
+	{exp:http_header content_type="application/json"}
+{/if}
+
+{if segment_3 == "conversation"}
+<div ng-cloak>
+<ion-view title="Conversation" ng-controller="messagingCtrl">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" padding="true" has-tabs="true" ng-init="getMessages({segment_4});conversation.thread = {segment_4};">
+			<div ng-repeat="message in messages | orderBy:'created'">
+				<div class="list card">
+					<div class="item item-body" ng-class="{'item-positive': message.user_id == {logged_in_member_id}}">
+						<strong>{{(message.first_name && message.last_name) ? message.first_name + ' ' + message.last_name : message.username}}:</strong> {{message.message}}
+						<p class="messaging-timestamp"><small>{{(message.created * 1000) | date:'medium'}}</small></p>
+					</div>
+				</div>
+			</div>
+    </ion-content>
+    <ion-footer-bar align-title="center" class="bar-assertive" style="padding:0;">
+    	<form name="messageForm" style="width:100%;padding:0;">
+	    	<div class="row" style="padding:0 !important; width:100%">
+	    		<div class="item-input-inset" style="width:100%; padding-top:5px;">
+	    			
+				    <label class="item-input-wrapper">
+				      <input type="text" placeholder="Enter your message..." ng-model="conversation.message" ng-minlength="1" ng-required="true">
+				      <input type="hidden" ng-model="conversation.thread" ng-required="true">
+				    </label>
+				    <button class="button button-clear button-light" ng-disabled="!canSendMessage()" ng-click="sendMessage()">
+				      Send
+				    </button>
+				</div>
+			</div>
+		</form>
+	</ion-footer-bar>
+</ion-view>
+</div>
+{/if}
+
+{if segment_3 == "request"}
+{exp:airtab:log_page_load}
+<div ng-cloak>
+<ion-view title="AirTab Friends" ng-init="$root.hideLoading()">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" padding="true" ng-init="hideNav()" has-tabs="true" id="checkoutModal" ng-controller="sendDrinkFriend">
+			<div class="list">
+				<div class="item item-avatar-left item-icon-right ">
+					{exp:member:custom_profile_data member_id="{segment_4}"}
+						<img src="{exp:airtab:avatar member="{segment_4}" size="90"}" width="40" height="40">
+						<h2>{screen_name}</h2>
+						<p>{username}</p>
+					{/exp:member:custom_profile_data}		
+				</div>
+			</div>
+			<h4 style="text-align:center">The user above would like to be your friend on AirTab. What would you like to do?</h4>
+			<div ng-controller="friendController">
+			<button class="button  button-block icon ion-checkmark-round button-balanced" ng-click="acceptRequest({segment_4})"> Accept Request</button>
+			<button class="button  button-block icon ion-close-round button-assertive" ng-click="declineRequest({segment_4})"> Decline Request</button>
+			</div>
+    </ion-content>
+</ion-view>
+</div>
+{/if}
+
+{if segment_3 == "new"}
+<div ng-cloak>
+<ion-view title="Send a Message">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    	<ion-content has-header="true" padding="true" ng-init="$root.hideLoading()">
+		<form name="newMessageForm" ng-submit="sendNewMessage()" ng-controller="messagingCtrl">
+			<div class="list">
+				<label class="item item-input item-stacked-label">
+					<span class="input-label">AirTab Username</span>
+					<input 
+					type="text"
+					placeholder="AirTab Username"
+					data-ng-model="new.username"
+                    required
+                    data-ng-minlength="4">
+				</label>
+
+				<label class="item item-input item-stacked-label">
+					<span class="input-label">Your Message</span>
+                    <textarea placeholder="Enter your message here..."
+                    ng-model="new.message"
+                    ng-required="true"
+                    ng-minlength="1"></textarea>
+				</label>
+			</div>
+			<button type="submit" class="button button-block button-assertive" ng-disabled="!canSendNewMessage()">Send Message</button>
+		</form>
+		
+    </ion-content>
+</ion-view>
+</div>
+{/if}
+
+{if segment_3 == "list"}
+			<div class="item-divider">
+			    Friend Requests
+			</div>
+		{exp:query sql="SELECT * FROM v_friends WHERE status='Pending Approval' AND friend_id={logged_in_member_id} ORDER BY sender_screen_name ASC"}
+				{embed="mobile/friend_info" member_id="{sender_id}" status="{status}" href="#/app/friends/request/{sender_id}"}
+			{if no_results}<h5 style="text-align:center; margin-top:10px">You have no friend requests</h5>{/if}
+		{/exp:query}
+    		<div class="item-divider">
+			    My Friends
+			</div>
+    	{exp:query sql="SELECT * FROM v_friends WHERE status='Approved' AND (sender_id={logged_in_member_id} or friend_id={logged_in_member_id}) ORDER BY CASE friend_id WHEN {logged_in_member_id}  THEN sender_screen_name ELSE friend_screen_name END ASC"}
+			{if sender_id == logged_in_member_id}
+				{embed="mobile/friend_info" member_id="{friend_id}" status="{status}" href="#/app/friends/options/{friend_id}"}
+			{if:else}
+				{embed="mobile/friend_info" member_id="{sender_id}" status="{status}" href="#/app/friends/options/{sender_id}"}
+			{/if}
+			{if no_results}You do not currently have any AirTab friends. Try adding some!{/if}
+		{/exp:query}
+{/if}
+
+{if segment_3 == "remove"}
+	{exp:airtab:log_page_load}
+	{exp:airtab:remove_friend friend_id="{segment_4}"}
+{/if}
+
+{if segment_3 == "accept"}
+	{exp:airtab:log_page_load}
+	{exp:airtab:process_friend_request friend_id="{segment_4}" action="accept"}
+{/if}
+
+{if segment_3 == "decline"}
+	{exp:airtab:log_page_load}
+	{exp:airtab:process_friend_request friend_id="{segment_4}" action="decline"}
+{/if}

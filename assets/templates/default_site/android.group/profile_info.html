@@ -1,0 +1,39 @@
+<div ng-cloak>
+<ion-view title="My Profile">
+  <ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" padding="true" has-tabs="true" ng-controller="profileCtrl">
+      <div class="list" ng-init="userId = '{logged_in_member_id}';loadProfile();">
+        <div ng-if="user">
+          <img src="{{user.avatar}}" width="100%">
+          <h4 style="text-align:center">{{user.fname}} {{user.lname}}</h4>
+          <h5 style="text-align:center; margin-bottom:0px;">{{user.username}}</h5>
+          <h5 style="text-align:center; margin-bottom:0px;">Birthday: {{user.bday_m}}/{{user.bday_d}}</h5>
+        </div>
+      </div>
+      <button ng-if="user" class="button  button-block button-assertive" ng-click="editProfile();">Edit Profile</button>
+      <button ng-if="user" class="button  button-block button-assertive" ng-click="editAvatar()">Update Profile Picture</button>
+      {exp:channel:entries channel="avatars" dynamic="no" url_title="avatar{logged_in_member_id}" limit="1"}
+
+      {exp:channel:form channel="avatars" url_title="avatar{logged_in_member_id}" name="avatarform" dynamic_title="avatar{logged_in_member_id}" include_jquery="yes" include_assets="no" secure_action="yes" json="yes" }
+      <input type="file" id="avatar" style="display:none" ng-model="avatarData.avatar" />
+      <input type="hidden" name="avatar_hidden_file" ng-model="avatarData.avatar.hidden_file" />
+      <input type="hidden" name="avatar_hidden_dir" ng-model="avatarData.avatar_hidden_dir" />
+      {/exp:channel:form}
+
+      {if no_results}
+
+
+      {exp:channel:form channel="avatars" name="avatarform" dynamic_title="avatar{logged_in_member_id}" include_jquery="yes" include_assets="no" secure_action="yes" json="yes" }
+      <input type="file" id="avatar" style="display:none" ng-model="avatarData.avatar" />
+      <input type="hidden" name="avatar_hidden_file" ng-model="avatarData.avatar.hidden_file" />
+      <input type="hidden" name="avatar_hidden_dir" ng-model="avatarData.avatar_hidden_dir" />
+      {/exp:channel:form}
+
+
+      {/if}
+      {/exp:channel:entries}
+    </ion-content>
+</ion-view>
+</div>

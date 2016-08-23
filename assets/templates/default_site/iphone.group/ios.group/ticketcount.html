@@ -1,0 +1,9 @@
+{if logged_out}
+{ "total": "0"}
+{if:else}
+	{exp:query sql="SELECT count(*) as total FROM v_drink_ticket_fields WHERE r_member = {logged_in_member_id} AND status='nonredeemed' ORDER BY purchase_date DESC"}
+	    {"total": "{total}"}
+	    {if no_results}{"total": "0"}{/if}
+	{/exp:query}
+{/if}
+{exp:http_header content_type="application/json"}

@@ -1,0 +1,15 @@
+
+<?php
+
+$sql = 'SELECT * FROM exp_members';
+	        
+$allMembers = $this->EE->db->query( $sql );
+	  		   foreach($allMembers->result_array() as $mRow) {                  
+    	            echo $mRow['username'];
+    	            echo ", ";
+    	            echo $mRow['email'];
+    	            echo "<br>";
+	              	                   
+               }               
+
+?>

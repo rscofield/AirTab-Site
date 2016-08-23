@@ -1,0 +1,65 @@
+{exp:airtab:log_page_load}
+{if segment_3 == "airtab"}
+	<!-- display bottle establishment list -->
+	Bottle enabled establishments listed here
+	
+{if:else}
+<div ng-cloak>
+<style type="text/css">
+	.button.button-block, .button.button-full {
+		margin-top:0;
+	}
+</style>
+<!-- not sure this will be used for bottle redemptions -->
+
+<ion-view ng-if="!isDrinkView()" title="Menu" ng-controller="sendBottleByUsername" ng-init="hideLoading()">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+     
+    <ion-content has-header="true" has-header="false"  padding="true" has-tabs="true" ng-class="($root.redeem) ? 'has-subheader' : ''">
+   		
+  		
+		<!-- display esttablishment name -->
+		{exp:channel:entries channel="establishments" entry_id="{segment_3}"}
+			<div class="panel-body text-center" style="padding: 10px 20px 0 20px">
+				<h3>{title}</h3>
+			</div>
+		{/exp:channel:entries}
+		<!-- now the list of bottles available bottleNm, estId, sender, recipient, recipientid -->
+		
+		   	<div class="text-center" >
+				<p>Which item would you like to send?</p>
+			</div>
+		
+   	  <div class="list">
+    	{exp:low_search:results channel="drinks" child:drk_establishment="{segment_3}" search:drk_level="{segment_7}"}
+  			 			 			
+    		
+  <a class="item item-thumbnail-left" ng-click="viewGiftDetails( '{entry_id}', '{segment_3}', '{segment_4}', '{segment_5}', '{segment_6}' )">
+			
+			
+				<img src="{fld_picture:iphone5}?v=1" width="80" height="80">
+				<h2>{title}</h2>
+				<p>{drk_teaser}</p>
+				<p>${drk_price}</p>
+		    </a>
+
+		    {if no_results}
+				No bottle service for this Establishment
+			{/if}
+		  {/exp:low_search:results}
+		</div>
+				
+    </ion-content>
+    <ion-footer-bar align-title="center" class="bar-assertive" style="padding:0;">
+    	<div class="row" style="padding:0 !important;">
+			<div class="col" style="text-align:center" >
+				<button class="button  button-block button-assertive" >
+				</button>
+			</div>
+		</div>
+	</ion-footer-bar>
+</ion-view>
+</div>
+{/if}

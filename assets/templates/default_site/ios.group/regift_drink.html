@@ -1,0 +1,345 @@
+{!--       
+     Author: John W. Blaine
+     File Name: drinks_with_msg.html
+     
+     Description : Display DRINKS send and the message.
+     
+     Example:
+     
+     
+--}
+
+{exp:airtab:log_page_load}
+
+{embed="ios/update"}
+
+<div ng-cloak>
+{if segment_3 == "main"}
+
+<style type="text/css">
+	.button.button-block, .button.button-full {
+		margin-top:0;
+	}
+</style>
+<ion-view title="Send A Drink" ng-controller="RegiftdrinkCtrl">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    
+    <ion-content class="has-header" padding="true" ng-init="hideLoading()">
+    	<div class="list card">
+
+			<a href="#/app/regift_drink/airtab/{segment_4}/{segment_5}/{segment_6}" class="item item-icon-left item-icon-right" ng-click="$root.showLoading()">
+				<i class="icon ion-android-friends"></i>
+				AirTab Friend <br>
+				<i class="icon ion-chevron-right icon-accessory"></i>
+			</a>
+
+			<a href="#/app/regift_drink/username/{segment_4}/{segment_5}/{segment_6}" class="item item-icon-left item-icon-right" ng-click="$root.showLoading()">
+				<i class="icon ion-person"></i>
+				By AirTab Username
+				<i class="icon ion-chevron-right icon-accessory"></i>
+			</a>
+
+			
+			{if {logged_in_member_id} == "952" || {logged_in_member_id} == "1171" }      
+				<a ng-click="regiftByContacts( '{segment_4}', '{segment_5}', '{segment_6}' )" class="item item-icon-left item-icon-right">
+					<i class="icon ion-iphone"></i>
+					Select A Phone Contact
+					<i class="icon ion-chevron-right icon-accessory"></i>
+				</a>			
+			{if:else}
+				<a href="#/app/regift_drink/contact/{segment_4}/{segment_5}/{segment_6}" class="item item-icon-left item-icon-right" ng-click="$root.showLoading()">
+					<i class="icon ion-email"></i>
+					By Phone Contact
+					<i class="icon ion-chevron-right icon-accessory"></i>
+				</a>
+			{/if}
+			
+			
+			
+			<a href="#/app/regift_drink/email/{segment_4}/{segment_5}/{segment_6}" class="item item-icon-left item-icon-right" ng-click="$root.showLoading()">
+				<i class="icon ion-email"></i>
+				By Email
+				<i class="icon ion-chevron-right icon-accessory"></i>
+			</a>
+
+			<a href="#/app/regift_drink/text/{segment_4}/{segment_5}/{segment_6}" class="item item-icon-left item-icon-right" ng-click="$root.showLoading()">
+				<i class="icon ion-ios7-telephone"></i>
+				By Text Message
+				<i class="icon ion-chevron-right icon-accessory"></i>
+			</a>
+			<!--
+			<a href="#/senddrink/facebook" class="item item-icon-left item-icon-right">
+				<i class="icon ion-android-friends"></i>
+				Facebook
+				<i class="icon ion-chevron-right icon-accessory"></i>
+			</a>
+			-->
+		</div>
+
+    </ion-content>
+		    
+		<ion-footer-bar align-title="center" class="bar-assertive">
+		
+			  <div class="buttons">
+			  </div>
+		  
+		</ion-footer-bar>
+      
+    
+</ion-view>
+{/if}
+
+
+{if segment_3 == "airtab"}
+<ion-view title="AirTab" ng-controller="RegiftdrinkCtrl">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+    	<button class="button button-icon button-clear" onClick="window.location.href='#/app/addfriend_via_contact';">
+		  <i class="icon ion-person-add"></i>
+		</button>
+    </ion-nav-buttons>
+    
+    <ion-content has-header="true" padding="true">
+
+	    <div style="width:100%" id="widthTest">
+				<input ng-model="query" placeholder="Search">
+		</div>
+		
+		{if {logged_in_member_id} == "952" || {logged_in_member_id} == "1171" }    
+		
+		  
+			Showing un-approved firend!!!
+		    	<div class="list" ng-init="query_friendsList()" ng-controller="RegiftdrinkCtrl">
+					
+				       		<div ng-repeat="myfriend in friendsList | filter:query" >
+					    				
+							<div class="list card" ng-click="regiftDrinkTo( '{{myfriend.id}}', '{segment_4}', '{segment_5}', '{segment_6}' );">
+		 					    
+		 					    
+				 			<div style="width: 100%; overflow: hidden;">
+				 				<div style="width:30%; float: left; border-width: 1px; border-style: solid; border-color: transparent; margin-top:10px;"> 						 
+										 <div ng-if="myfriend.img != ''"> 						 
+							 				 <img src="//airtab.me/avatar/?file={{myfriend.img}}" width="40" height="40" style="vertical-align: middle;" > 
+						  			    </div>
+				
+				  			    </div>
+				  			    
+				 				 <div style="width:55%; float: left; border-width: 1px; border-style: solid; border-color: transparent;"> 
+				 								{{myfriend.first}}  {{myfriend.last}}<br>
+												{{myfriend.usr}} <br> {{myfriend.phone}}
+				  			    </div>
+				  			    
+						        <div align="center" style="width:15%; float: left; border-width: 1px; border-style: solid; border-color: transparent;  margin-top:1px; align : center; " )"> 	   
+				  			    </div>
+				  			</div>
+					</div>
+				</div>
+			
+			
+			
+		{if:else}
+		    	<div class="list" ng-init="query_friendsList()" ng-controller="RegiftdrinkCtrl">
+					
+				       		<div ng-repeat="myfriend in friendsList | filter:query" >
+					    				
+							<div class="list card" ng-click="regiftDrinkTo( '{{myfriend.id}}', '{segment_4}', '{segment_5}', '{segment_6}' );">
+		 					    
+		 					    
+				 			<div style="width: 100%; overflow: hidden;">
+				 				<div style="width:30%; float: left; border-width: 1px; border-style: solid; border-color: transparent; margin-top:10px;"> 						 
+										 <div ng-if="myfriend.img != ''"> 						 
+							 				 <img src="//airtab.me/avatar/?file={{myfriend.img}}" width="40" height="40" style="vertical-align: middle;" > 
+						  			    </div>
+				
+				  			    </div>
+				  			    
+				 				 <div style="width:55%; float: left; border-width: 1px; border-style: solid; border-color: transparent;"> 
+				 								{{myfriend.first}}  {{myfriend.last}}<br>
+												{{myfriend.usr}} <br> {{myfriend.phone}}
+				  			    </div>
+				  			    
+						        <div align="center" style="width:15%; float: left; border-width: 1px; border-style: solid; border-color: transparent;  margin-top:1px; align : center; " )"> 	   
+				  			    </div>
+				  			</div>
+					</div>
+				</div>
+ 		{/if}
+ 					
+    </ion-content>
+    
+</ion-view>
+
+{/if}
+
+
+{if segment_3 == "contact"}
+
+<ion-view title="Contacts" ng-controller="RegiftdrinkCtrl">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+    	<button class="button button-icon button-clear" onClick="window.location.href='#/app/addfriend_via_contact';">
+		  <i class="icon ion-person-add"></i>
+		</button>
+    </ion-nav-buttons>
+    
+    <ion-content has-header="true" padding="true">
+
+	    <div style="width:100%" id="widthTest">
+				<input ng-model="query" placeholder="Search">
+		</div>
+
+    	<div class="list" ng-init="getContactList()" ng-controller="RegiftdrinkCtrl">
+			
+		       		<div ng-repeat="myfriend in phoneFriendsList | filter:query" >
+			    				
+			    				
+			    				
+						{!--     {segment_4}/{segment_5}/{segment_6}  --}
+			    				
+						<div class="list card" ng-click="regiftDrinkContactsPhone( '{{myfriend.phone[0]}}', '{segment_4}', '{segment_5}', '{segment_6}' );">
+
+									<a class="item item-avatar">
+								      <img src="/images/ios7-telephone.png" width="30" height="30">
+								      <p>{{myfriend.first}} {{myfriend.last}}<br>
+								      {{myfriend.phone[0]}}</p>
+								    </a>
+							{!--
+							<div style="width: 100%; overflow: hidden;">
+							
+						    		<div style="width:20%; float: left; border-width: 1px; border-style: solid; border-color: white; margin-top:1px; align : center; "> 
+						           		 <img src="/images/ios7-telephone.png" width="30" height="30" style="vertical-align: center;" > 		           									           		 
+									</div>
+						    		<div style="width:80%; float: left; border-width: 1px; border-style: solid; border-color: white; margin-top:1px;"> 
+										{{myfriend.first}} {{myfriend.last}}<br> 
+										{{myfriend.phone[0]}}
+									</div>
+									
+		
+							</div>
+								--}						
+							
+ 					    </div>
+ 					    
+ 					    
+ 					    
+ 					    
+ 					    
+			       </div>
+		</div>
+ 					
+    </ion-content>
+    
+</ion-view>
+
+{/if}
+
+
+{if segment_3 == "username"}
+<ion-view title="Send By Username">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    	<ion-content has-header="true" padding="true" ng-init="hideLoading()">
+		<form name="inviteFormUsername" ng-submit="submitForm( '{segment_4}',  '{segment_5}',  '{segment_6}' )" ng-controller="regiftDrinkByUsername">
+			<div class="list">
+				<div class="item-divider">Enter the AirTab username of the person to which you would like to send a drink:</div>
+				<label class="item item-input">
+					<input 
+					type="text"
+					placeholder="AirTab Username"
+					data-ng-model="invite.username"
+                    required
+                    data-ng-minlength="4">
+				</label>
+			</div>
+			<button type="submit" class="button button-block button-assertive" ng-disabled="!canSubmit()">Send Drink</button>
+		</form>
+		
+    </ion-content>
+</ion-view>
+{/if}
+
+{if segment_3 == "email"}
+<ion-view title="Send By Email" ng-init="hideLoading()">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" padding="true" id="sendDrinkContacts" ng-controller="regiftDrinkEmail">
+		<form name="form_sendDrinkEmail" ng-submit="submitForm( '{segment_4}',  '{segment_5}',  '{segment_6}' )">
+			<div class="list">
+				<label class="item item-input">
+					<input 
+						type="email" 
+						name="email" 
+						placeholder="Enter Email Address"
+						data-ng-model="invite.email"
+                        required
+                        data-ng-minlength="4">
+				</label>
+				<!--
+				<label class="item item-input">
+					<textarea rows="6" name="message" placeholder="Your Message"
+						data-ng-model="invite.message"
+                        data-ng-maxlength="250"></textarea>
+				</label>-->
+			</div>
+			<input type="submit" name="submit" class="button button-block button-assertive" value="Send Drink" ng-disabled="!canSubmit()" />
+		</form>
+    </ion-content>
+</ion-view>
+{/if}
+
+{if segment_3 == "text"}
+<ion-view title="Send By Text" ng-init="hideLoading()">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" padding="true" id="sendDrinkContacts" ng-controller="regiftDrinkText">
+		<form name="form_sendDrinkText" ng-submit="submitForm( '{segment_4}',  '{segment_5}',  '{segment_6}' )">
+			<div class="list">
+				<label class="item item-input">
+					<input 
+						type="text" 
+						name="phone" 
+						placeholder="Enter Phone Number"
+						data-ng-model="invite.phone"
+                        ng-pattern="/\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}/"
+                        required ng-minlength="10"
+                        ng-maxlength="15"
+                        pattern="[0-9]*">
+				</label>
+				
+				<!--
+				<label class="item item-input">
+					<textarea rows="6" name="message" placeholder="Your Message"
+						data-ng-model="invite.message"
+                        data-ng-maxlength="250"></textarea>
+				</label>-->
+			</div>
+			<input type="submit" name="submit" class="button button-block button-assertive" value="Send Drink" ng-disabled="!canSubmit()" />
+		</form>
+    </ion-content>
+</ion-view>
+{/if}
+
+{if segment_3 == "guest"}
+<ion-view title="Send A Drink" ng-init="hideLoading()">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" padding="true" id="sendDrinkContacts" ng-controller="sendDrinkText">
+		<div>Test</div>
+    </ion-content>
+</ion-view>
+{/if}
+
+
+
+
+</div>

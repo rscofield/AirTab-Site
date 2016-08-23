@@ -1,0 +1,55 @@
+<?php
+
+		$deviceToken = "0fcf7d0f3d5045dda298eb1ea804d3603431e1fcee605b49d76002d3febd1042";
+		echo $deviceToken . PHP_EOL;
+		
+		// My private key's passphrase here:
+		$passphrase = 'pw4airtabdev';
+		
+		// My alert message here:
+		$message = 'A new version of AirTab is available. Please update.';
+		
+		//badge
+		$badge = 1;
+		
+		$ctx = stream_context_create();
+		stream_context_set_option($ctx, 'ssl', 'local_cert', '/var/www/vhosts/airtab.me/httpdocs/push/apns-dev.pem');
+		stream_context_set_option($ctx, 'ssl', 'passphrase', $passphrase);
+		
+		// Open a connection to the APNS server
+		$fp = stream_socket_client(
+		    'ssl://gateway.sandbox.push.apple.com:2195', $err,
+		    $errstr, 60, STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, $ctx);
+		
+		if (!$fp)
+		exit("Failed to connect: $err $errstr" . PHP_EOL);
+		
+		echo 'Connected to APNS' . PHP_EOL;
+		
+		// Create the payload body
+		$body['aps'] = array(
+		    'alert' => $message,
+		    'badge' => $badge,
+		    'sound' => "updateavailable.wav"
+		);
+		
+		// Encode the payload as JSON
+		$payload = json_encode($body);
+		
+		// Build the binary notification
+		$msg = chr(0) . pack('n', 32) . pack('H*', $deviceToken) . pack('n', strlen($payload)) . $payload;
+		
+		// Send it to the server
+		$result = fwrite($fp, $msg, strlen($msg));
+		
+		if (!$result)
+		    echo 'Error, notification not sent' . PHP_EOL;
+		else
+		    echo 'notification sent!' . PHP_EOL;
+		
+		// Close the connection to the server
+		fclose($fp);
+
+
+
+?>

@@ -1,0 +1,32 @@
+	{exp:channel:form channel="avatars" url_title="{embed:url_title}" dynamic_title="avatar{logged_in_member_id}" include_jquery="no" include_assets="no" secure_action="yes" json="yes"}
+			<p>
+			<input type="file" name="avatar" data-content-type="image" data-directory="9" title="Choose File" data-ui-file-upload id="upload"></p>
+			<input type="hidden" name="avatar_hidden_file" value="" />
+			<input type="hidden" name="avatar_hidden_dir" value="9" />
+			<input type="submit" class="btn btn-danger btn-lg" value="Save Profile Picture">
+	{/exp:channel:form}
+
+	<script type="text/javascript">
+        $('#publishForm').ajaxForm({
+                dataType: 'json',
+                beforeSubmit: function(arr, $form, options) { 
+				    $("#avatar_container").addClass("loading");             
+				},
+                success: function(data) {
+                        if (data.success) {
+                        	if($( "input[name='entry_id']" ).val() == "0") {
+                        		location.reload();
+                        	} else {
+	                    		$.get( "/dash/avatar_url/640/{logged_in_member_id}", function( data ) {
+								  $( "#avatar" ).attr( "src", data );
+								  $("#avatar_container").removeClass("loading");
+								  $("#upload").val("");
+								});
+                    		}
+                        } else {
+                            alert('Failed with the following errors: '+data.errors.join(', '));
+                            $("#avatar_container").removeClass("loading");   
+                        }
+                }
+        });
+	</script>

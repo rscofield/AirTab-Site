@@ -1,0 +1,29 @@
+<div class="page">
+
+	<div class="panel panel-default">
+        {!--  establishment list block    
+		has link to edit page  --}
+
+	{exp:query sql="select * from v_user_activity where member_id={segment_3}" limit="15" paginate="bottom" paginate_base="/admin/#/activity_detail/{segment_3}/page/"}
+        {if count == 1}<div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span> Page Activity for UserName: {username}</strong></div>
+        <div class="table-responsive">
+                <table class="table table-striped table-bordered table-hover">
+                    <thead>
+                        <th>Time</th>
+                        <th>Page</th>
+                    </thead>
+                    <tbody>{/if}
+                        <tr onClick="window.location.href='#/activity_detail/{member_id}';">
+                            <td >{entry_time}</td>
+                            <td>{page}</td>
+                        </tr>
+        {if count == total_results}</tbody>
+                </table>
+            </div></div>{/if}
+        {paginate}
+			<p>Page {current_page} of {total_pages} pages {pagination_links}</p>
+		{/paginate}
+    {/exp:query}
+    <!-- end List group -->
+
+</div>

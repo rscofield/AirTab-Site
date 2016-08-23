@@ -1,0 +1,9 @@
+<?php
+if(ee()->input->get('callback')) $callback = ee()->input->get('callback');
+if(ee()->input->post('callback')) $callback = ee()->input->post('callback');
+echo <<<EOF
+
+{exp:json:entries channel="establishments" fields="title|latitude|longitude|address|city|state|zip" jsonp="yes" callback="$callback"}
+
+EOF;
+?>

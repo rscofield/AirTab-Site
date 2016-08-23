@@ -1,0 +1,27 @@
+{if segment_3 == "redeemable"}
+[
+	{exp:channel:entries channel="drink_ticket" status="nonredeemed" search:tck_redeem_member="={logged_in_member_id}"}
+	{
+		"tr_class": "{if "{drink_type:title}" == "Standard"}success{if:else}warning{/if}",
+    	"purchase_date": "{tck_purchase_date format="%m/%d/%y - %h:%i%a" timezone="America/New_York"}",
+    	"drink_type": "{drink_type:title}",
+		"sender": "{embed="dash/screenname" member_id="{tck_p_member}"}"
+	}{if count < total_results},{/if}
+	{/exp:channel:entries}
+]
+{/if}
+{if segment_3 == "redeemed"}
+[
+	{exp:channel:entries channel="drink_ticket" status="redeemed|pending" search:tck_redeem_member="={logged_in_member_id}"}
+	{
+		"tr_class": "{if "{drink_type:title}" == "Standard"}success{if:else}warning{/if}",
+    	"order_id": "{entry_id}",
+    	"redeem_date": "{tck_redeem_date format="%m/%d/%y - %h:%i%a" timezone="America/New_York"}",
+        "sender": "{embed="dash/screenname" member_id="{tck_p_member}"}",
+        "redeemed_at": "{tck_redeemed_at:title}",
+        "drink": "{redeemed_drink:title}"
+    }{if count < total_results},{/if}
+	{/exp:channel:entries}
+]
+{/if}
+{exp:http_header content_type="application/json"}

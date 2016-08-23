@@ -1,0 +1,137 @@
+{exp:airtab:log_page_load}
+<div ng-cloak>
+<style type="text/css">
+	.button.button-block, .button.button-full {
+		margin-top:0;
+	}
+
+	ol {
+		list-style-type: decimal !important;
+		margin-left:40px;
+		font-size: 10pt;
+		margin-bottom: 10px;
+	}
+</style>
+{if segment_3 == ""}
+<ion-view title="About AirTab">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" padding="true" has-tabs="false" id="mydrinks" ng-init="$root.hideLoading()" ng-controller="aboutCtrl">
+    	<div class="card">
+    		<div class="item item-text-wrap">
+    			<h1 center style="font-size:16pt">AirTab for iOS</h1>
+    			<h2 center>Server Version: <span id="server_ver"></span></h2>
+    			<h2 center ng-if="ver">Client Version: {{ver}}</h2>
+    		</div>
+    	</div>
+
+    	<div class="card">
+    		<div class="item item-text-wrap">
+    			<p center>&copy; 2014 Software Development Associates. All Rights Reserved</p>
+    			<p center>The materials contained in this application are protected by applicable copyright and trademark law.</p>
+    		</div>
+    	</div>
+
+			<button class="button  button-block button-assertive" ng-click="goTo('how_it_works')">How It Works</button>
+    	<button class="button  button-block button-assertive" ng-click="goTo('terms')">Terms &amp; Conditions</button>
+      <button class="button  button-block button-assertive" ng-click="goTo('privacy')">Privacy Policy</button>
+ 
+    </ion-content>
+</ion-view>
+<script>$("#server_ver").html(config.version)</script>
+{if:elseif segment_3 == "terms"}
+<ion-view title="Terms &amp; Conditions">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" padding="true" has-tabs="false" id="mydrinks" ng-init="$root.hideLoading()" ng-controller="aboutCtrl">
+    	<div class="card">
+    		<div class="item item-text-wrap">
+    			<h3 center>Software Development Associates, LLC (“SDA”), d/b/a airtab (Hereafter referred collectively as “airtab”)</h3>
+      <h4>1. Terms</h4>
+      <p>By accessing this website, you are agreeing to be bound by these website Terms and Conditions of Use, all applicable laws and regulations, and agree that you are responsible for compliance with all applicable federal, state and local laws. If you do not agree with any of these terms, you are prohibited from using or accessing this site. The materials contained in this website are protected by applicable copyright and trademark law.</p>
+      <p>Airtab enables users to purchase alcoholic beverages for others from bars or restaurants. Airtab is for the personal use, of persons who are lawfully permitted to purchase and consume alcoholic beverages, in countries and other territories where the sale, advertising and consumption of alcoholic beverages are lawful. You hereby warrant that airtab will only be used for the personal use, of persons who are lawfully permitted to purchase and consume alcoholic beverages, in countries and other territories where the sale, advertising and consumption of alcoholic beverages is lawful by using airtab, you indicate that you accept these terms of use and that you agree to abide by them. You must exit airtab if you do not accept these terms of use, if you are not of legal age for consuming alcoholic beverages in the country or other territory in which you are located, or if you are accessing our Site in a country or other territory where use of our Site is not permitted.</p>
+      
+      <h4>2. Use License </h4>
+      
+      <p>  Permission is granted to temporarily download  one copy of the materials (information or software) on the airtab website for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title, and under this license you may not:</p>
+      
+      <ol>
+          <li>modify or copy the materials; </li>
+          <li>use the materials for any commercial purpose, or for any public display (commercial or </li>
+          <li>attempt to decompile or reverse engineer any software contained on airtab’s website; </li>
+          <li>remove any copyright or other proprietary notations from the airtab materials; or </li>
+          <li>transfer the materials to another person or “mirror” the materials on any </li>
+      </ol>
+      
+      <p>This license shall automatically terminate if  you violate any of these restrictions and may be terminated by airtab at any time. Upon terminating your viewing of these materials or upon the termination of this license, you must destroy any downloaded materials in your possession whether in electronic or printed format.</p>
+      
+      <h4>3. Disclaimer </h4>
+      
+      <p>  The materials on airtab’s website are provided  “as is”. Airtab makes no warranties, expressed or implied, and hereby disclaims and negates all other warranties, including without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights. Further, airtab does not warrant or make any representations concerning the accuracy, likely results, or reliability of the use of the materials on its Internet website or otherwise relating to such materials or on any sites linked to this site.</p>
+      
+      <p>  Airtab provides links to third-party websites,  typically, bars and restaurants, as a convenience to you. You agree that airtab is not responsible for examining or evaluating the content or accuracy of any third-party websites. Airtab does not warrant and disclaims any liability or responsibility for any third-party materials or websites, or for any other materials, products, or services of third parties. You agree that you will not use any third-party materials in a manner that would infringe or violate the rights of any other party and that airtab is not in any way responsible for any such use by you.</p>
+      
+      <p>  You hereby acknowledge that by using airtab you  may encounter material that you may deem to be offensive, indecent, or objectionable, and that such content may or may not be identified as having explicit material.You agree to use airtab at your sole risk and airtab will have no liability to you for material that may be found to be offensive, indecent, or objectionable. Product types and descriptions are provided for convenience, and you agree that airtab does not guarantee their accuracy.</p>
+      
+      <h4>4. Limitations </h4>
+      
+      <p>  In no event shall Airtab or its suppliers be  liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption,) arising out of the use or inability to use the materials on airtab’s Internet site, even if airtab or a airtab authorized representative has been notified orally or in writing of the possibility of such damage. Because some jurisdictions do not allow limitations on implied warranties, or limitations of liability for consequential or incidental damages, these limitations may not apply to you.</p>
+      
+      <h4>5. Revisions and Errata </h4>
+      
+      <p>  The materials appearing on airtab’s website  could include technical, typographical, or photographic errors. Airtab does not warrant that any of the materials on its website are accurate, complete, or current. Airtab may make changes to the materials contained on its website at any time without notice. Airtab does not, however, make any commitment to update the materials.</p>
+      
+      <h4>6. Links </h4>
+      
+      <p>  Airtab has not reviewed all of the sites linked  to its Internet website and is not responsible for the contents of any such linked site. The inclusion of any link does not imply endorsement by airtab of the site. Use of any such linked website is at the user’s own risk.</p>
+      
+      <h4>7. Intellectual Property</h4>
+      
+      <p>  You agree that airtab contains proprietary  information and material that is owned by SDA and/or its licensors, and is protected by applicable intellectual property and other laws, including but not limited to copyright. You agree that you will not use such proprietary information or materials in any way whatsoever except for permissible uses of airtab in compliance with this Agreement. No portion of airtab may be reproduced in any form or by any means, except as expressly permitted in these terms. You agree not to modify, rent, lease, loan, sell, distribute, or create derivative works based on airtab, and you shall not exploit airtab in any unauthorized way whatsoever, including, but not limited to, by trespass or burdening network capacity. All copyrights in and to airtab (including the compilation of content, postings, links to other Internet resources, and descriptions of those resources) and related software are owned by SDA and/or its licensors, who reserve all their rights in law and equity. The use of the airtab software is only as permitted in this Agreement and is strictly<br>
+       prohibited otherwise and infringes on the intellectual property rights of airtab and SDA and others and may subject you to civil and criminal penalties.</p>
+      
+      <h4>8. Uploading Material to airtab/Contents and Standards</h4>
+      
+      <p>  Any material  you upload to our airtab site will be considered non-confidential and non-proprietary, and unless otherwise agreed in writing between us, we have the right to use, copy, distribute and disclose to third parties any such material in whole or in part for any purpose. We also have the right to disclose your identity to any third party who is claiming that any material posted or uploaded by you to our airtab Site constitutes a violation of their intellectual property rights, or of their right to privacy. We will not be responsible, or liable to any third party, for the content or accuracy of any materials posted by you or any other user of airtab. We have the right to remove any material or posting you make on our Site if, in our sole opinion, such material does not comply with the content standards below. Any and all material which you contribute to our Site must comply with the following: (a) be accurate where facts are stated; (b) comply with all state, federal, local and international laws. Your contributions must not: (a) contain any material that is defamatory of any person; (b) contain any material which is obscene, offensive, hateful or inflammatory; (c) contain sexually explicit material; (d) harm, or attempt to harm, minors in any way; (e) encourage, condone, promote or glamorize under-age, excessive or responsible consumption of alcoholic beverages or drink driving; (f) target at an under legal drinking age audience; (g) promote violence; (h) promote discrimination based on race, sex, religion, nationality, disability, sexual orientation or age; (i) be likely to deceive any person; (j) be made in breach of any legal duty owed to a third party, such as a contractual duty or a duty of confidence; (k) promote any illegal or immoral activity; (l) be threatening, abuse or invade another’s privacy, or cause annoyance, inconvenience or needless anxiety; and (m) advocate, promote or assist any unlawful act such as (by way of example only) copyright infringement or computer misuse.</p>
+      
+      <h4>9. Site Terms of Use Modifications </h4>
+      
+      <p>Airtab may revise these terms of use for its website at any time without notice. By using this website you are agreeing to be bound by the then current version of these Terms and Conditions of Use.</p>
+      
+      <h4>10. Governing Law </h4>
+      
+      <p>Any claim relating to airtab’s website shall be governed by the laws of the State of Florida without regard to its conflict of law provisions.</p>
+    		</div>
+    	</div>
+
+    </ion-content>
+</ion-view>
+{if:elseif segment_3 == "privacy"}
+<ion-view title="Privacy Policy">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" padding="true" has-tabs="false" id="mydrinks" ng-init="$root.hideLoading()" ng-controller="aboutCtrl">
+    	<div class="card">
+    		<div class="item item-text-wrap">
+    			<h3 center>Software Development Associates, LLC (“SDA”), d/b/a airtab (Hereafter referred collectively as “airtab”)</h3>
+      <p>
+        Your privacy is very important to us. Accordingly, we have developed this Policy in order for you to understand how we collect, use, communicate and disclose and make use of personal information. The following outlines our privacy policy:
+        <ol>
+          <li>Before or at the time of collecting personal information, we will identify the purposes for which information is being collected.</li>
+          <li>We will collect and use of personal information solely with the objective of fulfilling those purposes specified by us and for other compatible purposes, unless we obtain the consent of the individual concerned or as required by law.</li>
+          <li>We will collect personal information by lawful and fair means and, where appropriate, with the knowledge or consent of the individual concerned.</li>
+          <li>Personal data should be relevant to the purposes for which it is to be used, and, to the extent necessary for those purposes, should be accurate, complete, and up-to-date.</li>
+          <li>We will protect personal information by reasonable security safeguards against loss or theft, as well as unauthorized access, disclosure, copying, use or modification.</li>
+          <li>We will make readily available to customers information about our policies and practices relating to the management of personal information.</li>
+        </ol>
+      </p>
+    		</div>
+    	</div>
+
+    </ion-content>
+</ion-view>
+{/if}
+</div>

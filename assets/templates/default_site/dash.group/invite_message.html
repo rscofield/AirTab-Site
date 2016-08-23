@@ -1,0 +1,7 @@
+{exp:channel:entries channel="invites" url_title="{embed:id}" limit="1" dynamic="no" status="pending"}
+<div class="callout callout-info">
+    <h4>Message from {exp:member:custom_profile_data member_id="{inv_sender}"}{if FName AND LName}{FName} {LName}{if:else}{username}{/if}</h4>
+    <p>{invite_message}</p>
+</div>
+            
+{/exp:channel:entries}

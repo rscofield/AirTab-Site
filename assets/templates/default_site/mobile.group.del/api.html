@@ -1,0 +1,5 @@
+{if segment_3 == "login_success"}
+	{exp:member:custom_profile_data}
+	<meta http-equiv="REFRESH" content="0;url=airtab:{segment_3}:{logged_in_email}:{username}">
+	{/exp:member:custom_profile_data}
+{/if}

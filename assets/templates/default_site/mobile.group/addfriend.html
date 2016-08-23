@@ -1,0 +1,230 @@
+{if segment_3 == ""}
+<ion-view title="Add A Friend">
+	<ion-nav-buttons side="right">
+      <button class="button button-icon button-clear ion-navicon" ng-click="showMenu()"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" padding="true" ng-init="hideNav()">
+    	<div class="list card">
+
+    		<a href="#/addfriend/username" class="item item-icon-left item-icon-right">
+				<i class="icon ion-person"></i>
+				AirTab Username
+				<i class="icon ion-chevron-right icon-accessory"></i>
+			</a>
+			
+			
+			<a href="airtab:showContacts" class="item item-icon-left item-icon-right">
+				<i class="icon ion-android-friends"></i>
+				Phone Contacts
+				<i class="icon ion-chevron-right icon-accessory"></i>
+			</a>
+			<!-- Hide These Until We Have The Interface Functional
+			<a href="#/addfriend/facebook" class="item item-icon-left item-icon-right">
+				<i class="icon ion-social-facebook"></i>
+				Facebook Friend
+				<i class="icon ion-chevron-right icon-accessory"></i>
+			</a>-->
+
+			<a href="#/addfriend/email" class="item item-icon-left item-icon-right">
+				<i class="icon ion-email"></i>
+				Email Address
+				<i class="icon ion-chevron-right icon-accessory"></i>
+			</a>
+
+			<a href="#/addfriend/text" class="item item-icon-left item-icon-right">
+				<i class="icon ion-ios7-telephone"></i>
+				Phone Number
+				<i class="icon ion-chevron-right icon-accessory"></i>
+			</a>
+
+		</div>
+    </ion-content>
+</ion-view>
+{/if}
+
+{if segment_3 == "username"}
+<ion-view title="Invite by Username">
+	<ion-nav-buttons side="right">
+      <button class="button button-icon button-clear ion-navicon" ng-click="showMenu()"></button>
+    </ion-nav-buttons>
+	<ion-content has-header="true" padding="true" ng-controller="addFriendByUsername">
+		<form name="inviteFormUsername" ng-submit="submitForm()">
+			<div class="list">
+				<div class="item-divider" ng-if=>Enter an AirTab username to which you would like to text a friend request:</div>
+				<label class="item item-input">
+					<input 
+					type="text"
+					placeholder="AirTab Username"
+					data-ng-model="invite.username"
+                    required
+                    data-ng-minlength="4">
+				</label>
+			</div>
+			<button type="submit" class="button button-block button-assertive" ng-disabled="!canSubmit()">Send Invitation</button>
+		</form>
+		
+    </ion-content>
+</ion-view>
+{/if}
+
+{if segment_3 == "email"}
+<ion-view title="Invite by Email">
+	<ion-nav-buttons side="right">
+      <button class="button button-icon button-clear ion-navicon" ng-click="showMenu()"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" padding="true" ng-controller="addFriendByEmail">
+		<form name="inviteFormEmail" ng-submit="submitForm()">
+			<div class="list">
+				<label class="item item-input">
+					<input 
+					type="email"
+					placeholder="Email Address"
+					data-ng-model="invite.email"
+                    required
+                    data-ng-minlength="4">
+				</label>
+				<!--
+				<label class="item item-input">
+					<textarea 
+					rows="6"
+					placeholder="Your Message"
+					data-ng-model="invite.message"
+                    data-ng-minlength="3"
+					></textarea>
+				</label>-->
+			</div>
+			<button type="submit" class="button button-block button-assertive" ng-disabled="!canSubmit()">Send Invitation</button>
+		</form>
+		
+    </ion-content>
+</ion-view>
+{/if}
+
+{if segment_3 == "text"}
+<ion-view title="Invite by Text">
+	<ion-nav-buttons side="right">
+      <button class="button button-icon button-clear ion-navicon" ng-click="showMenu()"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" padding="true" ng-controller="addFriendByText">
+		<form name="inviteFormText" ng-submit="submitForm()">
+			<div class="list">
+				<label class="item item-input">
+					<input 
+					type="tel"
+					placeholder="Phone Number"
+					data-ng-model="invite.phone"
+                    required
+                    data-ng-pattern="/[0-9]*/"
+                        required ng-minlength="10"
+                        ng-maxlength="11"
+                        pattern="[0-9]*">
+				</label>
+				<!--
+				<label class="item item-input">
+					<textarea 
+					rows="6"
+					placeholder="Your Message"
+					data-ng-model="invite.message"
+                    data-ng-minlength="3"
+					></textarea>
+				</label>-->
+			</div>
+			<button type="submit" class="button button-block button-assertive" ng-disabled="!canSubmit()">Send Invitation</button>
+		</form>
+		
+    </ion-content>
+</ion-view>
+{/if}
+
+{if segment_3 == "contact" AND segment_4 == "text"}
+<ion-view title="Invite by Text">
+	<ion-nav-buttons side="right">
+      <button class="button button-icon button-clear ion-navicon" ng-click="showMenu()"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" padding="true" ng-controller="addFriendByContactText">
+		<form name="inviteFormText" ng-submit="submitForm()">
+			<div class="list">
+				<label class="item item-input">
+					<input 
+					type="text"
+					placeholder="First Name"
+					data-ng-model="invite.first_name">
+				</label>
+				<label class="item item-input">
+					<input 
+					type="text"
+					placeholder="Last Name"
+					data-ng-model="invite.last_name">
+				</label>
+				<label class="item item-input">
+					<input 
+					type="tel"
+					placeholder="Phone Number"
+					data-ng-model="invite.phone"
+                    required
+                    data-ng-pattern="/^[0-9]+$/"
+                    data-ng-minlength="10">
+				</label>
+				<!--
+				<label class="item item-input">
+					<textarea 
+					rows="6"
+					placeholder="Your Message"
+					data-ng-model="invite.message"
+                    data-ng-maxlength = "160"
+                    maxlength="160"
+					></textarea>
+				</label>-->
+			</div>
+			<button type="submit" class="button button-block button-assertive" ng-disabled="!canSubmit()">Send Invitation</button>
+		</form>
+		
+    </ion-content>
+</ion-view>
+{/if}
+
+{if segment_3 == "contact" AND segment_4 == "email"}
+<ion-view title="Invite by Email">
+	<ion-nav-buttons side="right">
+      <button class="button button-icon button-clear ion-navicon" ng-click="showMenu()"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" padding="true" ng-controller="addFriendByContactEmail">
+		<form name="inviteFormEmail" ng-submit="submitForm()">
+			<div class="list">
+				<label class="item item-input">
+					<input 
+					type="text"
+					placeholder="First Name"
+					data-ng-model="invite.first_name">
+				</label>
+				<label class="item item-input">
+					<input 
+					type="text"
+					placeholder="Last Name"
+					data-ng-model="invite.last_name">
+				</label>
+				<label class="item item-input">
+					<input 
+					type="email"
+					placeholder="Email Address"
+					data-ng-model="invite.email"
+                    required
+                    data-ng-minlength="4">
+				</label>
+				<!--
+				<label class="item item-input">
+					<textarea 
+					rows="6"
+					placeholder="Your Message"
+					data-ng-model="invite.message"
+                    data-ng-maxlength = "300"
+                    maxlength="160"
+					></textarea>
+				</label> -->
+			</div>
+			<button type="submit" class="button button-block button-assertive" ng-disabled="!canSubmit()">Send Invitation</button>
+		</form>
+		
+    </ion-content>
+</ion-view>
+{/if}

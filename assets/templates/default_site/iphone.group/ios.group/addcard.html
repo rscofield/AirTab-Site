@@ -1,0 +1,84 @@
+<div ng-cloak>
+    <ion-modal-view ng-init="$root.hideLoading()">
+        <ion-header-bar class="bar bar-header bar-assertive">
+          <h1 class="title">Add Credit Card</h1>
+          <button class="button button-clear button-primary" ng-click="modal.hide()">Cancel</button>
+        </ion-header-bar>
+        <ion-content class="padding">
+        	<form name="forms.addCard" id="addCard">
+				<div id="checkout_form_gateway_fields" class="list">
+					<div class="item-divider">
+					    Billing Information
+					</div>
+						<label class="item item-input ">
+						    <input type="text" ng-model="newCard.first_name" placeholder="First Name" id="first_name" required ng-minlength="2" />
+						</label>
+
+						<label class="item item-input ">
+						    <input type="text" ng-model="newCard.last_name" placeholder="Last Name" id="last_name" required ng-minlength="2" />
+						</label>
+
+						<label class="item item-input ">
+						    <input type="text" ng-model="newCard.address" placeholder="Street Address" id="address" required ng-minlength="5" />
+						</label>
+
+						<label class="item item-input ">
+						    <input type="text" ng-model="newCard.city" placeholder="City" id="city" required ng-minlength="3" />
+						</label>
+
+						<label class="item item-input item-select">
+						    <input type="text" ng-model="newCard.state" placeholder="State" id="state"  required ng-minlength="2" />
+						</label>
+
+						<label class="item item-input ">
+						    <input type="text" ng-model="newCard.zip" placeholder="Zip Code" id="zip" required ng-minlength="5" />
+						</label>
+					<div class="item-divider">
+					    Payment Information
+					</div>
+						<label class="item item-input ">
+						    <input type="text" ng-model="newCard.cardNumber" placeholder="Credit Card Number" id="cardNumber" ng-pattern="/[0-9]*/" required ng-minlength="13" ng-maxlength="16" pattern="[0-9]*" />
+						</label>
+
+						<label class="item item-input item-stacked-label item-select">
+						    <div class="input-label">
+						      Expiration Month
+						    </div>
+						    <select ng-model="newCard.expiration_month" id="expiration_month" class="required" required>
+								<option value="01">January</option>
+								<option value="02">February</option>
+								<option value="03">March</option>
+								<option value="04">April</option>
+								<option value="05">May</option>
+								<option value="06">June</option>
+								<option value="07">July</option>
+								<option value="08">August</option>
+								<option value="09">September</option>
+								<option value="10">October</option>
+								<option value="11">November</option>
+								<option value="12">December</option>
+							</select>
+						</label>
+
+						<label class="item item-input item-select item-stacked-label">
+						    <div class="input-label">
+						      Expiration Year
+						    </div>
+						    <select class="form-control" ng-model="newCard.expiration_year">
+						    	<option value="{{year}}" ng-repeat="year in expirationYears()" ng-selected="newCard.expiration_year == year">{{year}}</option>
+							</select>
+						</label>
+
+					</div>
+
+					<div class="control-group">
+						    <div class="form-actions">
+						{!-- do not add a name attribute to your submit button if you want it to work with stripe payment gateway --}
+						    <input type="submit" id="checkout_complete" class="button button-block button-assertive" ng-disabled="!canAddCard()" value="Add Card" ng-click="saveNewCard($event)" />
+						</div>
+					</div>
+				</form>
+			</div>
+	    </ion-content>
+	</ion-modal-view>
+</div>

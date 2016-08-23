@@ -1,0 +1,13 @@
+{if logged_out}
+	{embed="dash/login" return="{current_path}" redirect="yes"}
+{/if}
+{exp:airtab:log_page_load}
+<?php
+
+ee()->session->destroy();
+
+?>
+
+<script type="text/javascript">
+	location.reload();
+</script>

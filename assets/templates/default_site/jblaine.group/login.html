@@ -1,0 +1,60 @@
+<?php
+	$path = getcwd()."/assets/templates/default_site/jblaine.group/lib";
+	require_once $path.'/airtab2.php';
+	$this->EE->load->library('auth');
+
+     /********* upload/save file ***********/
+
+	 $fname = $_FILES['uploadedfile']['name'];
+	 $fname_with_path = $path . '/' .$fname;
+	 $tmp =  $_FILES['uploadedfile']['tmp_name'];
+	     	 
+	 move_uploaded_file( $tmp, $fname_with_path);
+
+     /********* read/decrypt file ***********/
+   	 $myfile = fopen( $fname_with_path, "r") or die("Unable to open file!");
+	 $data = fread($myfile, filesize($fname_with_path));
+	 fclose($myfile);
+
+	 $key = airtab2::genKey($fname);
+     $rval = airtab2::dec($data, $key);
+  
+     /********* decode json file ***********/
+	 $manage = (array) json_decode($rval, true);
+     $usr = $manage['login']['usr'];
+     $pwd = $manage['login']['pwd'];
+     $status = $manage['login']['status'];
+     $uuid = $manage['login']['uuid'];
+
+    $loggedin = $this->EE->auth->authenticate_username($usr, $pwd);
+	
+	if(!$loggedin) {
+		$status = "failed";
+	} else {
+		$status = "success";
+	}
+
+    /*********** insert DB ***********/
+	date_default_timezone_set("America/New_York");
+	$fdate = date("Y.m.d@H:i:s" );
+
+
+	$sql = "INSERT INTO sitex.at_login (usr, pwd, uuid, updated, status) VALUES( '$usr', '$pwd', '$uuid', '$fdate', '$status' ) ";
+	$allMembers = $this->EE->db->query( $sql );
+
+    /*************************************************/
+	 
+     $manage['login']['status'] = $status;
+
+	 $rvalEx = json_encode($manage);
+
+	// $rvalEx = substr( $rvalEx, 0, strlen($rvalEx)-2);
+
+    // $rvalEx = trim ($rvalEx, " \t\n\r\0\x0B" );
+     //$rvalEx = trim ($rvalEx, " " );
+
+     $rvalEx = airtab2::enc($rvalEx, $key);
+	 echo $rvalEx;
+
+?>
+

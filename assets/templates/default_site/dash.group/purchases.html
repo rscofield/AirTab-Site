@@ -1,0 +1,45 @@
+{if logged_out}
+	{embed="dash/login" return="{current_path}" redirect="yes"}
+{if:else}
+{if segment_3 == "html"}
+	{exp:query sql="SELECT * FROM v_drink_tickets WHERE tck_p_member='{logged_in_member_id}' ORDER BY tck_purchase_date DESC"}
+    <tr class="{if drink_type == "Standard"}success{if:else}warning{/if}">
+        <td>
+        	{tck_purchase_date format="%m/%d/%y" timezone="America/New_York"}
+        </td>
+        <td>
+        	{if status == "pending" || status == "redeemed"}<span class="label label-danger">Redeemed</span>{if:else}<span class="label label-success">Redeemable</span>{/if}
+        </td>
+        <td>
+        	{r_member_username}
+        </td>
+    </tr>
+	{/exp:query}
+{if:else}
+<div class="page">
+
+	<section class="panel panel-default">
+		<div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span> Drinks</strong></div>
+		<div class="panel-body">
+
+				<div class="table-responsive">
+					<table class="table table-hover table-striped table-bordered">
+						<thead>
+			                <tr>
+			                    <th>Purchased</th>
+			                    <th>Status</th>
+			                    <th>Sent To</th>
+			                </tr>
+			            </thead>
+						<tbody ng-controller="myPurchases" ng-init="getPurchases()" ng-bind-html="purchases">
+							
+						</tbody>
+					</table>
+				</div>
+
+		</div>
+	</section> 
+
+</div>
+{/if}
+{/if}

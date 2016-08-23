@@ -1,0 +1,16 @@
+{!--  
+     Author: John W. Blaine
+     File Name: sql_my_drinks_with_msg.html
+     Date: 01/05/2015
+     
+     Description : When the establishment is not an AirTab member, the app allows the user to recommend the place.
+                   Insert the name of establishment, establishment ID and member ID into the database.
+                   The PHP "at_user_recommend" module/function is in mod.airtab.php file.           
+--}
+
+
+  			
+{exp:airtab:getDrinkWithMessage member_id="{logged_in_member_id}"}
+{/exp:airtab:getDrinkWithMessage}
+{exp:http_header content_type="application/json"}
+ 			

@@ -1,0 +1,19 @@
+{if logged_out}
+	{embed="dash/login" return="{current_path}" redirect="yes"}
+{if:else}
+	<div class="page page-form-ele">
+		<section class="panel panel-default">
+			<div class="panel-heading" data-ng-hide="isSpecificPage()"><strong><span class="glyphicon glyphicon-th"></span> My Profile Picture</strong></div>
+			<div class="panel-body">
+				{exp:channel:entries channel="avatars" dynamic="no" url_title="avatar{logged_in_member_id}" limit="1"}
+					<div id="avatar_container"><img src="{exp:airtab:avatar member="{logged_in_member_id}" size="640"}" width="100%" id="avatar"/></div>
+					{embed="dash/avatar_form" url_title="avatar{logged_in_member_id}"}
+					{if no_results}
+						<div id="avatar_container"><img src="/uploads/avatars/_640/default_avatar.png" width="100%" id="avatar"/></div>
+						{embed="dash/avatar_form"}
+					{/if}
+				{/exp:channel:entries}
+			</div>
+		</section>
+	</div>
+{/if}

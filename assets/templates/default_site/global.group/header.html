@@ -1,0 +1,50 @@
+	<!-- Begin Mobile Navigation -->
+	<div id="mobile-nav">
+		<div class="container clearfix">
+			<div>
+			
+				<!-- Mobile Nav Button -->
+				<div class="navigationButton sixteen columns clearfix">
+					<img src="/assets/airtab/img/mobile-nav.png" alt="Navigation" width="29" height="17" />
+				</div>
+
+				<!-- Mobile Nav Links -->
+				<div class="navigationContent sixteen columns clearfix">
+					<ul>
+						<li><a href="/big-dog-challenge">Big Dog Ranch Rescue Challenge</a></li>
+						<li><a href="/">Home</a></li>
+						<li><a href="/about">About</a></li>
+						<li><a href="/how-it-works">How It Works</a></li>
+						{if logged_in}  <li><a href="/dashboard/#/logout">Logout</a></li> {/if}
+						{if logged_out}  <li><a href="/dashboard/#/login">Login</a></li> {/if}				
+					</ul>
+				</div>
+
+			</div>
+			
+		</div>
+	</div>
+	<!-- End Mobile Navigation -->
+
+
+	<!-- Begin Header -->
+	<header class="clearfix">
+		<div class="container">
+
+			<!-- Logo -->
+			<div id="logo" class="three columns"><img src="/assets/airtab/img/logo.png" alt=""></div>
+
+			<!-- Navigation -->
+			<nav id="navigation" class="thirteen columns">
+				<ul class="clearfix">
+					<li><a class="current" href="/">Home</a></li>
+					<li><a href="/about">About</a></li>
+					<li><a href="/how-it-works">How It Works</a></li>
+					<li><a href="/celebrity-challenge">AirTab Celebrity Challenge</a></li>
+					{if logged_in}  <li><a href="/dashboard/#/logout">Logout</a></li> {/if}
+					{if logged_out}  <li><a href="/dashboard/#/login">Login</a></li> {/if}				
+				</ul>
+			</nav>
+		</div>
+	</header>
+	<!-- End Header -->

@@ -1,0 +1,30 @@
+{if logged_in}
+{preload_replace:template_group="store"}
+{preload_replace:template="index"}
+<div ng-cloak>
+<ion-view title="Payment Information">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" padding="true" ng-init="hideLoading()">
+		<div ng-controller="promoController">
+			<h5 style="text-align:center">You have been granted promotional rights. You do not need to enter any payment details.</h5>
+			<div class="list list-inset">
+			{if segment_4 == "email" OR segment_4 == "text"}
+			  <label class="item item-input">
+			    <textarea placeholder="Custom Message (Optional)" ng-model="input.message"></textarea>
+			  </label>
+			</div>
+			{/if}
+			
+			{!--  --}
+			<input type="submit" id="checkout_complete" class="button button-block button-assertive"  value="Send Drink" ng-click="createTicket('{segment_4}', '{segment_3}', '{segment_5}')" />
+		    {!-- --}
+		
+		</div>
+    </ion-content>
+</ion-view>	
+</div>
+{if:else}
+	<iframe src="airtab:notLoggedIn" style="display:none">
+{/if}

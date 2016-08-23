@@ -1,0 +1,326 @@
+{if logged_out}
+	{embed="dash/login" return="{current_path}" redirect="yes"}
+{if:else}
+        
+			{!--  Member dashboard, drinks  --}
+			
+			<!-- Redeemable Table -->
+						
+			{if segment_3 == 'redeemable' }
+			<div class="page page-table" data-ng-controller="tableCtrl" ng-init="settings('getRedeemable')">
+			
+			    <section class="panel panel-default table-dynamic">
+			        <div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span> Redeemable Drinks</strong></div>
+			
+			        <div class="table-filters">
+			            <div class="row">
+			                <div class="col-sm-4 col-xs-6">
+			                    <form>
+			                        <input type="text"
+			                               placeholder="search"
+			                               class="form-control"
+			                               data-ng-model="searchKeywords"
+			                               data-ng-keyup="search()">
+			                    </form>
+			                </div>
+			                <div class="col-sm-3 col-xs-6 filter-result-info">
+			                    <span>
+			                        Showing {{filteredData.length}}/{{data.length}} entries
+			                    </span>              
+			                </div>
+			            </div>
+			        </div>
+					<div class="table-responsive">
+				        <table class="table table-bordered table-striped table-responsive">
+				            <thead>
+				                <tr>
+				                    <th><div class="th">
+				                        Purchase Date
+				                        <span class="glyphicon glyphicon-chevron-up"
+				                              data-ng-click=" order('purchase_date') "
+				                              data-ng-class="{active: row == 'purchase_date'}"></span>
+				                        <span class="glyphicon glyphicon-chevron-down"
+				                              data-ng-click=" order('-purchase_date') "
+				                              data-ng-class="{active: row == '-purchase_date'}"></span>
+				                    </div></th>
+				                    <th><div class="th">
+				                        Drink Type
+				                        <span class="glyphicon glyphicon-chevron-up"
+				                              data-ng-click=" order('drink_type') "
+				                              data-ng-class="{active: row == 'drink_type'}"></span>
+				                        <span class="glyphicon glyphicon-chevron-down"
+				                              data-ng-click=" order('-drink_type') "
+				                              data-ng-class="{active: row == '-drink_type'}"></span>
+				                    </div></th>
+				                    <th><div class="th">
+				                        Sender
+				                        <span class="glyphicon glyphicon-chevron-up"
+				                              data-ng-click=" order('sender') "
+				                              data-ng-class="{active: row == 'sender'}"></span>
+				                        <span class="glyphicon glyphicon-chevron-down"
+				                              data-ng-click=" order('-sender') "
+				                              data-ng-class="{active: row == '-sender'}"></span>
+				                    </div></th>
+				                </tr>
+				            </thead>
+				            <tbody>
+				                <tr data-ng-repeat="data in currentPageData" class="{{data.tr_class}}">
+				                    <td>{{data.purchase_date}}</td>
+				                    <td>{{data.drink_type}}</td>
+				                    <td>{{data.sender}}</td>
+				                </tr>
+				            </tbody>
+				        </table>
+					</div>
+					
+					<p class="text-right" style="padding-right:10px"><i class="fa fa-square color-warning"></i> <strong><small>Premium Drink</small></strong>&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-square color-success"></i> <strong><small>Standard Drink</small></strong></p>
+			
+			        <footer class="table-footer">
+			            <div class="row">
+			                <div class="col-md-6 page-num-info">
+			                    <span>
+			                        Show 
+			                        <select data-ng-model="numPerPage"
+			                                data-ng-options="num for num in numPerPageOpt"
+			                                data-ng-change="onNumPerPageChange()">
+			                        </select> 
+			                        entries per page
+			                    </span>
+			                </div>
+			                <div class="col-md-6 text-right pagination-container">
+			                    <pagination class="pagination-sm"
+			                                page="currentPage"
+			                                total-items="filteredData.length"
+			                                max-size="4"
+			                                on-select-page="select(page)"
+			                                items-per-page="numPerPage"
+			                                rotate="false"
+			                                boundary-links="true"></pagination>
+			                </div>
+			            </div>
+			        </footer>
+			    </section>
+			
+			</div>					
+			<!-- Redeemed Table -->
+			
+			{if:elseif segment_3 == 'redeemed' }
+				<div class="page page-table" data-ng-controller="tableCtrl" ng-init="settings('getRedeemed')">
+			
+			    <section class="panel panel-default table-dynamic">
+			        <div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span> Redeemed Drinks</strong></div>
+			
+			        <div class="table-filters">
+			            <div class="row">
+			                <div class="col-sm-4 col-xs-6">
+			                    <form>
+			                        <input type="text"
+			                               placeholder="search"
+			                               class="form-control"
+			                               data-ng-model="searchKeywords"
+			                               data-ng-keyup="search()">
+			                    </form>
+			                </div>
+			                <div class="col-sm-3 col-xs-6 filter-result-info">
+			                    <span>
+			                        Showing {{filteredData.length}}/{{data.length}} entries
+			                    </span>              
+			                </div>
+			            </div>
+			        </div>
+					<div class="table-responsive">
+				        <table class="table table-bordered table-striped table-responsive">
+				            <thead>
+				                <tr>
+				                	<th><div class="th">
+				                        Order ID
+				                        <span class="glyphicon glyphicon-chevron-up"
+				                              data-ng-click=" order('order_id') "
+				                              data-ng-class="{active: row == 'order_id'}"></span>
+				                        <span class="glyphicon glyphicon-chevron-down"
+				                              data-ng-click=" order('-order_id') "
+				                              data-ng-class="{active: row == '-order_id'}"></span>
+				                    </div></th>
+				                    <th><div class="th">
+				                        Redemption Date
+				                        <span class="glyphicon glyphicon-chevron-up"
+				                              data-ng-click=" order('redeem_date') "
+				                              data-ng-class="{active: row == 'redeem_date'}"></span>
+				                        <span class="glyphicon glyphicon-chevron-down"
+				                              data-ng-click=" order('-redeem_date') "
+				                              data-ng-class="{active: row == '-redeem_date'}"></span>
+				                    </div></th>
+				                    <th><div class="th">
+				                        Sender
+				                        <span class="glyphicon glyphicon-chevron-up"
+				                              data-ng-click=" order('sender') "
+				                              data-ng-class="{active: row == 'sender'}"></span>
+				                        <span class="glyphicon glyphicon-chevron-down"
+				                              data-ng-click=" order('-sender') "
+				                              data-ng-class="{active: row == '-sender'}"></span>
+				                    </div></th>
+				                    <th><div class="th">
+				                        Establishment
+				                        <span class="glyphicon glyphicon-chevron-up"
+				                              data-ng-click=" order('redeemed_at') "
+				                              data-ng-class="{active: row == 'redeemed_at'}"></span>
+				                        <span class="glyphicon glyphicon-chevron-down"
+				                              data-ng-click=" order('-redeemed_at') "
+				                              data-ng-class="{active: row == '-redeemed_at'}"></span>
+				                    </div></th>
+				                    <th><div class="th">
+				                        Drink
+				                        <span class="glyphicon glyphicon-chevron-up"
+				                              data-ng-click=" order('drink') "
+				                              data-ng-class="{active: row == 'drink'}"></span>
+				                        <span class="glyphicon glyphicon-chevron-down"
+				                              data-ng-click=" order('-drink') "
+				                              data-ng-class="{active: row == '-drink'}"></span>
+				                    </div></th>
+				                </tr>
+				            </thead>
+				            <tbody>
+				                <tr data-ng-repeat="data in currentPageData" class="{{data.tr_class}}">
+				                    <td>{{data.order_id}}</td>
+				                    <td>{{data.redeem_date}}</td>
+				                    <td>{{data.sender}}</td>
+				                    <td>{{data.redeemed_at}}</td>
+				                    <td>{{data.drink}}</td>
+				                </tr>
+				            </tbody>
+				        </table>
+					</div>
+					
+					<p class="text-right" style="padding-right:10px"><i class="fa fa-square color-warning"></i> <strong><small>Premium Drink</small></strong>&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-square color-success"></i> <strong><small>Standard Drink</small></strong></p>
+			
+			        <footer class="table-footer">
+			            <div class="row">
+			                <div class="col-md-6 page-num-info">
+			                    <span>
+			                        Show 
+			                        <select data-ng-model="numPerPage"
+			                                data-ng-options="num for num in numPerPageOpt"
+			                                data-ng-change="onNumPerPageChange()">
+			                        </select> 
+			                        entries per page
+			                    </span>
+			                </div>
+			                <div class="col-md-6 text-right pagination-container">
+			                    <pagination class="pagination-sm"
+			                                page="currentPage"
+			                                total-items="filteredData.length"
+			                                max-size="4"
+			                                on-select-page="select(page)"
+			                                items-per-page="numPerPage"
+			                                rotate="false"
+			                                boundary-links="true"></pagination>
+			                </div>
+			            </div>
+			        </footer>
+			    </section>
+			
+			</div>
+<!--
+			{if:elseif segment_3 == 'redeemed'}			
+				{exp:channel:entries channel="drink_ticket" status="redeemed|pending" search:tck_redeem_member="{logged_in_member_id}"}
+					<div class="row">
+						<div class="col-sm-1">
+							{tck_redeem_date format="%m/%d/%y"}
+						</div>
+						<div class="col-sm-1">
+							{drink_type:title}
+						</div>
+						<div class="col-sm-2">
+							{exp:member:custom_profile_data member_id="{logged_in_member_id}"}
+								Sent By: {screen_name}
+							{/exp:member:custom_profile_data}	
+						</div>
+						<div class="col-sm-2">
+							{tck_redeemed_at:title}
+						</div>
+						<div class="col-sm-2">
+							{redeemed_drink:title}
+						</div>
+					</div>
+				{/exp:channel:entries}
+-->
+				
+			<!-- Sent Table -->	
+				
+			{if:elseif segment_3 == 'sent' }
+			<div class="table-responsive">
+				<div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span> Sent Drinks</strong></div>
+					<table class="table table-hover table-striped table-bordered">
+						<thead>
+			                <tr>
+			                	<th>Order ID</th>
+			                    <th>Purchase Date</th>
+			                    <th>Order Total</th>
+			                    <th>Status</th>
+			                    <th>Sent To</th>
+			                    <th>Location</th>
+			                    <th>Drink</th>
+			                </tr>
+			            </thead>
+						<tbody>
+				{exp:query sql="SELECT * FROM v_drink_tickets WHERE tck_p_member='{logged_in_member_id}' ORDER BY tck_purchase_date DESC"}
+                            <tr class="{if drink_type == "Standard"}active{if:else}warning{/if}">
+                            	<td>
+                            		{ticket_id}
+                            	</td>
+                                <td>
+                                	{tck_purchase_date format="%m/%d/%y"}
+                                </td>
+                                <td>
+                                	${order_total}
+                                </td>
+                                <td>
+                                	{if status == "pending" || status == "redeemed"}<span class="label label-danger">Redeemed</span>{if:else}<span class="label label-success">Redeemable</span>{/if}
+                                </td>
+                                <td>
+                                	{r_member_username}
+                                </td>
+                                <td>
+                                	{estab_name}
+                                </td>
+                                <td>
+                                	{redeemed_drink}
+                                </td>
+                            </tr>
+				{/exp:query}
+						</tbody>
+					</table>
+			</div>
+			<p class="text-right"><i class="fa fa-square color-warning"></i> <strong>Premium Drink</strong>&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-square color-success"></i> <strong>Standard Drink</strong></p>
+				
+<!--
+			{if:elseif segment_3 == 'sent'}
+			
+				{exp:query sql="SELECT * FROM v_drink_tickets WHERE tck_p_member='{logged_in_member_id}'"}
+					<div class="row">
+						<div class="col-sm-1">
+							{tck_purchase_date format="%m/%d/%y"}
+						</div>
+						<div class="col-sm-1">
+							{drink_type}
+						</div>
+						<div class="col-sm-1">
+							{status}
+						</div>
+						<div class="col-sm-2">
+							{redeem_member_screen_name}	
+						</div>
+						<div class="col-sm-2">
+							{tck_redeemed_at}
+						</div>
+						<div class="col-sm-2">
+							{redeemed_drink}
+						</div>
+					</div>
+				{/exp:query}	
+-->
+			
+			{/if}
+				
+
+{/if}

@@ -1,0 +1,59 @@
+{exp:airtab:log_page_load}
+{if segment_3 == "complete"}
+<script>
+parent.profileEditComplete();
+</script>
+{if:else}
+<div ng-cloak>
+<ion-content has-header="false" padding="true">
+
+			{exp:freemember:update_profile return="/android/editprofile/complete" error_handling="inline" error_delimiters='<span class="error">|</span>'}
+				<label class="item item-input item-stacked-label">
+					<span class="input-label">First Name</span>
+					<input type="text" name="FName" placeholder="John" value="{FName}">
+				</label>{error:FName}
+
+				<label class="item item-input item-stacked-label">
+					<span class="input-label">Last Name</span>
+					<input type="text" name="LName" placeholder="Doe" value="{LName}">
+				</label>{error:LName}
+
+				<label class="item item-input item-stacked-label">
+					<span class="input-label">Email Address</span>
+					<input type="email" name="email" placeholder="jdoe@email.domain" value="{email}">
+				</label>{error:email}
+
+				<label class="item item-input item-stacked-label">
+					<span class="input-label">Mobile Phone</span>
+					<input type="tel" name="Phone" placeholder="jdoe@email.domain" value="{Phone}">
+				</label>{error:Phone}
+				
+				<label class="item item-input item-stacked-label">
+					<span class="input-label">Username</span>
+					<input type="text" name="username" placeholder="jdoe" value="{username}">
+				</label>{error:username}
+
+				<div class="item-divider">Change Your Password</div>
+
+				<label class="item item-input item-stacked-label">
+					<span class="input-label">Enter Your Current Password</span>
+					<input type="password" name="current_password" placeholder="Current Password" value="{current_password}">
+				</label>{error:email}
+
+				<label class="item item-input item-stacked-label">
+					<span class="input-label">New Password</span>
+					<input type="password" name="password" placeholder="Minimum of 6 characters" value="{password}">
+				</label>{error:password}
+
+				<label class="item item-input item-stacked-label">
+					<span class="input-label">Confirm New Password</span>
+					<input type="password" name="password_confirm" placeholder="Enter the same password as above..." value="{password_confirm}">
+				</label>{error:password_confirm}
+
+				<p>
+					<input type="submit" class="button  button-block button-assertive" value="Update Profile">
+				</p>
+			{/exp:freemember:update_profile}
+</ion-content>
+</div>
+{/if}

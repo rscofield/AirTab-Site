@@ -1,0 +1,9 @@
+<?php
+	$r = json_decode(file_get_contents('php://input'));
+	
+	$to = ($r->type == "text") ? $r->phone : $r->email;
+	$body = "AirTab.me: " . $r->promotionInfo->name . ". Click link to accept. " . $r->promotionInfo->invite_url;
+
+?>	
+	{exp:airtab:process_send_promotion  type="<?php echo $r->type;?>" to="<?php echo $to;?>" body="<?php echo $body;?>"  }
+	{/exp:airtab:process_send_promotion}

@@ -1,0 +1,47 @@
+<div class="table-responsive">
+		<table class="table table-hover table-striped table-bordered">
+			<thead>
+				<tr>
+					<th>Title</th>
+					<th>Type</th>
+					<th>Text Content</th>
+					<th>Banner Image</th>
+					<th>Content Type</th>
+					<th>Content Banner Image</th>
+				</tr>
+			</thead>
+			<tbody>
+				{exp:query sql="SELECT * FROM v_establishment_news WHERE estab_id='{segment_3}' Order By title"}
+					<tr>
+						<td>
+							{title}
+						</td>
+						<td>
+							{est_news_type}
+						</td>
+						<td>
+							{news_content}
+						</td>
+						<td>
+							{if est_news_type == "full_banner"}
+								{exp:parse_file_paths}
+									<img src="{banner_image}" height="120" class="col-sm-12"/>
+								{/exp:parse_file_paths}
+							{/if}
+						</td>
+						<td>
+							{est_news_content_type}
+						</td>
+						<td>
+							{if est_news_content_type == "banner"}
+								{exp:parse_file_paths}
+									<img src="{est_news_content_banner}" height="120" class="col-sm-12"/>
+								{/exp:parse_file_paths}
+							{/if}
+						</td>
+					</tr>
+					{if no_results} No News or Special Events defined. {/if}
+				{/exp:query}
+			</tbody>
+		</table>
+</div>

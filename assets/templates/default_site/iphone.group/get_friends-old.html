@@ -1,0 +1,29 @@
+<? $member = ee()->session->userdata('member_id'); ?>
+[
+{exp:stash:set 
+parse_tags="yes" 
+parse_conditionals="yes" 
+parse_depth="5" 
+no_results_prefix="nested"
+}
+{stash:content}
+{exp:channel:entries channel="friends" search:sender_id="=<?=$member?>" status="Approved|Pending Approval"}
+	{embed="iphone/friends_info" member_id="{friend_id}" status="{status}"}{if count < total_results},{/if}
+	{if nested:no_results}
+		{stash:noresults}yes{/stash:noresults}
+	{/if}
+{/exp:channel:entries}
+{/stash:content}
+{/exp:stash:set}
+{exp:stash:get name="content"} 
+{if {exp:stash:not_empty name="noresults"}}
+{exp:channel:entries channel="friends" search:friend_id="=<?=$member?>" status="Approved|Pending Approval"}
+	{embed="iphone/friends_info" member_id="{sender_id}" status="{status}"}{if count < total_results},{/if}
+{/exp:channel:entries}
+{if:else}
+{exp:channel:entries channel="friends" search:friend_id="=<?=$member?>" status="Approved|Pending Approval"}
+	{if count == 1},{/if}{embed="iphone/friends_info" member_id="{sender_id}" status="{status}"}{if count < total_results},{/if}
+{/exp:channel:entries}
+{/if}
+]
+{exp:http_header content_type="application/json"}

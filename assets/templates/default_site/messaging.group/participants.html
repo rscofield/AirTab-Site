@@ -1,0 +1,17 @@
+{if logged_out}
+{}
+{if:else}
+[
+	{exp:query sql="SELECT * FROM v_messaging_thread_participants WHERE thread_id = {embed:thread} AND user_id <> {logged_in_member_id}"}
+		{
+			"user_id": "{user_id}",
+			"username": "{username}",
+			"first_name": "{first}",
+			"last_name": "{last}",
+			"display_name": "{if first AND last}{first} {last}{if:else}{username{/if}",
+			"avatar": "{exp:airtab:avatar member="{user_id}" size="60"}"
+		}{if count < total_results},{/if}
+		{if no_results}{}{/if}
+	{/exp:query}
+]
+{/if}

@@ -1,0 +1,26 @@
+<link href="{path=css/_ee_channel_form_css}" type="text/css" rel="stylesheet" media="screen">
+{exp:airtab:log_page_load}
+
+<div class="page">
+
+	<section class="panel panel-default">
+		<div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span>
+			{exp:query sql="SELECT * FROM v_establishment WHERE entry_id = '{segment_3}'"}
+				Establishment {title}
+			{/exp:query}
+		</strong></div>
+		<div class="panel-body">
+			<div class="ui-tab-container">
+				<tabset class="ui-tab">
+					<tab heading="Profile">{embed="adm/estab_profile"}</tab>
+					<tab heading="Drink Menu">{embed="adm/estab_menu"}</tab>
+					<tab heading="Events & Specials">{embed="adm/estab_news"}</tab>
+					<tab heading="Bartenders">bartenders placeholder</tab>
+					<tab heading="Redeemed Drinks">{embed="adm/estab_redeemed"}</tab>
+				</tabset>
+			</div>
+				
+		</div>
+	</section> 
+
+</div>

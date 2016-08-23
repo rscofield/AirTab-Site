@@ -1,0 +1,33 @@
+<html>
+<header><title>This is title</title></header>
+<body>
+
+<?php
+
+    /*
+
+    http://airtab.me/test/sql_query_at_usr_rec?name=john
+/var/www/vhosts/airtab.me/httpdocs/assets/templates/default_site/test.group/newfile.txt
+    */
+
+$d = date("Y-m-d-h:i:s");
+echo $d . "\n";
+
+echo getcwd() . "\n";
+
+$path = getcwd()."/assets/templates/default_site/test.group/";
+
+$myfile = fopen( $path."xfile".$d.".txt", "w") or die("Unable to open file!");
+$txt = "John Doe\n";
+fwrite($myfile, $txt);
+$txt = "Jane Doe\n";
+fwrite($myfile, $txt);
+fclose($myfile);
+
+//	echo $_GET["name"];
+
+?>
+
+</body>
+</html>
+

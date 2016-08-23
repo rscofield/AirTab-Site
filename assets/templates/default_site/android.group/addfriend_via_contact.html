@@ -1,0 +1,160 @@
+{!--       
+     Author: John W. Blaine
+     File Name: drinks_with_msg.html
+     
+     Description : Display DRINKS send and the message.
+     
+     Example:
+     
+     
+--}
+
+{if segment_3 == ""}
+<div ng-cloak>
+<style type="text/css">
+	.button.button-block, .button.button-full {
+		margin-top:0;
+	}
+</style>
+
+<ion-view title="Friends Via Contacts" ng-controller="friendViaContactsController">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    
+		    <ion-content has-header="true" padding="true">
+		    	<div class="list" ng-init="getFriendsViaAndroidContacts( '{logged_in_member_id}' )" >
+		    	 		           								                  							
+		       		<div ng-repeat="myfriend in phoneFriendsList">
+		    			<div class="list card" >
+
+	
+							<div style="width: 100%; overflow: hidden;" ng-click="selectAndroidContacts( '{{myfriend.name}}', '{{myfriend.phone}}' );">
+				    			
+				    			<div style="width:20%; float: left; border-width: 1px; border-style: solid; border-color: transparent; margin-top:10px;"> 
+			    				</div>
+			    				
+
+			    				<div style="width:50%; float: left; border-width: 1px; border-style: solid; border-color: transparent;"> 
+					           		 {{myfriend.name}}  <br> 
+					           		 {{myfriend.phone}} <br> 					           		 
+			    				</div>			    				
+					    
+				    			<div align="center" style="width:30%; float: left; border-width: 1px; border-style: solid; border-color: transparent;  margin-top:15px; align : center; " )"> 			    				
+			    				</div>
+
+						    </div>
+
+						</div>
+ 					</div>
+
+ 					</div>		                 
+							          
+		    </ion-content>   
+		    
+		<ion-footer-bar align-title="center" class="bar-assertive">
+					
+		</ion-footer-bar>
+   
+    
+</ion-view>
+</div>
+{/if}
+
+
+
+{if segment_3 == "ORG_DEL"}
+<div ng-cloak>
+<style type="text/css">
+	.button.button-block, .button.button-full {
+		margin-top:0;
+	}
+</style>
+
+<ion-view title="Friends Via Contacts" ng-controller="friendViaContactsController">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    
+		    <ion-content has-header="true" padding="true">
+		    	<div class="list" ng-init="getFriendsViaContacts( '{logged_in_member_id}' )" >
+		    	 
+					<div ng-if="phoneFriendsList[0].status">
+		            AIRTAB MEMBERS IN MY CONTACTS     
+					</div>		
+		           								                  							
+		       		<div ng-repeat="myfriend in phoneFriendsList">
+		    			<div class="list card" ng-change="memberFriend( '{{myfriend.first}}', '{{myfriend.phone[0]}}' )" >
+
+							<div style="width: 100%; overflow: hidden;">
+				    			
+				    			<div style="width:20%; float: left; border-width: 1px; border-style: solid; border-color: transparent; margin-top:10px;"> 
+				    
+				    				  		            	 
+				    				 <div ng-if="myfriend.img != ''">
+			 			            	 <img src="//airtab.me/avatar/?file={{myfriend.img}}" width="40" height="40" style="vertical-align: middle;"> 
+				    				 </div>			 		            	 
+				    				
+			    				</div>
+			    				
+
+			    				<div style="width:50%; float: left; border-width: 1px; border-style: solid; border-color: transparent;"> 
+					           		 {{myfriend.first}} {{myfriend.last}} <br> 
+					           		 {{myfriend.phone[0]}} <br> 
+					           		 {{myfriend.usr}} <br> 
+					           		 
+										{if {logged_in_member_id} == "952" || {logged_in_member_id} == "1171" }      
+								           		 Friend: {{myfriend.friend}} <br> 
+								           		 {{myfriend.status}}<br>
+								           		 {{myfriend.id}}
+										{/if}
+					           		 
+			    				</div>			    				
+					    
+				    			<div align="center" style="width:30%; float: left; border-width: 1px; border-style: solid; border-color: transparent;  margin-top:15px; align : center; " )"> 			    				
+		           					<input type="button" value="{{myfriend.follow}}" ng-click="memberFriend( '{{myfriend.first}}', '{{myfriend.phone[0]}}' )" style="background-color:{{myfriend.color}}; color: white; border-color: transparent;  width: 100%;"/>
+			    				</div>
+
+						</div>
+
+						</div>
+ 					</div>
+
+
+
+		                 
+					<div ng-if="non_members[0].status">
+		            INVITE CONTACTS     
+					</div>		
+							          
+		           <div ng-repeat="non_mem in non_members">
+		    			<div class="list card" >
+
+							<div style="width: 100%; overflow: hidden;">
+				    			
+				    			<div style="width:70%; float: left; border-width: 1px; border-style: solid; border-color: transparent; margin-top:10px;"> 
+						            {{non_mem.first}} {{non_mem.last}} <br> {{non_mem.phone[0]}}  <br> {{non_mem.status}} 
+			    				</div>
+				            
+				            	<div align="center" style="width:30%; float: left; border-width: 1px; border-style: solid; border-color: transparent;  margin-top:15px; align : center; " )"> 			    				
+		           					<input type="button" value="{{non_mem.follow}}" ng-click='contactFriend( "{{non_mem.first}}", "{{non_mem.phone[0]}}", "{logged_in_member_id}" )' style="background-color:{{non_mem.color}}; color: white; border-color: transparent;  width: 100%;"/>
+			    				</div>
+							</div>		
+				                                 
+		 				</div>
+ 					</div>
+		           
+		           
+		 		</div>				
+		    </ion-content>   
+		    
+		<ion-footer-bar align-title="center" class="bar-assertive">
+					
+		</ion-footer-bar>
+   
+    
+</ion-view>
+</div>
+{/if}
+
+

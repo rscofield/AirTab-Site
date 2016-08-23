@@ -1,0 +1,29 @@
+{if logged_out}
+	{embed="dash/login" return="{current_path}" redirect="yes"}
+{if:else}
+{exp:airtab:log_page_load}
+<div class="page">
+
+	<section class="panel panel-default">
+		<div class="panel-body">
+
+				<p><strong>AirTab for {segment_4} Version {segment_3}</strong</p>
+				<? if(strpos(ee()->input->user_agent(), "AirTab/dev") !== false) echo "<p>Development Build</p>";?>
+				<p>&copy; 2014 Software Development Associates. All Rights Reserved.</p>
+				<p>The materials contained in this App are protected by applicable copyright and trademark law.</p>
+		</div>
+	</section> 
+	
+	<section class="panel panel-default">
+		<div class="panel-body">
+				<p>
+					<button type="button" class="btn btn-danger btn-block" onClick="window.location.href='#terms-and-conditions'"><span class="glyphicon glyphicon-gavel"></span> Terms of Service</button>
+				</p>
+				<p>
+					<button type="button" class="btn btn-danger btn-block" onClick="window.location.href='#privacy-policy'"><span class="glyphicon glyphicon-eye-slash"></span> Privacy Policy</button>
+				</p>
+		</div>
+	</section>
+
+</div>
+{/if}
