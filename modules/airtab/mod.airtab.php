@@ -2447,21 +2447,7 @@ class Airtab {
         return $now->format('Y-m-d H:i:s');
         
     }
-    
-		    public function at_estab_register()
-    {
-        $place = $this->EE->input->post("estInfo");
-        $now = new DateTime();
-        $curTime = $now->format('Y-m-d H:i:s');
-				$member_id = ee()->session->userdata('member_id'); // Get Current User's ID
-                
-        //$queryEx = $this->EE->db->query("INSERT INTO at_user_recommend (establishment_name, occurred, member_id, estab_id) VALUES ( '$place', '$curTime', $member_id, $establishment_id )");
-        
-        //return "success";
-        return $now->format('Y-m-d H:i:s');
-        
-    }
-		
+    	
      // Get Friends' List
     // Friends List is stored in table exp_channel_data (channel_id = 6)
     // Member's First/Last name and phone are stored in table exp_member_data

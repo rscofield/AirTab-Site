@@ -262,10 +262,6 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
       return false;
     }
   }
-	
-	$scope.promoInvite = function() {
-		
-	}
 
   $scope.checkLogin = function(forceLogin) {
     //Don't check if the login dialog is open
@@ -759,7 +755,7 @@ starter.controller('estController', function($scope, $stateParams, $rootScope, $
 
       var request = {
         location: location,
-        types: ['bar', 'night_club'],
+        types: ['bar', 'night_club', 'restaurant', 'cafe'],
         rankBy: google.maps.places.RankBy.DISTANCE
       };
 
@@ -774,9 +770,7 @@ starter.controller('estController', function($scope, $stateParams, $rootScope, $
     }
   },
   
-  
   $scope.getNearby = function() {
-
     if($scope.isLoading) return;
     if(!$scope.places && !$scope.nearbyEsts && !$scope.refreshing) $rootScope.showLoading();
     if( $scope.refreshing ) {
@@ -841,6 +835,9 @@ starter.controller('estController', function($scope, $stateParams, $rootScope, $
     $scope.info = true;
     $scope.recommend = false;
     $scope.register = false;
+		$scope.estInfo = {};
+		$scope.estInfo.latitude = results.geometry.location.lat();
+		$scope.estInfo.longitude = results.geometry.location.lng();
     location = new google.maps.LatLng(results.geometry.location.lat(),results.geometry.location.lng());
     map = new google.maps.Map(document.getElementById('placeMap_'+results.place_id), {
       center: location,
@@ -852,25 +849,38 @@ starter.controller('estController', function($scope, $stateParams, $rootScope, $
         title: results.name
     });
     $scope.pInfo = results;
+		$scope.estInfo.name = $scope.pInfo.name;
+		$scope.estInfo.phone = (typeof $scope.pInfo.formatted_phone_number !== "undefined") ? $scope.pInfo.formatted_phone_number : "unknown";
+		if ($scope.pInfo.address_components.length == 7) {
+			$scope.estInfo.address = $scope.pInfo.address_components["0"].long_name + " " + $scope.pInfo.address_components[1].long_name;
+			$scope.estInfo.city = $scope.pInfo.address_components[2].long_name;
+			$scope.estInfo.state = $scope.pInfo.address_components[4].long_name;
+			$scope.estInfo.zip = $scope.pInfo.address_components[6].long_name;
+		} else {
+			$scope.estInfo.address = $scope.pInfo.address_components[0].long_name;
+			$scope.estInfo.city = $scope.pInfo.address_components[1].long_name;
+			$scope.estInfo.state = $scope.pInfo.address_components[3].long_name;
+			$scope.estInfo.zip = $scope.pInfo.address_components[5].long_name;			
+		}
     $ionicLoading.hide();
   },
 
   $scope.showRecommend = function() {
 	$scope.info = false;
 	$scope.recommend = true;
-	//$http.get(config.template_path + "/sql_insert_at_user_recommend/" + estName + "/" + member_id + "/" + estAddress )
-	//.success(function (data) {
-	//	parent.rootScope.hideLoading();						
-	//})
+	$http.get(config.template_path + "/sql_insert_at_user_recommend/" + $scope.pInfo.name + "/" + $rootScope.userInfo.member_id + "/0")
+	.success(function (data) {
+		parent.rootScope.hideLoading();						
+	})
   },	
 	
   $scope.showRegister = function() {
 	$scope.info = false;
 	$scope.register = true;
-	//$http.get(config.template_path + "/sql_insert_at_user_recommend/" + estName + "/" + member_id + "/" + estAddress )
-	//.success(function (data) {
-	//	parent.rootScope.hideLoading();						
-	//})
+	$http.post(config.global_path + "/sql_insert_at_estab_register" , $scope.estInfo )
+	.success(function (data) {
+		parent.rootScope.hideLoading();					
+	})
 	},		
 
   $scope.showModal = function(estId) {
@@ -3088,5 +3098,53 @@ starter.controller("aboutCtrl", function($scope, $http, $window, $sce, $timeout,
 
   
   $scope.getVersion();
+
+})
+
+
+// ########################################################
+
+starter.controller("campaignCtrl", function($scope, $http, $window, $sce, $timeout, $ionicLoading, $rootScope, $ionicModal, $state) {
+
+  $scope.init = function() {
+		$scope.showOptions = true;
+		$scope.textMode = false;
+		$scope.emailMode = false;
+		$scope.success = false;
+		$scope.error = false;
+  }, 
+
+  $scope.goTo = function(page) {
+	  if(page == "email") {
+			$scope.showOptions = false;
+			$scope.emailMode = true;
+	  } else if ( page == "text" ) {
+			$scope.showOptions = false;
+			$scope.textMode = true;
+	  }    
+  },
+	
+	$scope.Submit = function() {
+		console.log("Submit");
+		$scope.invite.type = ($scope.textMode) ? "text" : "email";
+		$scope.invite.promotionInfo = $rootScope.promotion_list;
+		$http.post(config.global_path + "/send_promotion" , $scope.invite )
+		.success(function (data) {
+			//parent.rootScope.hideLoading();
+			console.log(data);			
+		})		
+		
+		if ($scope.textMode) {
+			$scope.type = "text";
+			$scope.success = true;
+			$scope.textMode = false;
+		} else if ($scope.emailMode) {
+			$scope.type = "EMail";
+			$scope.success = true;
+			$scope.emailMode = false;
+		}
+	}
+
+  $scope.init();
 
 });

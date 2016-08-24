@@ -18,7 +18,7 @@
       </button>
     </div>
     <div class="card" style="text-align:center" ng-show="info">
-    	<div class="item item-text-wrap" ng-click="showRegister()">
+    	<div class="item item-text-wrap" ng-click="showRegister()" ng-show="$root.isLogged">
     		I am the owner/manager of {{pInfo.name}} and would like to register it with AirTab!
 		</div>
 		<div class="item item-text-wrap" ng-click="showRecommend()">
@@ -34,7 +34,7 @@
     
     <div class="card" style="text-align:center" ng-show="register">
     	<div class="item item-text-wrap">
-    		Thank You!  Your registration request has been saved. A AirTab representative will contact you shortly to complete the process.
+    		Thank You!  Your registration request has been saved. An AirTab representative will contact you shortly to complete the process.
 		</div>
     </div>
     

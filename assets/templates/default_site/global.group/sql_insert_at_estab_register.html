@@ -1,0 +1,46 @@
+<?php
+/*  
+     Author: Ray Scofield
+     File Name: sql_insert_at_estab_register.html
+     Date: 08/22/2015
+     
+     Description :           
+
+		 Used for memeber who is owner/manager of venue that wants to self register.
+		 Called from places display page.
+*/
+
+	$r = json_decode(file_get_contents('php://input'));
+	
+		//Create the ticket
+		ee()->load->library('api');
+		ee()->api->instantiate('channel_entries');
+
+		$data = array(
+		    'title'         => $r->name,
+		    'entry_date'    => time(),
+		    'edit_date'     => time(),
+		    'field_id_1'    => $r->address, // address
+		    'field_id_2'    => $r->city,  	// city
+		    'field_id_3'    => $r->state,  	// state
+		    'field_id_4'   	=> $r->zip,			// zip
+		    'field_id_5'	=> ee()->session->userdata('username'),  // contact name
+		    'field_id_20'	=> $r->latitude, 		// latitude
+		    'field_id_21'	=> $r->longitude,  	// longitude
+				'field_id_30'	=> ee()->session->userdata('member_id'),  // member ID
+				'field_id_38'	=> $r->phone,  		// phone #
+		    'status'		=> "Waiting Approval"
+		);
+
+		if (ee()->api_channel_entries->save_entry($data, 2) === FALSE)
+		{
+		    echo json_encode(array("success"=>false, "msg"=>"Could not create establishment. Please contact customer service."));
+		    return;
+		} 
+		
+		echo json_encode(array("success"=>true));
+		return;	
+?>	
+{exp:http_header content_type="application/json"}
+  			
+  	

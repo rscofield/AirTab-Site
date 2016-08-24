@@ -154,10 +154,6 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
     }
   }
 	
-	$scope.promoInvite = function() {
-		
-	}
-
   $scope.checkLogin = function(forceLogin) {
     showModal = typeof showModal !== 'undefined' ? showModal : true;
     console.log("Verifying Login");
@@ -386,7 +382,7 @@ starter.controller('loginCtrl', function($scope, $stateParams, $rootScope, $http
 
 starter.controller('estController', function($scope, $stateParams, $rootScope, $http, $ionicLoading, $ionicModal, $ionicScrollDelegate, $timeout, $ionicPopup, $state, $window) {
   $scope.location = $rootScope.location,
-  $scope.radius = 5, //In miles
+  $scope.radius = 25, //In miles
   $scope.params = $stateParams;
 
   $scope.doScroll = function() {
@@ -504,7 +500,7 @@ starter.controller('estController', function($scope, $stateParams, $rootScope, $
 
       var request = {
         location: location,
-        types: ['bar', 'night_club'],
+        types: ['bar', 'night_club', 'restaurant', 'cafe'],
         rankBy: google.maps.places.RankBy.DISTANCE
       };
 
@@ -585,6 +581,9 @@ starter.controller('estController', function($scope, $stateParams, $rootScope, $
     $scope.info = true;
     $scope.recommend = false;
     $scope.register = false;
+		$scope.estInfo = {};
+		$scope.estInfo.latitude = results.geometry.location.lat();
+		$scope.estInfo.longitude = results.geometry.location.lng();
     location = new google.maps.LatLng(results.geometry.location.lat(),results.geometry.location.lng());
     map = new google.maps.Map(document.getElementById('placeMap_'+results.place_id), {
       center: location,
@@ -596,13 +595,26 @@ starter.controller('estController', function($scope, $stateParams, $rootScope, $
         title: results.name
     });
     $scope.pInfo = results;
+		$scope.estInfo.name = $scope.pInfo.name;
+		$scope.estInfo.phone = (typeof $scope.pInfo.formatted_phone_number !== "undefined") ? $scope.pInfo.formatted_phone_number : "unknown";
+		if ($scope.pInfo.address_components.length == 7) {
+			$scope.estInfo.address = $scope.pInfo.address_components["0"].long_name + " " + $scope.pInfo.address_components[1].long_name;
+			$scope.estInfo.city = $scope.pInfo.address_components[2].long_name;
+			$scope.estInfo.state = $scope.pInfo.address_components[4].long_name;
+			$scope.estInfo.zip = $scope.pInfo.address_components[6].long_name;
+		} else {
+			$scope.estInfo.address = $scope.pInfo.address_components[0].long_name;
+			$scope.estInfo.city = $scope.pInfo.address_components[1].long_name;
+			$scope.estInfo.state = $scope.pInfo.address_components[3].long_name;
+			$scope.estInfo.zip = $scope.pInfo.address_components[5].long_name;			
+		}
     $rootScope.hideLoading();
   },
   
   $scope.showRecommend = function() {
 	$scope.info = false;
 	$scope.recommend = true;
-	$http.get(config.template_path + "/sql_insert_at_user_recommend/" + $scope.pInfo.name + "/" + member_id + "/" + $scope.pInfo.formatted_address )
+	$http.get(config.template_path + "/sql_insert_at_user_recommend/" + $scope.pInfo.name + "/" + $rootScope.userInfo.member_id + "/0")
 	.success(function (data) {
 		parent.rootScope.hideLoading();						
 	})
@@ -611,14 +623,7 @@ starter.controller('estController', function($scope, $stateParams, $rootScope, $
   $scope.showRegister = function() {
   $scope.info = false;
 	$scope.register = true;
-	$scope.estInfo = {};
-	$scope.estInfo.name = $scope.pInfo.name;
-	$scope.estInfo.phone = $scope.pInfo.formatted_phone_number;
-	$scope.estInfo.address = $scope.pInfo.address_components["0"].long_name + " " + $scope.pInfo.address_components[1].long_name;
-	$scope.estInfo.city = $scope.pInfo.address_components[2].long_name;
-	$scope.estInfo.state = $scope.pInfo.address_components[4].long_name;
-	$scope.estInfo.zip = $scope.pInfo.address_components[6].long_name;
-	$http.post(config.template_path + "/sql_insert_at_estab_register" , $scope.estInfo )
+	$http.post(config.global_path + "/sql_insert_at_estab_register" , $scope.estInfo )
 	.success(function (data) {
 		parent.rootScope.hideLoading();					
 	})

@@ -652,6 +652,11 @@ var app = angular.module('starter', ['ionic', 'starter.controllers'])
       templateUrl: config.template_path + "/how_it_works/redeem"
     })
 
+    .state('app.test', {
+      url: "/test",
+      templateUrl: config.template_path + "/test"
+    })		
+		
     .state('app.guest', {
       url: "/guest/:view",
           templateUrl: function(params){ return config.template_path + '/guest/'  + params.view;},

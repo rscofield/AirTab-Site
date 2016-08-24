@@ -538,6 +538,11 @@ var app = angular.module('starter', ['ionic', 'starter.controllers'])
       templateUrl: function(params){ return config.template_path + '/data-api/' + params.action + '/' + params.id;},
       prefetchTemplate: false
     })
+		
+    .state('app.test', {
+      url: "/test",
+      templateUrl: config.template_path + "/test"
+    })		
 
     .state('app.guest', {
       url: "/guest/:view",
