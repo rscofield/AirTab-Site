@@ -62,10 +62,19 @@
           <i class="icon ion-cash"></i>
           My Purchases
         </ion-item>
-        <ion-item class="item-icon-left" nav-clear menu-close href="#/app/messages" ng-show="$root.tester">
+        <ion-item class="item-icon-left" nav-clear menu-close href="#/app/messages">
           <i class="icon ion-ios7-chatboxes"></i>
           Messages
         </ion-item>
+				
+        <div class="item item-divider" ng-show="isVenueManager()">
+          Dashboard
+        </div>
+        <ion-item class="item-icon-left" nav-clear menu-close href="#/app/dashboard/{{userInfo.venueID}}" ng-show="isVenueManager()">
+          <i class="icon ion-settings"></i>
+          {{ userInfo.venueName }}
+        </ion-item>
+				
         <div class="item item-divider">
           Other
         </div>

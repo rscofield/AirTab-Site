@@ -46,7 +46,7 @@ if(!$loggedin) {
 					'member_id' => ee()->session->userdata('member_id')
 				))
 			->get();		
-		if ($results->num_rows() == 1)
+		if ($results->num_rows() > 0)
 		{
 			$userdata['venueID'] = intval($results->row("entry_id"));
 			$userdata['venueName'] = $results->row("title");
