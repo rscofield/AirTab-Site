@@ -146,6 +146,14 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
     }
   }
 	
+	  $scope.isVenueManager = function() {
+    if($rootScope.isVenueManager) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+	
   $scope.isPromoVolunteer = function() {
     if($rootScope.isPromoVolunteer) {
       return true;
@@ -243,10 +251,12 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
 
   $rootScope.initialize = function() {
     if(!$rootScope.initialized) {
+			console.log("Initializing..");
       $scope.getDrinkCount();
       if(typeof Android != "undefined" && typeof Android.hideSplash == "function") Android.hideSplash();
-      //$scope.isTester();
+      $scope.isTester();
 			$scope.isPromoter();
+			$scope.isLogged();
       $rootScope.checkFacebookSDK();
       $rootScope.initialized = true;
     }
@@ -332,16 +342,24 @@ starter.controller('loginCtrl', function($scope, $stateParams, $rootScope, $http
         $rootScope.hideLoading();
 
         if (data.status == "success") {
-            //Login Successful
-            console.log("success");
-            $rootScope.isLogged = true;
-            $scope.closeLogin();
-            $window.setDeviceId();
-            $rootScope.initialize();
-            $ionicViewService.nextViewOptions({
-               disableBack: true
-            });
-            $state.go("app.establishments");
+					//Login Successful
+					console.log("success");
+					$rootScope.userInfo = data;
+					$rootScope.isLogged = true;
+					$rootScope.isAdmin = (result.group_id==1 || result.group_id==10) ? true : false;
+					$rootScope.isVenueManager = result.group_id==6 ? true : false;
+					$scope.closeLogin();
+					$window.setDeviceId();
+					// load any promoter settings
+					$http.get('/global/ispromoter').success(function(result) {
+						$rootScope.promotion_list = result;
+						$rootScope.isPromoVolunteer = typeof result.promotionID !== 'undefined' ? true : false;
+					});
+					$rootScope.initialize();
+					$ionicViewService.nextViewOptions({
+						 disableBack: true
+					});
+					$state.go("app.establishments");
         } else {
             // if successful, bind success message to message
             var alertPopup = $ionicPopup.alert({
@@ -3385,6 +3403,49 @@ starter.controller("campaignCtrl", function($scope, $http, $window, $sce, $timeo
 
   $scope.init();
 
+})
+
+// ########################################################
+
+starter.controller("dashboardCtrl", function($scope, $http, $window, $sce, $timeout, $rootScope, $state) {
+	$scope.venueInfo = {};
+	$scope.menuInfo = {};
+	$scope.ticketInfo = {};
+  $scope.init = function() {
+
+  },
+	
+	$scope.loadVenue = function(venueID) {
+    $http.get(config.template_path + '/data-api/venue/'+venueID)
+		.success(function(result) {
+      $scope.venueInfo = result;
+			// load menu items
+			$http.get(config.template_path + '/data-api/menu/'+venueID)
+			.success(function(result) {
+				$scope.menuInfo = result;
+				// load redeemed items
+				$http.get(config.template_path + '/data-api/venue-redeemed/'+venueID)
+				.success(function(result) {
+					$scope.ticketInfo = result;					
+				});				
+			});
+    });
+	},
+	
+	 $scope.doTicketRefresh = function(venueID) {
+    $http.get(config.template_path + '/data-api/venue-redeemed/'+venueID)
+     .success(function(result) {
+       $scope.ticketInfo = result;
+     })
+     .finally(function() {
+       // Stop the ion-refresher from spinning
+       $scope.$broadcast('scroll.refreshComplete');
+     });
+  }
+
+  $scope.init();
+
 });
+
 
 

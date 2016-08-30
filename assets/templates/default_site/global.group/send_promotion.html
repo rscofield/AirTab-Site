@@ -7,3 +7,5 @@
 ?>	
 	{exp:airtab:process_send_promotion  type="<?php echo $r->type;?>" to="<?php echo $to;?>" body="<?php echo $body;?>"  }
 	{/exp:airtab:process_send_promotion}
+	
+	{exp:http_header content_type="application/json"}

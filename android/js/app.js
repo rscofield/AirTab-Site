@@ -533,6 +533,13 @@ var app = angular.module('starter', ['ionic', 'starter.controllers'])
       templateUrl: config.template_path + "/how_it_works/redeem"
     })
 		
+    .state('app.dashboard', {
+      url: '/dashboard/:Id',
+      templateUrl: function(params){ return config.template_path + '/dashboard/' +  params.Id;},
+      controller: 'AppCtrl',
+      prefetchTemplate: false
+    })
+		
     .state('app.data-api', {
       url: '/data-api/:action/:id',
       templateUrl: function(params){ return config.template_path + '/data-api/' + params.action + '/' + params.id;},

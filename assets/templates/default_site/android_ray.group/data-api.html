@@ -43,6 +43,50 @@
 	{/exp:query}
 ]
 
+{if:elseif segment_3 == "venue"}
+	{exp:query sql="SELECT * FROM v_establishment WHERE entry_id={segment_4}"}
+		{
+		"venueID":{entry_id},
+		"name":"{title}",
+		"status":"{status}",
+		"address":"{address}",
+		"city":"{city}",
+		"state":"{state}",
+		"zip":"{zip}",
+		"contact":"{contact_name}",
+		"phone":"{phone}"
+		}
+		{if no_results}{"error":"no results"}{/if}
+	{/exp:query}
+
+{if:elseif segment_3 == "menu"}
+[
+	{exp:query sql="SELECT * FROM v_establishment_menu WHERE estab_id={segment_4}"}
+		{
+		"menuID":{entry_id},
+		"name":"{title}",
+		"status":"{status}",
+		"type":"{Type}",
+		"price":"{Price}"
+		}{if count < total_results},{/if}
+		{if no_results}{"error":"no results"}{/if}
+	{/exp:query}
+]	
+
+{if:elseif segment_3 == "venue-redeemed"}
+[
+	{exp:query sql="SELECT * FROM v_drink_tickets WHERE redeemed_at_id='{segment_4}' Order By tck_redeem_date desc"}
+		{
+		"drinkID":{entry_id},
+		"name":"{redeemed_drink}",
+		"date":"{tck_redeem_date format="%m/%d/%y %g:%i%A"}",
+		"serverIDcode":"{serverIDcode}",
+		"type":"{type}"
+		}{if count < total_results},{/if}
+		{if no_results}{"error":"no results"}{/if}
+	{/exp:query}
+]	
+
 {if:elseif segment_3 == "sendpromotion"}
 	{exp:query sql="SELECT * FROM v_active_promotions WHERE promotion = {segment_4}" LIMIT 1}
 		{
