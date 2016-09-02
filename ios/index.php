@@ -16,6 +16,7 @@
 
     <!-- ionic/angularjs js -->
     <script src="js/ionic.bundle.min.js?<?=filemtime("./js/ionic.bundle.min.js")?>"></script>
+		<script src="js/ngFacebook.js?<?=filemtime("./js/ngFacebook.js")?>"></script>
 
     <!-- your app's js -->
     <script src="js/app.js?<?=filemtime("./js/app.js")?>"></script>

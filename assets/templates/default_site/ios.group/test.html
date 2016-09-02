@@ -1,7 +1,21 @@
-<?php
+<div ng-cloak>
+<ion-view title="Test Page" ng-init="$root.hideLoading()" ng-controller="testCtrl">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
 
+	<ion-content has-header="true" padding="true" has-tabs="true">
 
-     echo "a";
-     echo "b";
-
-?>
+		<div class="card">
+			<div class="item item-text-wrap">
+				<h1 center style="font-size:16pt">{{welcomeMsg}}</h1>
+			</div>
+		</div>
+		<div style="text-align:center;padding:10px" padding="true">
+			<button type="button" ng-click="login()" ng-hide="isLoggedIn" class="btn btn-default navbar-btn">Login</button>
+		</div>
+		
+	</ion-content>	
+	
+</ion-view>
+</div>

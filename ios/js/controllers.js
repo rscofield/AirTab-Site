@@ -255,6 +255,14 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
     }
   }
 	
+  $scope.isSuperAdmin = function() {
+    if($rootScope.userInfo.group_id == 1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+	
 	$scope.isVenueManager = function() {
     if($rootScope.isVenueManager) {
       return true;
@@ -3208,6 +3216,32 @@ starter.controller("dashboardCtrl", function($scope, $http, $window, $sce, $time
 
   $scope.init();
 
+})
+
+// ########################################################
+
+starter.controller("testCtrl", function($scope, $http, $window, $sce, $timeout, $rootScope, $state, $facebook) {
+
+  $scope.isLoggedIn = false;
+  $scope.login = function() {
+    $facebook.login().then(function() {
+      refresh();
+    });
+  }
+  function refresh() {
+    $facebook.api("/me").then( 
+      function(response) {
+        $scope.welcomeMsg = "Welcome " + response.name;
+        $scope.isLoggedIn = true;
+      },
+      function(err) {
+        $scope.welcomeMsg = "Please log in";
+      });
+  }
+  
+  refresh();
+	
 });
+
 
 
