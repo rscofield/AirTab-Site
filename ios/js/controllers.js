@@ -9,7 +9,7 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
   $window.nav = $ionicNavBarDelegate;
   $window.state = $state;
   $rootScope.isLoggingIn = false;
-  $rootScope.deviceUUID = null;
+  $rootScope.deviceUUID = config.default_UUID;
   $rootScope.launched = false;
 
   $rootScope.alertJBlaine = function( alert) {
@@ -245,7 +245,7 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
         console.log("Error Logging Out");
       }
     });
-  },
+  };
 
   $scope.isLogged = function() {
     if($rootScope.isLogged) {
@@ -253,7 +253,7 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
     } else {
       return false;
     }
-  }
+  };
 	
   $scope.isSuperAdmin = function() {
     if($rootScope.userInfo.group_id == 1) {
@@ -261,7 +261,7 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
     } else {
       return false;
     }
-  }
+  };
 	
 	$scope.isVenueManager = function() {
     if($rootScope.isVenueManager) {
@@ -269,7 +269,7 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
     } else {
       return false;
     }
-  }
+  };
 	
   $scope.isPromoVolunteer = function() {
     if($rootScope.isPromoVolunteer) {
@@ -277,7 +277,7 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
     } else {
       return false;
     }
-  }
+  };
 
   $scope.checkLogin = function(forceLogin) {
     //Don't check if the login dialog is open
@@ -319,7 +319,7 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
         }
       }
     });
-  },
+  };
 
 //  $rootScope.hasPromoAccess = function(callback,type) {
 //  	if (type === undefined) type = "drink";
@@ -350,14 +350,14 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
     $http.get(config.global_path + '/haspromo/'+type).success(function(result) {
         callback(result);  // send json result to callback function
     });
-  },
+  };
 
   $rootScope.getLocation = function(callBack) {
     $scope.locCallback = callBack;
     if(bridge) {
       $scope.queryLocation();
     }
-  },
+  };
 
   $scope.queryLocation = function() {
     if(bridge) {
@@ -392,38 +392,38 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
         }
       });
     }
-  },
+  };
 
   $scope.$on('$destroy', function(){
     $timeout.cancel($scope.promise);
-  }),
+  });
 
   $scope.hideLoading = function() {
     $ionicLoading.hide();
-  },
+  };
 
   $rootScope.hideLoading = function() {
     $ionicLoading.hide();
-  },
+  };
 
   $scope.getDrinkCount = function() {
     $http.get(config.template_path + '/ticketcount').success(function(result) {
       $rootScope.drinkCount = result.total;
     });
-  },
+  };
 
   $scope.isTester = function() {
     $http.get('/global/istester').success(function(result) {
       $rootScope.tester = result.tester;
     });
-  },
+  };
 	
   $scope.isPromoter = function() {
     $http.get('/global/ispromoter').success(function(result) {
       $rootScope.promotion_list = result;
 			$rootScope.isPromoVolunteer = typeof result.promotionID !== 'undefined' ? true : false;
     });
-  },
+  };
 	
   $rootScope.initialize = function() {
     if(!$rootScope.initialized) {
@@ -445,40 +445,81 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
       }
       
     }
-  },
+  };
   
   $scope.firstLaunch = function() {
 	  
-	  if($rootScope.launched) return;
-	  
+	  if($rootScope.launched) return;	  
 	  $rootScope.launched = true;
 	  
 	  if(bridge) {
-	  
-	//	  $rootScope.alertJBlaine( 'getVersion: ' );
-		  
-		 // $rootScope.alertJBlaine( 'getVersion: ' + $rootScope.logged_in_member_id );
-	
 		  bridge.callHandler("getVersion", null, function(response) {
-    	      $scope.version = JSON.parse(response);
-			  //$scope.version = response;
-			  
-	        if($scope.version.build >= 17) {
-		        bridge.callHandler("getUUID", null, function(uuid) {
-		           //$rootScope.alertJBlaine( 'uuid: ' + uuid );
-				  	//if(uuid) $rootScope.deviceUUID = uuid;
-		            //$rootScope.alertJBlaine( 'saveDeviceId: ' + $rootScope.deviceId );
-
-		        	if(uuid) {
-				  		$rootScope.deviceUUID = uuid;
-				  		$rootScope.saveDeviceId();
-				  	}
-
-				});
-	        }
-	      });
-	  }
-  },
+    	  $scope.version = JSON.parse(response);
+	      if($scope.version.build >= 17) {
+					bridge.callHandler("getUUID", null, function(uuid) {
+						if(uuid) {
+							$rootScope.deviceUUID = uuid;
+							$rootScope.saveDeviceId();
+						}
+					});
+				}
+	    });
+			// get current location
+			$rootScope.location = {latitude: 27.63007,longitude: -80.420380};  // default if geolocation fails
+      $scope.locPromise = $timeout($scope.queryLocation, 1000, true);
+      bridge.callHandler("getLocation", null, function(r) {
+        if(r == "unknown") {
+          return;
+        } else {
+          $timeout.cancel($scope.locPromise); //Kill the Location Promise
+          if(r.status != "success") {
+            switch(r.status) {
+              case "error":
+                $rootScope.location = { status: r.status, error: r.error };
+                break;
+              case "declined":
+                $rootScope.location = { status: r.status };
+                break
+            }
+            $scope.locCallback();
+            return;
+          } else {
+            $rootScope.location = {
+              latitude: r.lat,
+              longitude: r.lng,
+              status: r.status
+            };
+            $scope.locCallback();
+            return;
+          }
+        }
+      });
+	  } else {
+			// load from browser navagator
+			$rootScope.location = {latitude: 27.63007,longitude: -80.420380};  // default if geolocation fails
+			navigator.geolocation.getCurrentPosition(
+				function(position) {
+					$rootScope.location = {
+						latitude: position.coords.latitude,
+						longitude: position.coords.longitude
+					};
+					console.log("Got location via GeoLocation");
+					$scope.queryEstablishments();
+				},
+				function(err) {
+					var error = err.message;
+					if(err.code == "1") error = "You did not allow AirTab access to your location. Please go into your settings and allow AirTab to access your location.";
+					if(err.code == 3) error = "Unable to find your current location. Please try again later.";
+					$scope.showAlert("Location Error", error);
+					$rootScope.hideLoading();
+				}, {
+					enableHighAccuracy: true,
+					timeout: 5000,
+					maximumAge: 0
+				}
+			);
+		}
+  };
 
   $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
       //console.log(fromState, fromParams);
@@ -503,7 +544,7 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
       } else {
         $rootScope.showLoading();
       }
-  }),
+  });
 
   $rootScope.$on('$viewHistory.historyChange', function(e, data) {
         $rootScope.isBackButtonShown = !!data.showBack;
@@ -514,10 +555,11 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
           $rootScope.menuSide = "left";
           console.log("left");
         }
-  }),
-  $scope.firstLaunch(),
-  $rootScope.initialize(),
-  $scope.checkLogin()
+  });
+	
+  $scope.firstLaunch();
+  $rootScope.initialize();
+  $scope.checkLogin();
 })
 
 
@@ -641,8 +683,10 @@ starter.controller('loginCtrl', function($scope, $stateParams, $rootScope, $http
 
 starter.controller('estController', function($scope, $stateParams, $rootScope, $http, $ionicLoading, $ionicModal, $ionicScrollDelegate, $timeout, $ionicPopup, $state, $window) {
   $scope.location = $rootScope.location,
-  $scope.radius = 5, //In miles
+  $scope.radius = 50, //In miles
   $scope.params = $stateParams;
+	$scope.globalPlaces = null;
+	$scope.globalSearch = {text: ""};
 
   $scope.goToRecommendOrRegister = function(estid, esttitle) {
 	  
@@ -699,7 +743,7 @@ starter.controller('estController', function($scope, $stateParams, $rootScope, $
           }, {
             enableHighAccuracy: true,
             timeout: 5000,
-            maximumAge: 0
+            maximumAge: 60000
           }
         );
       }
@@ -762,7 +806,6 @@ starter.controller('estController', function($scope, $stateParams, $rootScope, $
 
   $scope.queryNearby = function() {
     $http.get(config.template_path + '/estjson/'+$rootScope.location.latitude+'/'+$rootScope.location.longitude+'/'+$scope.radius).success(function(results) {
-      
       if(results[0].type == "Google Places") {
       	delete $scope.nearbyEsts;
         $scope.placesLoad();
@@ -782,8 +825,9 @@ starter.controller('estController', function($scope, $stateParams, $rootScope, $
 
       var request = {
         location: location,
+				radius:16000,
         types: ['bar', 'night_club', 'restaurant', 'cafe'],
-        rankBy: google.maps.places.RankBy.DISTANCE
+        //rankBy: google.maps.places.RankBy.DISTANCE
       };
 
       var service = new google.maps.places.PlacesService(attrib);
@@ -796,11 +840,34 @@ starter.controller('estController', function($scope, $stateParams, $rootScope, $
       console.log("No Google API");
     }
   },
-  
+	
+	$scope.refreshSearch = function() {
+		delete $scope.globalPlaces;
+    if(typeof google != "undefined") {
+      var attrib = document.getElementById("placesAttribs");
+      //var location = new google.maps.LatLng($rootScope.location.latitude,$rootScope.location.longitude);
+			var location = new google.maps.LatLng(27.63007,-80.420380);
+
+      var request = {
+ 				query: $scope.globalSearch.text,
+				//query: "Applebees",
+				types: ['bar', 'night_club', 'restaurant', 'cafe']
+      };
+      var service = new google.maps.places.PlacesService(attrib);
+      service.textSearch(request, function(results,status) {
+        $scope.globalPlaces = results;
+        $ionicLoading.hide();
+        $scope.$broadcast('scroll.refreshComplete');
+      });
+    } else {
+      console.log("No Google API");
+    }
+	},
+	
   $scope.getNearby = function() {
     if($scope.isLoading) return;
     if(!$scope.places && !$scope.nearbyEsts && !$scope.refreshing) $rootScope.showLoading();
-    if( $scope.refreshing ) {
+
       if(bridge) {
         $rootScope.getLocation($scope.gotNearbyLocation);
       } else {
@@ -811,7 +878,7 @@ starter.controller('estController', function($scope, $stateParams, $rootScope, $
               longitude: position.coords.longitude
             };
             console.log("Got location via GeoLocation");
-            $scope.queryEstablishments();
+            $scope.queryNearby();
           },
           function(err) {
             var error = err.message;
@@ -826,9 +893,7 @@ starter.controller('estController', function($scope, $stateParams, $rootScope, $
           }
         );
       }
-    } else {
       $scope.queryNearby();
-    }
   },
 
   $scope.gotNearbyLocation = function() {
@@ -965,6 +1030,7 @@ starter.controller('NewsCtrl', function($scope, $stateParams, $rootScope, $http,
   },
 
   $scope.loadNews = function() {
+		delete $rootScope.redeem;
     if($rootScope.news && !$scope.refreshing) {
       $ionicLoading.hide();
       return;
@@ -3238,9 +3304,29 @@ starter.controller("testCtrl", function($scope, $http, $window, $sce, $timeout, 
         $scope.welcomeMsg = "Please log in";
       });
   }
+	
+	  $scope.loginFB = function() {
+    //alert( 'loginFB' );
+    $window.loginFB($scope.loginFBRX);
+
+  },
+  
+  $scope.loginFBRX = function(r) {
+	  $scope.showAlert( 'Message', r );
+  },
+
+  $scope.showAlert = function(title, alert) {
+      var alertPopup = $ionicPopup.alert({
+        title: title,
+        template: alert
+      });
+      alertPopup.then(function(res) {
+        console.log('Hit OK');
+      });
+    },
   
   refresh();
-	
+
 });
 
 
