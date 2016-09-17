@@ -400,9 +400,11 @@ starter.controller('loginCtrl', function($scope, $stateParams, $rootScope, $http
 
 starter.controller('estController', function($scope, $stateParams, $rootScope, $http, $ionicLoading, $ionicModal, $ionicScrollDelegate, $timeout, $ionicPopup, $state, $window) {
   $scope.location = $rootScope.location,
-  $scope.radius = 25, //In miles
-  $scope.params = $stateParams;
-
+  $scope.radius = 50, //In miles
+  $scope.params = $stateParams;	
+	$scope.globalPlaces = null;
+	$scope.globalSearch = {text: ""};
+	
   $scope.doScroll = function() {
     var delegate = $ionicScrollDelegate.$getByHandle('scrollCtrl');
     delegate.rememberScrollPosition('establishments');
@@ -518,8 +520,9 @@ starter.controller('estController', function($scope, $stateParams, $rootScope, $
 
       var request = {
         location: location,
+				radius:16000,
         types: ['bar', 'night_club', 'restaurant', 'cafe'],
-        rankBy: google.maps.places.RankBy.DISTANCE
+        //rankBy: google.maps.places.RankBy.DISTANCE
       };
 
       var service = new google.maps.places.PlacesService(attrib);
@@ -532,7 +535,29 @@ starter.controller('estController', function($scope, $stateParams, $rootScope, $
       console.log("No Google API");
     }
   },
+	
+	$scope.refreshSearch = function() {
+		delete $scope.globalPlaces;
+    if(typeof google != "undefined") {
+      var attrib = document.getElementById("placesAttribs");
+      var location = new google.maps.LatLng($rootScope.location.latitude,$rootScope.location.longitude);
 
+      var request = {
+ 				query: $scope.globalSearch.text,
+				//query: "Applebees",
+				types: ['bar', 'night_club', 'restaurant', 'cafe']
+      };
+      var service = new google.maps.places.PlacesService(attrib);
+      service.textSearch(request, function(results,status) {
+        $scope.globalPlaces = results;
+        $ionicLoading.hide();
+        $scope.$broadcast('scroll.refreshComplete');
+      });
+    } else {
+      console.log("No Google API");
+    }
+	},
+	
   $scope.getNearby = function() {
     if($scope.isLoading) return;
     if(!$scope.places && !$scope.nearbyEsts && !$scope.refreshing) $rootScope.showLoading();

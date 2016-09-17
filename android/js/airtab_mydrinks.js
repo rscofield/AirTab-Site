@@ -258,6 +258,7 @@ starter.controller("mydrinksController", function($scope, $http, $ionicPopup, $i
         	    if($scope.modal) {
         	      //This is in a modal window, close modal
         	      $rootScope.hideModal();
+								$state.transitionTo("app.establishments");
         	    } else {
         	      $state.transitionTo("app.establishments");
         	    }
