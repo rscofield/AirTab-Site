@@ -816,6 +816,12 @@ starter.controller('estController', function($scope, $stateParams, $rootScope, $
         $scope.$broadcast('scroll.refreshComplete');
       }
     });
+		//Hide startup Splash screen
+    if(bridge) {
+        bridge.callHandler("hideSplash", null, function(r) {
+          console.log("Splash Hidden");
+        });
+    }
   },
 
   $scope.placesLoad = function() {
@@ -865,6 +871,7 @@ starter.controller('estController', function($scope, $stateParams, $rootScope, $
 	},
 	
   $scope.getNearby = function() {
+
     if($scope.isLoading) return;
     if(!$scope.places && !$scope.nearbyEsts && !$scope.refreshing) $rootScope.showLoading();
 
