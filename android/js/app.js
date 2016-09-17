@@ -559,7 +559,7 @@ var app = angular.module('starter', ['ionic', 'starter.controllers'])
 
     });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/news');
+  $urlRouterProvider.otherwise('/app/establishments');
 });
 
 app.directive('checkoutform', function($compile) {
