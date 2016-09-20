@@ -1,0 +1,43 @@
+{exp:airtab:log_page_load}
+
+<div ng-cloak>
+<style type="text/css">
+	.button.button-block, .button.button-full {
+		margin-top:0;
+	}
+</style>
+<!-- not sure this will be used for bottle redemptions -->
+
+<ion-view title="Send Gift" ng-controller="SendgiftCtrl" ng-init="hideLoading()">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+     
+    <ion-content has-header="true" has-header="false"  padding="true" has-tabs="true" ng-class="($root.redeem) ? 'has-subheader' : ''">
+			<div class="text-center" >
+				<p>Which item would you like to send?</p>
+			</div>
+		
+   	  <div class="list">
+    	{exp:low_search:results channel="drinks" child:drk_establishment="248" search:drk_level="Meal" orderby="drk_price" sort="asc"}
+  			 			 			
+    		
+  <a class="item item-thumbnail-left" ng-click="viewGiftDetails( '{entry_id}' )">
+			
+			
+				<img src="{fld_picture:iphone5}?v=1" width="80" height="80">
+				<h2>{title}</h2>
+				<p>{drk_teaser}</p>
+				<p>${drk_price}</p>
+		    </a>
+
+		    {if no_results}
+				No bottle service for this Establishment
+			{/if}
+		  {/exp:low_search:results}
+		</div>
+				
+    </ion-content>
+
+</ion-view>
+</div>

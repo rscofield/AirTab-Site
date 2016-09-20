@@ -28,16 +28,16 @@
           Send A Drink
         </ion-item>
         
-         <ion-item class="item-icon-left" nav-clear menu-close href="#/app/sendbottle/main/Meal">
+         <ion-item class="item-icon-left" nav-clear menu-close href="#/app/sendgift">
           <i class="icon ion-ios7-paperplane"></i>
           Send Gift
         </ion-item>		
-        		
+   <!--     		
          <ion-item class="item-icon-left" nav-clear menu-close href="#/app/sendbottle/main/Bottle" ng-show="$root.tester">
           <i class="icon ion-ios7-paperplane"></i>
           Send Bottle
         </ion-item>				
-        
+   -->     
         <ion-item class="item-icon-left" ng-class="(drinkCount > 0) ? 'item-icon-right' : '';" nav-clear menu-close href="#/app/mydrinks">
           <i class="icon ion-ios7-wineglass"></i>
           My Drinks & Gifts
@@ -75,7 +75,7 @@
         <ion-item class="item-icon-left" nav-clear menu-close href="#/app/dashboard/{{userInfo.venueID}}" ng-show="isVenueManager()">
           <i class="icon ion-settings"></i>
           {{ userInfo.venueName }}
-        </ion-item>
+        </ion-item>				
 				
         <div class="item item-divider">
           Other
@@ -95,6 +95,10 @@
         <ion-item class="item-icon-left" nav-clear menu-close href="#/app/about">
           <i class="icon ion-ios7-information"></i>
           About
+        </ion-item>
+        <ion-item class="item-icon-left" nav-clear menu-close href="#/app/test" ng-show="isSuperAdmin()">
+          <i class="icon ion-ios7-paperplane"></i>
+          Test
         </ion-item>
       </ion-list>
     </ion-content>

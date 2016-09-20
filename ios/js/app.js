@@ -14,8 +14,9 @@ var imageCallback = null;
 var bridge = null;
 
 var config = {
-  template_path: "/ios",
+  template_path: "/ios_ray",
   global_path: "/global",
+	default_UUID: "d01f38bdd5b9345a37f4e6a6ddd714c8ac8696ce982a9bd4765ed6c5730c67e3",
   version: "1.07",
   platform: "iOS"
 }
@@ -234,14 +235,9 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'ngFacebook
 
     })
 
-   /* Send Bottle */     
-    .state('app.sendjohn', {
-      url: "/sendjohn",
-      templateUrl: config.template_path + "/send_gift",
-      controller: 'SendbottleCtrl',
-      prefetchTemplate: false
-    })	
+		
 
+		/* Send Bottle */     
     .state('app.sendbottle', {
       
       url: "/sendbottle",
@@ -292,48 +288,57 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'ngFacebook
 
     .state('app.sendgift', {
       url: "/sendgift",
-      templateUrl: config.template_path + "/send_gift",
+      templateUrl: config.template_path + "/menu_gift",
       controller: 'SendgiftCtrl',
       prefetchTemplate: false
     })	
 		
+    .state('app.sendgiftTo', {
+      url: "/sendgift/:method",
+      templateUrl: function(params){ return config.template_path + '/send_gift/' + params.method;},
+
+      controller: 'SendgiftCtrl',
+      prefetchTemplate: false
+    })
+
     .state('app.sendgiftAirtab', {
-      url: "/sendgift/airtab",
-      templateUrl: config.template_path + "/send_gift/airtab",
-      controller: 'SenddrinkCtrl',
+      url: "/sendgift/:method/:gift",
+      templateUrl: function(params){ return config.template_path + '/send_gift/' + params.method + "/" + params.gift;},
+
+      controller: 'SendgiftCtrl',
       prefetchTemplate: false
     })
     
     .state('app.sendgiftUsername', {
-      url: "/sendgift/username",
-      templateUrl: config.template_path + "/send_gift/username",
-      controller: 'SenddrinkCtrl',
+      //url: "/sendbottle/username",
+      //templateUrl: config.template_path + "/send_bottle/username",
+      url: "/sendgift/:method/:gift",
+      templateUrl: function(params){ return config.template_path + '/send_gift/' + params.method + "/" + params.gift;},
+      
+      controller: 'SendgiftCtrl',
       prefetchTemplate: false
     })
  
     .state('app.sendgiftEmail', {
-      url: "/sendgift/email",
-      templateUrl: config.template_path + "/send_gift/email",
+      //url: "/sendbottle/email",
+      //templateUrl: config.template_path + "/send_bottle/email",
+      url: "/sendgift/:method/:gift",
+      templateUrl: function(params){ return config.template_path + '/send_gift/' + params.method + "/" + params.gift;},
+
       controller: 'SenddrinkCtrl',
       prefetchTemplate: false
     })
 
     .state('app.sendgiftText', {
-      url: "/sendgift/text",
-      templateUrl: config.template_path + "/send_gift/text",
-      controller: 'SenddrinkCtrl',
+      //url: "/sendbottle/text",
+      //templateUrl: config.template_path + "/send_bottle/text",
+      url: "/sendgift/:method/:gift",
+      templateUrl: function(params){ return config.template_path + '/send_gift/' + params.method + "/" + params.gift;},
+
+      controller: 'SendgiftCtrl',
       prefetchTemplate: false
     })
-
-//    .state('app.regiftdrink', {          
-//          url: '/regift_drink/:screen/:ticket_id',
-//          templateUrl: function(params){ return config.template_path + '/regift_drink/' + params.screen + "/" + params.ticket_id;},
-//
-//          controller: 'RegiftdrinkCtrl',
-//      prefetchTemplate: false
-//    })
-
-    
+		  
     .state('app.regiftdrink', {          
           url: '/regift_drink/:screen/:ticket_id/:redeemAt/:drinkId',
           templateUrl: function(params){ return config.template_path + '/regift_drink/' + params.screen + "/" + params.ticket_id + "/" + params.redeemAt + "/" + params.drinkId;},

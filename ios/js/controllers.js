@@ -11,6 +11,7 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
   $rootScope.isLoggingIn = false;
   $rootScope.deviceUUID = config.default_UUID;
   $rootScope.launched = false;
+	$rootScope.giftInfo = {method:""};
 
   $rootScope.alertJBlaine = function( alert) {
       var alertPopup = $ionicPopup.alert({
@@ -557,6 +558,15 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
         }
   });
 	
+	$scope.hideSplash = function() {
+		if(bridge) {
+				bridge.callHandler("hideSplash", null, function(r) {
+					console.log("Splash Hidden");
+				});
+		}
+	};
+	
+	$timeout($scope.hideSplash,15000);
   $scope.firstLaunch();
   $rootScope.initialize();
   $scope.checkLogin();
@@ -806,6 +816,7 @@ starter.controller('estController', function($scope, $stateParams, $rootScope, $
 
   $scope.queryNearby = function() {
     $http.get(config.template_path + '/estjson/'+$rootScope.location.latitude+'/'+$rootScope.location.longitude+'/'+$scope.radius).success(function(results) {
+		//$http.get(config.template_path + '/estjson/'+26.775039+'/'+-80.136109+'/'+$scope.radius).success(function(results) {
       if(results[0].type == "Google Places") {
       	delete $scope.nearbyEsts;
         $scope.placesLoad();
@@ -816,12 +827,6 @@ starter.controller('estController', function($scope, $stateParams, $rootScope, $
         $scope.$broadcast('scroll.refreshComplete');
       }
     });
-		//Hide startup Splash screen
-    if(bridge) {
-        bridge.callHandler("hideSplash", null, function(r) {
-          console.log("Splash Hidden");
-        });
-    }
   },
 
   $scope.placesLoad = function() {
@@ -841,6 +846,12 @@ starter.controller('estController', function($scope, $stateParams, $rootScope, $
         $scope.places = results;
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');
+				//Hide startup Splash screen
+				if(bridge) {
+						bridge.callHandler("hideSplash", null, function(r) {
+							console.log("Splash Hidden");
+						});
+				}
       });
     } else {
       console.log("No Google API");
@@ -900,7 +911,7 @@ starter.controller('estController', function($scope, $stateParams, $rootScope, $
           }
         );
       }
-      $scope.queryNearby();
+      //$scope.queryNearby();
   },
 
   $scope.gotNearbyLocation = function() {
