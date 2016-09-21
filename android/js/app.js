@@ -14,7 +14,7 @@ var state = null;
 var imageCallback = null;
 
 var config = {
-  template_path: "/android_ray",
+  template_path: "/android",
   global_path: "/global",
   version: "1.03",
   platform: "Android"
