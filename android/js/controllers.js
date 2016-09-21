@@ -8,6 +8,10 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
   $window.rootScope = $rootScope;
   $window.nav = $ionicNavBarDelegate;
   $window.state = $state;
+  $rootScope.isLoggingIn = false;
+  $rootScope.deviceUUID = config.default_UUID;
+  $rootScope.launched = false;
+	$rootScope.giftInfo = {method:""};
 
   // Create the login modal that we will use later
 
@@ -500,7 +504,7 @@ starter.controller('estController', function($scope, $stateParams, $rootScope, $
 
   $scope.queryNearby = function() {
     $http.get(config.template_path + '/estjson/'+$rootScope.location.latitude+'/'+$rootScope.location.longitude+'/'+$scope.radius).success(function(results) {
-      
+		//$http.get(config.template_path + '/estjson/'+26.775039+'/'+-80.136109+'/'+$scope.radius).success(function(results) {
       if(results[0].type == "Google Places") {
       	delete $scope.nearbyEsts;
         $scope.placesLoad();

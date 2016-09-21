@@ -68,13 +68,6 @@ var app = angular.module('starter', ['ionic', 'starter.controllers'])
       prefetchTemplate: false
     })
     
- //	 .state('app.paymentbottle', {
-//		 url: '/payment_bottle/:type/:estId/:drinkId/:recipientId',
-//		 templateUrl: function(params){ return config.template_path + '/payment_bottle/' + params.type + "/" +  params.estId + "/" + params.drinkId + "/" + params.recipientId;},
-//		 controller: 'AppCtrl',
-//		 prefetchTemplate: false
-//	   })
-   
 	 .state('app.paymentbottle', {
 		 url: '/payment_bottle/:type/:estId/:drinkId/:recipientId',
 		 templateUrl: function(params){ return config.template_path + '/payment_bottle/' + params.type + "/" +  params.estId + "/" + params.drinkId + "/" + params.recipientId;},
@@ -88,13 +81,6 @@ var app = angular.module('starter', ['ionic', 'starter.controllers'])
           controller: 'AppCtrl',
       prefetchTemplate: false
     })
-                          
- //   .state('app.establishments_bottle', {
- //         url: "/establishments_bottle/:senderId/:recipientid/:method",
- //         templateUrl: function(params){ return config.template_path + '/establishments_bottle/' + params.senderId + "/" + params.recipientid+ "/" + params.method;},
- //         controller: 'AppCtrl',
- //     prefetchTemplate: false
- //   })
 
    .state('app.establishments_bottle', {
           url: "/establishments_bottle/:senderId/:recipientid/:method/:gift",
@@ -112,14 +98,7 @@ var app = angular.module('starter', ['ionic', 'starter.controllers'])
       controller: 'estController',
       prefetchTemplate: false
     })
-		
-//     .state('app.menuBottle', {
-//      url: '/menubottle/:estId/:sender/:recipient/:method',
-//          templateUrl: function(params){ return config.template_path + '/menu_bottle/'  + params.estId + "/" +  params.sender + "/" + params.recipient + "/" + params.method;},
-//          controller: 'estController',
-//      prefetchTemplate: false
-//    })
-    
+		   
     .state('app.menuBottle', {
           url: '/menubottle/:estId/:sender/:recipient/:method/:gift',
           templateUrl: function(params){ return config.template_path + '/menu_bottle/'  + params.estId + "/" +  params.sender + "/" + params.recipient + "/" + params.method + "/" + params.gift;},
@@ -142,7 +121,6 @@ var app = angular.module('starter', ['ionic', 'starter.controllers'])
 
     })
 
-    
     .state('app.giftInfo', {
       url: "/giftInfo/:type/:estId/:item_id/:senderId/:recipientid",
       templateUrl: function(params){  return config.template_path + '/giftInfo/' + "/" + params.type + "/" + params.estId + "/" + params.item_id + "/" + params.senderId + "/" + params.recipientid;},
@@ -174,7 +152,6 @@ var app = angular.module('starter', ['ionic', 'starter.controllers'])
 
     .state('app.senddrink', {
       url: "/senddrink",
-          //templateUrl: config.template_path + "/send_drink"
           templateUrl: config.template_path + "/send_drink",
           controller: 'SenddrinkCtrl'
     })
@@ -214,15 +191,6 @@ var app = angular.module('starter', ['ionic', 'starter.controllers'])
       prefetchTemplate: false
     })
 		
-
-    
-    //.state('app.sendbottle', {
-     // url: "/sendbottle",
-     // templateUrl: config.template_path + "/send_bottle",
-     // controller: 'SendbottleCtrl',
-     // prefetchTemplate: false
-    //})	
-    
 	 .state('app.sendbottle', { 
       url: "/sendbottle",
       templateUrl: config.template_path + "/send_bottle/main/Meal",
@@ -262,34 +230,49 @@ var app = angular.module('starter', ['ionic', 'starter.controllers'])
       prefetchTemplate: false
     })
 
- //   .state('app.sendbottleAirtab', {
- //     url: "/sendbottle/airtab",
- //     templateUrl: config.template_path + "/send_bottle/airtab",
- //     controller: 'SenddrinkCtrl',
- //     prefetchTemplate: false
- //   })
-    
-//    .state('app.sendbottleUsername', {
-//      url: "/sendbottle/username",
-//      templateUrl: config.template_path + "/send_bottle/username",
-//      controller: 'SenddrinkCtrl',
-//      prefetchTemplate: false
-//    })
- 
-//    .state('app.sendbottleEmail', {
-//      url: "/sendbottle/email",
-//      templateUrl: config.template_path + "/send_bottle/email",
-//      controller: 'SenddrinkCtrl',
-//      prefetchTemplate: false
-//    })
-   
-//    .state('app.sendbottleText', {
-//      url: "/sendbottle/text",
-//      templateUrl: config.template_path + "/send_bottle/text",
-//      controller: 'SenddrinkCtrl',
-//      prefetchTemplate: false
-//    })
+       /* Send Gift */     
 
+    .state('app.sendgift', {
+      url: "/sendgift",
+      templateUrl: config.template_path + "/menu_gift",
+      controller: 'SendgiftCtrl',
+      prefetchTemplate: false
+    })	
+		
+    .state('app.sendgiftTo', {
+      url: "/sendgift/:method",
+      templateUrl: function(params){ return config.template_path + '/send_gift/' + params.method;},
+      controller: 'SendgiftCtrl',
+      prefetchTemplate: false
+    })
+
+    .state('app.sendgiftAirtab', {
+      url: "/sendgift/:method/:gift",
+      templateUrl: function(params){ return config.template_path + '/send_gift/' + params.method + "/" + params.gift;},
+      controller: 'SendgiftCtrl',
+      prefetchTemplate: false
+    })
+    
+    .state('app.sendgiftUsername', {
+      url: "/sendgift/:method/:gift",
+      templateUrl: function(params){ return config.template_path + '/send_gift/' + params.method + "/" + params.gift;},   
+      controller: 'SendgiftCtrl',
+      prefetchTemplate: false
+    })
+ 
+    .state('app.sendgiftEmail', {
+      url: "/sendgift/:method/:gift",
+      templateUrl: function(params){ return config.template_path + '/send_gift/' + params.method + "/" + params.gift;},
+      controller: 'SenddrinkCtrl',
+      prefetchTemplate: false
+    })
+
+    .state('app.sendgiftText', {
+      url: "/sendgift/:method/:gift",
+      templateUrl: function(params){ return config.template_path + '/send_gift/' + params.method + "/" + params.gift;},
+      controller: 'SendgiftCtrl',
+      prefetchTemplate: false
+    }) 
     
     .state('app.regiftdrink', {          
           url: '/regift_drink/:screen/:ticket_id/:redeemAt/:drinkId',
@@ -355,23 +338,7 @@ var app = angular.module('starter', ['ionic', 'starter.controllers'])
       controller: 'promoController',
       prefetchTemplate: false
     })
-
- //   .state('app.promo_bottle', {
- //      	url: '/promo_bottle/:type/:estId/:item_id/:senderId/:recipientid',
- //       templateUrl: function(params){      	
- //   	return config.template_path + '/promo_bottle/' + "/" + params.type + "/" + params.estId + "/" + params.item_id + "/" + params.senderId + "/" + params.recipientid ;
- //     },
- //     controller: 'promoController',
- //     prefetchTemplate: false
- //   })
-
-//    .state('app.promo_regift', {
-//        url: '/promo_regift/:type/:drinkType/:fId/:remaining/:ticket_id/:redeemAt/:redeemId',
-//        templateUrl: function(params){ return config.template_path + '/promo_regift/' + params.type + "/" + params.drinkType + "/" + params.fId + "/" + params.remaining + "/" + params.ticket_id + "/" + params.redeemAt + "/" + params.redeemId;},
-//        controller: 'promoControllerRegift',
-//        prefetchTemplate: false
-//      })
-    
+  
     .state('app.mydrinks', {
       url: "/mydrinks",
           templateUrl: config.template_path + "/mydrinks",
@@ -420,14 +387,6 @@ var app = angular.module('starter', ['ionic', 'starter.controllers'])
           controller: 'AppCtrl'
     })
 
-//    .state('app.mydrinksPromo', {
-//      url: "/mydrinks/:screen",
-//      templateUrl: function(params){ return config.template_path + '/mydrinks/' + params.screen;},
-//      controller: 'AppCtrl',
-//      prefetchTemplate: false
-//
-//   })
-
     .state('app.addfriendText', {
       url: "/addfriend/text",
           templateUrl: config.template_path + '/addfriend/text',
@@ -436,7 +395,6 @@ var app = angular.module('starter', ['ionic', 'starter.controllers'])
     
     .state('app.addfriendContactText', {
       url: "/addfriend/text_contacts/:phone",
-      //        templateUrl: config.template_path + '/addfriend/text',
           templateUrl: function(params){ return config.template_path + '/addfriend/text_contacts/' + params.phone;},
         controller: 'AppCtrl'
     })
@@ -470,7 +428,6 @@ var app = angular.module('starter', ['ionic', 'starter.controllers'])
 
     .state('app.messages', {
       url: "/messages",
-
           templateUrl: config.template_path + '/messages',
           controller: 'AppCtrl',
           prefetchTemplate: false
@@ -479,7 +436,6 @@ var app = angular.module('starter', ['ionic', 'starter.controllers'])
 
     .state('app.newMessage', {
       url: "/messages/new",
-
           templateUrl: config.template_path + '/messages/new',
           controller: 'AppCtrl',
           prefetchTemplate: false
@@ -488,11 +444,9 @@ var app = angular.module('starter', ['ionic', 'starter.controllers'])
 
     .state('app.conversation', {
       url: '/messages/conversation/:thread',
-
           templateUrl: function(params){ return config.template_path + '/messages/conversation/'  + params.thread;},
           controller: 'AppCtrl',
           prefetchTemplate: false
-
     })
 
     .state('app.profile', {
@@ -501,7 +455,6 @@ var app = angular.module('starter', ['ionic', 'starter.controllers'])
           controller: 'AppCtrl',
       prefetchTemplate: false
     })
-
 
     .state('app.about', {
       url: "/about",

@@ -24,6 +24,7 @@
 
     <script src="js/controllers.js?<?=filemtime("./js/controllers.js")?>"></script>
     <script src="js/airtab_regift.js?<?=filemtime("./js/airtab_regift.js")?>"></script>
+		<script src="js/airtab_gift.js?<?=filemtime("./js/airtab_gift.js")?>"></script>
     <script src="js/airtab_bottle.js?<?=filemtime("./js/airtab_bottle.js")?>"></script>
     <script src="js/airtab_bottle_cart.js?<?=filemtime("./js/airtab_bottle_cart.js")?>"></script>
 

@@ -12,28 +12,20 @@
 
     <ion-tabs class="tabs-striped tabs-background-assertive tabs-color-light" ng-controller="estController">
 
-	  <ion-tab title="All Establishments" on-select="loadEstablishments();">
-	  	<ion-content has-header="true" padding="true" has-tabs="true" delegate-handle="scrollCtrl" ng-init="doScroll()" ng-class="($root.redeem) ? 'has-subheader' : ''">
+	  <ion-tab title="Near Me" on-select="getNearby();">
+	  	<ion-content has-header="true" padding="true" has-tabs="true" ng-class="($root.redeem) ? 'has-subheader' : ''">
 	  		<ion-refresher
 			    pulling-text="Pull to refresh..."
-			    on-refresh="doRefresh()">
+			    on-refresh="refreshNearby()">
 			</ion-refresher>
-			
-			{!--  
 			<div ng-if="$root.location.status == 'disabled'" style="text-align:center">
 				<h3>You do not have Location Services enabled.</h3>
 				<button ng-click="showLocationPrefs()">Enable Location Services</button>
 			</div>
-			--}
-			
-			<div style="width:100%" id="widthTest">
-				<input ng-model="query" placeholder="Search">
-			</div>
-	  	<div ng-repeat="est in $root.establishments | filter:query">
+	  		<div ng-repeat="est in nearbyEsts">
 		    	<div class="list card" ng-click="showEstMenu({{est.id}});">
-		    		
-					<div class="item item-image">
-						<img src="{{est.bg}}" width="100%" ng-style="{height: getImageHeight()}">
+		    		<div class="item item-image">
+						<img src="{{est.bg}}">
 					</div>
 
 					
@@ -41,63 +33,61 @@
 					<h2 center>
 						{{est.title}}
 					</h2>
-					{{est.distance}}
-					</div>
-				</div>
-			</div>
-		</ion-content>
-	  </ion-tab>
-
-	  <ion-tab title="Near Me" on-select="getNearby();">
-	  	<ion-content has-header="true" padding="true" has-tabs="true">
-	  		<ion-refresher
-			    pulling-text="Pull to refresh..."
-			    on-refresh="refreshNearby()">
-			</ion-refresher>
-						{!--  			
-			<div ng-if="$root.location.status == 'disabled'" style="text-align:center">
-				<h3>You do not have Location Services enabled.</h3>
-				<button ng-click="showLocationPrefs()">Enable Location Services</button>
-			</div>
-						--}
-			<div ng-show="nearbyEsts">			
-				<input ng-model="query" placeholder="Search">
-	  		<div ng-repeat="est in nearbyEsts | filter:query">
-		    	<div class="list card" ng-click="showEstMenu({{est.id}});">
-		    		<div class="item item-image">
-							<img src="{{est.bg}}">
-						</div>	
-						<div class="item" style="text-align:center">
-							<h2 center>
-								{{est.title}}
-							</h2>
-							{{est.distance}}
-						</div>
+					{{est.address}},{{est.city}}
 					</div>
 				</div>
 			</div>
 
 			<div ng-show="places">
-		    <div style="text-align:center;margin-bottom:15px;margin-bottom:15px"><strong>Pending establishments were found</strong></div>
-				<input ng-model="query" placeholder="Search">
 				<ion-list>
-
-				        <ion-item ng-repeat="item in places | filter:query" 
-				                  item="item"
-				                  class="item-avatar"
-				                  ng-click="showModal('{{item.place_id}}')">
-				                  	<img src="{{ item.icon }}" height="40px">
-				          			<h2>{{ item.name }}</h2>
-				          			<p>{{ item.vicinity }}</p>
-				        </ion-item>
-
+					<ion-item ng-repeat="item in places | filter:query" 
+										item="item"
+										class="item-avatar"
+										ng-click="showModal('{{item.place_id}}')">
+											<img src="{{ item.icon }}" height="40px">
+									<h2>{{ item.name }}</h2>
+									<p>{{ item.vicinity }}</p>
+					</ion-item>
 				</ion-list>
-
 				<div id="placesAttribs"></div>
 				<div style="text-align:center;margin-top:15px"><img src="/assets/img/powered-by-google-on-white.png" /></div>
 			</div>
 	    </ion-content>
 	  </ion-tab>
+		
+	  <ion-tab title="Search" on-select="refreshSearch();">
+	  	<ion-content has-header="true" padding="true" has-tabs="true"  ng-class="($root.redeem) ? 'has-subheader' : ''">
+	  		<ion-refresher
+			    pulling-text="Pull to refresh..."
+			    on-refresh="refreshSearch()">
+			</ion-refresher>
+			<div class="item item-input-inset">
+				<label class="item-input-wrapper">
+					<input ng-model="globalSearch.text" type="text" placeholder="Search Text">
+				</label>
+				<button class="button button-small" ng-click="refreshSearch()">
+					Search
+				</button>
+			</div>
+			<div ng-show="globalPlaces">
+				<ion-list>
+
+				        <ion-item ng-repeat="item in globalPlaces" 
+				                  item="item"
+				                  class="item-avatar"
+				                  ng-click="showModal('{{item.place_id}}')">
+				                  	<img src="{{ item.icon }}" height="40px">
+				          			<h2>{{ item.name }}</h2>
+				          			<p>{{ item.formatted_address }}</p>
+				        </ion-item>
+
+				</ion-list>
+				<div id="placesAttribs"></div>
+				<div style="text-align:center;margin-top:15px"><img src="/assets/img/powered-by-google-on-white.png" /></div>
+			</div>
+	    </ion-content>
+	  </ion-tab>
+		
 
 	</ion-tabs>	
 </ion-view>

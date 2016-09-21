@@ -34,14 +34,15 @@
 		<div class="item-divider">
 		    You have chosen to send a gift to a friend. Below are your order details.
 		  </div>
-		  
+
+		{if segment_4 != "0"}
 		<div class="item item-input item-stacked-label">
 			<span class="input-label">Establishment</span>
 			{exp:query sql="SELECT * FROM v_establishment WHERE entry_id ={segment_4}"} 
 			<p>{title}</p>
-			{/exp:query}
-						
+			{/exp:query}						
 		</div>
+		{/if}
 		
 		<div class="item item-input item-stacked-label">
 			<span class="input-label">Sender</span>
