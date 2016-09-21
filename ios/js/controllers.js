@@ -3177,26 +3177,23 @@ starter.controller("aboutCtrl", function($scope, $http, $window, $sce, $timeout,
     }
   }, 
 	 
-  $scope.goTo = function(page) {
-    
-	if(page == "terms") {
-       $state.transitionTo("app.terms");
-    } else if ( page == "privacy" ) {
-        $state.go('app.privacy');
-	} else if ( page == "how_it_works" ) {
-        $state.go('app.how_it_works');
-	} else if ( page == "howto_send" ) {
-        $state.go('app.howtosend');
-	} else if ( page == "howto_redeem" ) {
-        $state.go('app.howtoredeem');
-	} else if ( page == "native" ) {
-	    //$scope.showAlert("Card Error", page );  
-	    $window.gotoNative();
+  $scope.goTo = function(page) {    
+		if(page == "terms") {
+				 $state.transitionTo("app.terms");
+		} else if ( page == "privacy" ) {
+					$state.go('app.privacy');
+		} else if ( page == "how_it_works" ) {
+					$state.go('app.how_it_works');
+		} else if ( page == "howto_send" ) {
+					$state.go('app.howtosend');
+		} else if ( page == "howto_redeem" ) {
+					$state.go('app.howtoredeem');
+		} else if ( page == "native" ) {
+				//$scope.showAlert("Card Error", page );  
+				$window.gotoNative();
     }
-  }
-
-    
-  
+  },
+ 
   $scope.showAlert = function(title, msg) {	  
 	   var alertPopup = $ionicPopup.alert({
 		     title: title,
@@ -3205,7 +3202,7 @@ starter.controller("aboutCtrl", function($scope, $http, $window, $sce, $timeout,
 		     alertPopup.then(function(res) {
 		     console.log("msg");
 		   });  
-  }
+  },
 
   
   $scope.getVersion();
