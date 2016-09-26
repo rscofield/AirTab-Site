@@ -28,13 +28,13 @@
 				By Email
 				<i class="icon ion-chevron-right icon-accessory"></i>
 			</a>
-			
+	<!--		
 			<a ng-click="sendDrinkByContactsEmail()" class="item item-icon-left item-icon-right">
 				<i class="icon ion-android-friends"></i>
 				By Email Via Phone Contacts
 				<i class="icon ion-chevron-right icon-accessory"></i>
 			</a>
-			
+	-->		
 			<div class="item-divider">Text Message</div>
 
 			<a href="#/app/sendgift/text/{segment_4}" class="item item-icon-left item-icon-right">
@@ -43,13 +43,12 @@
 				<i class="icon ion-chevron-right icon-accessory"></i>
 			</a>
 
-			<!-- 
-			<a ng-click="sendBottleByContactsText( '{logged_in_member_id}', '{segment_4}' )" class="item item-icon-left item-icon-right">
+			<a ng-click="sendByContactsText( '{logged_in_member_id}', '{segment_4}' )" class="item item-icon-left item-icon-right">
 				<i class="icon ion-android-friends"></i>
 				By Text Via Phone Contacts
 				<i class="icon ion-chevron-right icon-accessory"></i>
 			</a>
-			-->
+
 
 			<!--
 			<a href="#/senddrink/facebook" class="item item-icon-left item-icon-right">
@@ -205,7 +204,7 @@
                         data-ng-maxlength="250"></textarea>
 				</label>
 			</div>
-			<input type="submit" name="submit" class="button button-block button-assertive" value="Send Gift" ng-disabled="!canSubmit()" />
+			<input type="submit" name="submit" class="button button-block button-assertive" value="Send Gift" ng-disabled="!canSubmitText()" />
 		</form>
     </ion-content>
 </ion-view>

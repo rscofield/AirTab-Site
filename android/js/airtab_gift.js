@@ -88,7 +88,17 @@ starter.controller("SendgiftCtrl", function($scope, $http, $rootScope, $ionicLoa
            	$state.transitionTo('app.paymentbottle', {type: $rootScope.giftInfo.method, estId: $rootScope.giftInfo.estId, drinkId: $rootScope.giftInfo.item_id, recipientId: $rootScope.giftInfo.recipientId});           	    	   
           }
         }, 
-
+				
+			$scope.sendByContactsText = function( memId, gift ) {
+        $rootScope.showLoading();
+        $window.getContact( $scope.contactInfoPhone);
+      },
+      $scope.contactInfoPhone = function(r) {
+				$rootScope.giftInfo.recipientId = r.phone;
+				$rootScope.giftInfo.method = "text";
+      	$rootScope.hasPromoAccess($scope.hasPromo);
+				//$state.transitionTo('app.establishments_bottle', {senderId: $scope.senderId, recipientid: r.phone, method : "text", gift : $scope.gift});
+      },				
               
         $scope.showError = function(title, alert) {
           var alertPopup = $ionicPopup.alert({
