@@ -415,8 +415,8 @@ starter.controller('promoBottleController', function($scope, $http, $compile, $i
             });
 
 //            $state.transitionTo("app.senddrink");
-            $state.transitionTo("app.sendbottle");
-       //     $state.transitionTo( "app.sendbottle", { method: 'bottle'} );
+            $state.transitionTo("app.sendgift");
+       //     $state.transitionTo( "app.sendbottle");
           }, 400);
         } else {
 
