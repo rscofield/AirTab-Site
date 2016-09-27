@@ -618,8 +618,8 @@ starter.controller('loginCtrl', function($scope, $stateParams, $rootScope, $http
 					console.log("success");
 					$rootScope.userInfo = data;
 					$rootScope.isLogged = true;
-					$rootScope.isAdmin = (result.group_id==1 || result.group_id==10) ? true : false;
-					$rootScope.isVenueManager = result.group_id==6 ? true : false;
+					$rootScope.isAdmin = (data.group_id==1 || data.group_id==10) ? true : false;
+					$rootScope.isVenueManager = data.group_id==6 ? true : false;
 					$scope.closeLogin();
 					$window.setDeviceId();
 					// load any promoter settings
@@ -3177,23 +3177,26 @@ starter.controller("aboutCtrl", function($scope, $http, $window, $sce, $timeout,
     }
   }, 
 	 
-  $scope.goTo = function(page) {    
-		if(page == "terms") {
-				 $state.transitionTo("app.terms");
-		} else if ( page == "privacy" ) {
-					$state.go('app.privacy');
-		} else if ( page == "how_it_works" ) {
-					$state.go('app.how_it_works');
-		} else if ( page == "howto_send" ) {
-					$state.go('app.howtosend');
-		} else if ( page == "howto_redeem" ) {
-					$state.go('app.howtoredeem');
-		} else if ( page == "native" ) {
-				//$scope.showAlert("Card Error", page );  
-				$window.gotoNative();
+  $scope.goTo = function(page) {
+    
+	if(page == "terms") {
+       $state.transitionTo("app.terms");
+    } else if ( page == "privacy" ) {
+        $state.go('app.privacy');
+	} else if ( page == "how_it_works" ) {
+        $state.go('app.how_it_works');
+	} else if ( page == "howto_send" ) {
+        $state.go('app.howtosend');
+	} else if ( page == "howto_redeem" ) {
+        $state.go('app.howtoredeem');
+	} else if ( page == "native" ) {
+	    //$scope.showAlert("Card Error", page );  
+	    $window.gotoNative();
     }
-  },
- 
+  }
+
+    
+  
   $scope.showAlert = function(title, msg) {	  
 	   var alertPopup = $ionicPopup.alert({
 		     title: title,
@@ -3202,7 +3205,7 @@ starter.controller("aboutCtrl", function($scope, $http, $window, $sce, $timeout,
 		     alertPopup.then(function(res) {
 		     console.log("msg");
 		   });  
-  },
+  }
 
   
   $scope.getVersion();

@@ -350,8 +350,8 @@ starter.controller('loginCtrl', function($scope, $stateParams, $rootScope, $http
 					console.log("success");
 					$rootScope.userInfo = data;
 					$rootScope.isLogged = true;
-					$rootScope.isAdmin = (result.group_id==1 || result.group_id==10) ? true : false;
-					$rootScope.isVenueManager = result.group_id==6 ? true : false;
+					$rootScope.isAdmin = (data.group_id==1 || data.group_id==10) ? true : false;
+					$rootScope.isVenueManager = data.group_id==6 ? true : false;
 					$scope.closeLogin();
 					$window.setDeviceId();
 					// load any promoter settings
