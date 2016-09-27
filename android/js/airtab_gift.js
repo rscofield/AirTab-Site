@@ -3,14 +3,15 @@
 starter.controller("SendgiftCtrl", function($scope, $http, $rootScope, $ionicLoading, $ionicPopup, $window, $ionicViewService, $location, $ionicModal, $state) {
 
 	
-	    var original;
-        return $scope.showInfoOnSubmit = !1, 
-        $scope.revert = function () {
-            return $scope.invite = angular.copy(original), $scope.inviteFormUsername.$setPristine()
+				var original;
+        return $scope.invite = {
+            phone: ""
+        }, $scope.showInfoOnSubmit = !1, original = angular.copy($scope.invite), $scope.revert = function () {
+            return $scope.invite = angular.copy(original), $scope.form_sendDrinkText.$setPristine()
         }, $scope.canRevert = function () {
-            return !angular.equals($scope.invite, original) || !$scope.inviteFormUsername.$pristine
+            return !angular.equals($scope.invite, original) || !$scope.form_sendDrinkText.$pristine
         }, $scope.canSubmit = function () {
-            return $scope.inviteFormUsername.$valid
+            return $scope.form_sendDrinkText.$valid
  
         },
         
