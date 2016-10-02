@@ -23,7 +23,11 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
       });
     },
 
-  // Create the login modal that we will use later
+	// called from menu pulldown
+  $rootScope.menuEstablishments = function() {
+		delete $rootScope.redeem;  // delete any redeem process info (clears redeem from message)
+    $state.go("app.establishments");
+  };
 
   $rootScope.changeState = function(state) {
     $state.go(state);
