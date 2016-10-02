@@ -246,27 +246,25 @@ starter.controller("mydrinksController", function($scope, $http, $ionicPopup, $i
           }
           
           
-          $scope.redeemDrink = function(ticketId, username, purchaseDate) {
+          $scope.redeemDrink = function(ticketId, username, purchaseDate, level) {
 
-        	    $rootScope.redeem = {
-        	      id: ticketId,
-        	      username: username,
-        	      purchased: purchaseDate
-        	    }
-       	       $state.transitionTo("app.establishments");
-        	    
-        	    if($scope.modal) {
-        	      //This is in a modal window, close modal
-        	      $rootScope.hideModal();
-								$state.transitionTo("app.establishments");
-        	    } else {
-        	      $state.transitionTo("app.establishments");
-        	    }
-        	  }
+						$rootScope.redeem = {
+							id: ticketId,
+							username: username,
+							purchased: purchaseDate,
+							level: level,
+							type: "drink"								
+						}
+						if (level != "Premium")  $rootScope.redeem.type = "gift";
+						if($scope.modal) {   	      
+							$rootScope.hideModal(); //This is in a modal window, close modal
+						}
+						$state.transitionTo( ($rootScope.redeem.type == "gift" ? "app.redeemsearch" : "app.establishments") );
+					}
           
-           $scope.redeemDrinkAt = function(entryId, estId, usrID, drinkID) {
+          $scope.redeemDrinkAt = function(entryId, estId, usrID, drinkID) {
                  $state.transitionTo('app.drinkInfoRedeem', {entryId: entryId, estId: estId, usrID : usrID, drinkID : drinkID });                                  
-           }
+          }
 
           $scope.drinkRegiftNew = function(ticketId, redeemAt, drinkId) {
           	   $state.transitionTo('app.regiftdrink', {screen: "main",  ticket_id: ticketId,  redeemAt: redeemAt,  drinkId: drinkId } );    	 

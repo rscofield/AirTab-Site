@@ -13,8 +13,12 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
   $rootScope.launched = false;
 	$rootScope.giftInfo = {method:""};
 
-  // Create the login modal that we will use later
-
+ 	// called from menu pulldown
+  $rootScope.menuEstablishments = function() {
+		delete $rootScope.redeem;  // delete any redeem process info (clears redeem from message)
+    $state.go("app.establishments");
+  };
+	
   $rootScope.changeState = function(state) {
     $state.go(state);
   };
@@ -509,6 +513,7 @@ starter.controller('estController', function($scope, $stateParams, $rootScope, $
       	delete $scope.nearbyEsts;
         $scope.placesLoad();
       } else {
+				$rootScope.establishments = results;
         $scope.nearbyEsts = results;
         $scope.placesLoad();
         $rootScope.hideLoading();

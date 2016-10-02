@@ -133,8 +133,15 @@ var app = angular.module('starter', ['ionic', 'starter.controllers'])
         templateUrl: function(params){ console.log(params); return config.template_path + '/drinkinfo_redeem/'  + params.entryId + '/' + params.estId + '/' + params.usrID + '/' + params.drinkID;},
         controller: 'AppCtrl',
         prefetchTemplate: false
-      })
+    })
 
+    .state('app.redeemsearch', {
+      url: "/redeemsearch",
+      templateUrl: config.template_path + "/redeemsearch",
+      controller: 'AppCtrl',
+      prefetchTemplate: false
+    })			
+			
     .state('app.news', {
       url: "/news",
           templateUrl: config.template_path + "/news",

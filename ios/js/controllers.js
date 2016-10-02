@@ -486,7 +486,6 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
                 $rootScope.location = { status: r.status };
                 break
             }
-            $scope.locCallback();
             return;
           } else {
             $rootScope.location = {
@@ -494,7 +493,6 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
               longitude: r.lng,
               status: r.status
             };
-            $scope.locCallback();
             return;
           }
         }
@@ -887,7 +885,7 @@ starter.controller('estController', function($scope, $stateParams, $rootScope, $
 	
   $scope.getNearby = function() {
 
-    if($scope.isLoading) return;
+    //if($scope.isLoading) return;
     if(!$scope.places && !$scope.nearbyEsts && !$scope.refreshing) $rootScope.showLoading();
 
       if(bridge) {
