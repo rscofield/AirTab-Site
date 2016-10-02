@@ -11,7 +11,7 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
   $rootScope.isLoggingIn = false;
   $rootScope.deviceUUID = config.default_UUID;
   $rootScope.launched = false;
-	$rootScope.giftInfo = {method:""};
+  $rootScope.giftInfo = {method:""};
 
   $rootScope.alertJBlaine = function( alert) {
       var alertPopup = $ionicPopup.alert({
@@ -505,7 +505,6 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
 						longitude: position.coords.longitude
 					};
 					console.log("Got location via GeoLocation");
-					$scope.queryEstablishments();
 				},
 				function(err) {
 					var error = err.message;
@@ -821,6 +820,7 @@ starter.controller('estController', function($scope, $stateParams, $rootScope, $
       	delete $scope.nearbyEsts;
         $scope.placesLoad();
       } else {
+      	$rootScope.establishments = results;
         $scope.nearbyEsts = results;
         $scope.placesLoad();
         $ionicLoading.hide();

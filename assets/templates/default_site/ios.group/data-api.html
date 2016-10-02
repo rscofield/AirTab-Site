@@ -7,13 +7,12 @@
 "status":"{status}",
 "purchase_date":"{tck_purchase_date format="%F %d, %Y"}",
 "p_member_id":"{tck_p_member}",
-"p_member_username":"{p_member_username}"
+"p_member_username":"{p_member_username}",
 "r_member_id":"{tck_r_member}",
 "r_member_username":"{r_member_username}"
 {if no_results}"error":"no results"{/if}
 {/exp:query}
 ]
-
 {if:elseif segment_3 == "newslist"}
 [
 {exp:channel:entries channel="est_news" orderby="random" search:news_ispinned="= Yes"}
@@ -29,7 +28,6 @@
 	}{if count != total_results},{/if}
 {/exp:channel:entries}
 ]
-
 {if:elseif segment_3 == "friendslist"}
 [
 {exp:query sql="SELECT * FROM v_friends WHERE friend_id = {segment_4} or sender_id = {segment_4}"}
@@ -42,8 +40,75 @@
 	{if no_results}"error":"no results"{/if}
 	{/exp:query}
 ]
+{if:elseif segment_3 == "venue"}
+	{exp:query sql="SELECT * FROM v_establishment WHERE entry_id={segment_4}"}
+		{
+		"venueID":{entry_id},
+		"name":"{title}",
+		"status":"{status}",
+		"address":"{address}",
+		"city":"{city}",
+		"state":"{state}",
+		"zip":"{zip}",
+		"contact":"{contact_name}",
+		"phone":"{phone}"
+		}
+		{if no_results}{"error":"no results"}{/if}
+	{/exp:query}
+
+{if:elseif segment_3 == "menu"}
+[
+	{exp:query sql="SELECT * FROM v_establishment_menu WHERE estab_id={segment_4}"}
+		{
+		"menuID":{entry_id},
+		"name":"{title}",
+		"status":"{status}",
+		"type":"{Type}",
+		"price":"{Price}"
+		}{if count < total_results},{/if}
+		{if no_results}{"error":"no results"}{/if}
+	{/exp:query}
+]	
+
+{if:elseif segment_3 == "venue-redeemed"}
+[
+	{exp:query sql="SELECT * FROM v_drink_tickets WHERE redeemed_at_id='{segment_4}' Order By tck_redeem_date desc"}
+		{
+		"drinkID":{entry_id},
+		"name":"{redeemed_drink}",
+		"date":"{tck_redeem_date format="%m/%d/%y %g:%i%A"}",
+		"serverIDcode":"{serverIDcode}",
+		"type":"{type}"
+		}{if count < total_results},{/if}
+		{if no_results}{"error":"no results"}{/if}
+	{/exp:query}
+]	
+
+{if:elseif segment_3 == "venueswith"}
+[
+	{exp:query sql="SELECT * FROM v_venue_menu_items WHERE category='{segment_4}' and type='{segment_5}'"}
+		{
+		"estab_id":{estab_id},
+		"name":"{estab_name}",
+		"drink_id":"{drink_id}"
+		}{if count < total_results},{/if}
+		{if no_results}{"error":"no results"}{/if}
+	{/exp:query}
+]	
+
+
+{if:elseif segment_3 == "sendpromotion"}
+	{exp:query sql="SELECT * FROM v_active_promotions WHERE promotion = {segment_4}" LIMIT 1}
+		{
+		"promotionID":{promotion},
+		"name":"{name}",
+		"invite_url":"{invitationURL}",
+		"count":{count},
+		"owner":{owner}
+		}
+		{if no_results}{"error":"no results"}{/if}
+	{/exp:query}
 
 {if:else}
 {/if}
-
 {exp:http_header content_type="application/json"}

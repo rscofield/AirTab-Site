@@ -108,8 +108,7 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'ngFacebook
       controller: 'AppCtrl',
       prefetchTemplate: false
     })
-
-                             
+                            
     .state('app.establishments_bottle', {
           url: "/establishments_bottle/:senderId/:recipientid/:method/:gift",
           templateUrl: function(params){ return config.template_path + '/establishments_bottle/' + params.senderId + "/" + params.recipientid+ "/" + params.method+ "/" + params.gift;},
@@ -163,7 +162,14 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'ngFacebook
         templateUrl: function(params){ console.log(params); return config.template_path + '/drinkinfo_redeem/'  + params.entryId + '/' + params.estId + '/' + params.usrID + '/' + params.drinkID;},
         controller: 'AppCtrl',
         prefetchTemplate: false
-      })
+    })
+		
+    .state('app.redeemsearch', {
+      url: "/redeemsearch",
+      templateUrl: config.template_path + "/redeemsearch",
+      controller: 'AppCtrl',
+      prefetchTemplate: false
+    })
 
     .state('app.news', {
       url: "/news",
@@ -694,6 +700,12 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'ngFacebook
       templateUrl: function(params){ return config.template_path + '/data-api/' + params.action + '/' + params.id;},
       prefetchTemplate: false
     })
+		
+//    .state('app.data-api', {
+//      url: '/data-api/:action/:group/:type',
+//      templateUrl: function(params){ return config.template_path + '/data-api/' + params.action + '/' + params.group + '/' + params.type;},
+//      prefetchTemplate: false
+//    })
 		
     .state('app.test', {
       url: "/test",

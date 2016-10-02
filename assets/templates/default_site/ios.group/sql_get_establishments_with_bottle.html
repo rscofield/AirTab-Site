@@ -6,12 +6,15 @@
      Description :  
 
 --}
-
-
-{exp:airtab:sql_get_establishments_with_bottle member_id="{logged_in_member_id}" }
-{/exp:airtab:sql_get_establishments_with_bottle}
-
-
-
-  			
-  	
+[
+	{exp:query sql="SELECT * FROM v_venue_menu_items WHERE category='{segment_3}' and type='{segment_4}'"}
+		{
+		"estab_id":{estab_id},
+		"name":"{estab_name}",
+		"type":"gift",
+		"drink_id":"{drink_id}"
+		}{if count < total_results},{/if}
+		{if no_results}{"error":"no results"}{/if}
+	{/exp:query}
+]	
+{exp:http_header content_type="application/json"}

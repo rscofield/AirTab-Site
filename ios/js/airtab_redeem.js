@@ -2,6 +2,13 @@
 		
 		
 starter.controller('RedeemCtrl', function($scope, $stateParams, $http, $window, $ionicModal, $ionicLoading, $rootScope, $ionicPopup, $state) {
+
+	$scope.location = $rootScope.location,
+  $scope.radius = 25, //In miles
+  $scope.params = $stateParams;
+	$scope.globalPlaces = null;
+	$scope.globalSearch = {text: ""};
+	$scope.nearbyEsts = {}; 
   $scope.data = {},
 
   $scope.hideLoading = function() {
@@ -110,5 +117,127 @@ starter.controller('RedeemCtrl', function($scope, $stateParams, $http, $window, 
       
       $state.transitionTo('app.mydrinks');
     });
-  }
+  },
+  
+  $scope.redeemAtEstab = function(estab_id, drink_id)  {
+	  $rootScope.redeem.estab_id = estab_id;
+		$rootScope.redeem.drink_id = drink_id;  
+		$state.transitionTo('app.drinkInfoRedeem', {entryId: $rootScope.redeem.id, estId: estab_id, usrID: $rootScope.userInfo.member_id, drinkID: drink_id } );
+  },
+  
+  $scope.refreshNearby = function() {
+    $scope.refreshing = true;
+    //$rootScope.showLoading();
+    $scope.getNearby();
+  },
+  
+  $scope.getNearby = function() {
+
+ 	  $http.get(config.template_path + '/sql_get_establishments_with_bottle/Meal/'+$rootScope.redeem.level ).success(function(results) {
+	       
+		    $scope.est_with_bottle = results;
+         	
+         	x = 0;
+         	for ( var j = 0; j <  $rootScope.establishments.length; j++) { 	
+         		
+    	        for ( var i = 0; i <  $scope.est_with_bottle.length; i++) { 
+    	        	if ( ( $scope.est_with_bottle[i].name == $rootScope.establishments[j].title ) && 
+    	        	//     ( $scope.est_with_bottle[i].type == "Bottle" ) ){
+      	        	    ( $scope.est_with_bottle[i].type == $rootScope.redeem.type ) ){
+		        		$scope.nearbyEsts[x] = new Array();
+		        		$scope.nearbyEsts[x].bg = $rootScope.establishments[j].bg;
+		        		$scope.nearbyEsts[x].id = $rootScope.establishments[j].id;
+		        		$scope.nearbyEsts[x].title = $rootScope.establishments[j].title;
+		        		$scope.nearbyEsts[x].distance = $rootScope.establishments[j].distance;
+		        		$scope.nearbyEsts[x].drink_id = $scope.est_with_bottle[i].drink_id;
+		        		x = x + 1;
+		        		break;
+    	        	}
+    	        }
+        	}
+					$rootScope.hideLoading();
+  	  });
+	  
+  },
+
+  $scope.gotNearbyLocation = function() {
+    console.log("Got location via iOS");
+    if($rootScope.location.status == "error") {
+      $ionicLoading.hide();
+      $scope.$broadcast('scroll.refreshComplete');
+    } else if ($rootScope.location.status == "disabled") {
+      $ionicLoading.hide();
+      $scope.$broadcast('scroll.refreshComplete');
+    } else {
+      $scope.queryNearby();
+    }
+  },
+	
+  $scope.queryNearby = function() {
+    $http.get(config.template_path + '/estjson/'+$rootScope.location.latitude+'/'+$rootScope.location.longitude+'/'+$scope.radius).success(function(results) {
+		//$http.get(config.template_path + '/estjson/'+26.775039+'/'+-80.136109+'/'+$scope.radius).success(function(results) {
+      if(results[0].type == "Google Places") {
+      	delete $scope.nearbyEsts;
+        $scope.placesLoad();
+      } else {
+        $scope.nearbyEsts = results;
+        $scope.placesLoad();
+        $ionicLoading.hide();
+        $scope.$broadcast('scroll.refreshComplete');
+      }
+    });
+  },
+  
+	  $scope.placesLoad = function() {
+    if(typeof google != "undefined") {
+      var attrib = document.getElementById("placesAttribs");
+      var location = new google.maps.LatLng($rootScope.location.latitude,$rootScope.location.longitude);
+
+      var request = {
+        location: location,
+				radius:16000,
+        types: ['bar', 'night_club', 'restaurant', 'cafe'],
+        //rankBy: google.maps.places.RankBy.DISTANCE
+      };
+
+      var service = new google.maps.places.PlacesService(attrib);
+      service.nearbySearch(request, function(results,status) {
+        $scope.places = results;
+        $ionicLoading.hide();
+        $scope.$broadcast('scroll.refreshComplete');
+				//Hide startup Splash screen
+				if(bridge) {
+						bridge.callHandler("hideSplash", null, function(r) {
+							console.log("Splash Hidden");
+						});
+				}
+      });
+    } else {
+      console.log("No Google API");
+    }
+  },
+	
+	$scope.refreshSearch = function() {
+		delete $scope.globalPlaces;
+    if(typeof google != "undefined") {
+      var attrib = document.getElementById("placesAttribs");
+      //var location = new google.maps.LatLng($rootScope.location.latitude,$rootScope.location.longitude);
+			var location = new google.maps.LatLng(27.63007,-80.420380);
+
+      var request = {
+ 				query: $scope.globalSearch.text,
+				//query: "Applebees",
+				types: ['bar', 'night_club', 'restaurant', 'cafe']
+      };
+      var service = new google.maps.places.PlacesService(attrib);
+      service.textSearch(request, function(results,status) {
+        $scope.globalPlaces = results;
+        $ionicLoading.hide();
+        $scope.$broadcast('scroll.refreshComplete');
+      });
+    } else {
+      console.log("No Google API");
+    }
+	}
+  
 })
