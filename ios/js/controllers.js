@@ -980,7 +980,7 @@ starter.controller('estController', function($scope, $stateParams, $rootScope, $
   $scope.showRecommend = function() {
 	$scope.info = false;
 	$scope.recommend = true;
-	$http.get(config.template_path + "/sql_insert_at_user_recommend/" + $scope.pInfo.name + "/" + $rootScope.userInfo.member_id + "/0")
+	$http.get(config.template_path + "/sql_insert_at_user_recommend/" + $scope.pInfo.name + "/" + $scope.pInfo.formatted_address + "/0")
 	.success(function (data) {
 		parent.rootScope.hideLoading();						
 	})

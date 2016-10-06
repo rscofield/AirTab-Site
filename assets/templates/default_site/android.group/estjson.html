@@ -1,6 +1,6 @@
 {if segment_3 != "" AND segment_4 != ""}
 [
-{exp:low_search:results channel="establishments" distance:from="{segment_3}|{segment_4}" distance:to="latitude|longitude" distance:radius="{segment_5}" distance:unit="mi" limit="50"}
+{exp:low_search:results channel="establishments" distance:from="{segment_3}|{segment_4}" distance:to="latitude|longitude" distance:radius="{segment_5}" distance:unit="mi" limit="25"}
 	{
       "index": "{count}",
       "type": "airtab",
@@ -18,7 +18,11 @@
     }
 	{exp:airtab:log_page_load  misc="{low_search_distance}" count="{count}" match="1"}
 	{if count < total_results},{/if}
-    {if no_results}{ "type": "Google Places" }{/if}
+  {if no_results}{ "type": "Google Places" }{/if}
+	{if count < 2}
+		{exp:airtab:at_deficiency_insert type="Establishment" lat="{segment_3}" long="{segment_4}" num="{count}"}
+		{/exp:airtab:at_deficiency_insert}
+	{/if}
 {/exp:low_search:results}
 ]
 {exp:http_header content_type="application/json"}

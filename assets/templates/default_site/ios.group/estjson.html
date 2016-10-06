@@ -18,7 +18,11 @@
     }
 	{exp:airtab:log_page_load  misc="{low_search_distance}" count="{count}" match="1"}
 	{if count < total_results},{/if}
-    {if no_results}{ "type": "Google Places" }{/if}
+  {if no_results}{ "type": "Google Places" }{/if}
+	{if count < 2}
+		{exp:airtab:at_deficiency_insert type="Establishment" lat="{segment_3}" long="{segment_4}" num="{count}"}
+		{/exp:airtab:at_deficiency_insert}
+	{/if}
 {/exp:low_search:results}
 ]
 {exp:http_header content_type="application/json"}

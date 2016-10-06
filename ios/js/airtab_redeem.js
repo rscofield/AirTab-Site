@@ -171,6 +171,21 @@ starter.controller('RedeemCtrl', function($scope, $stateParams, $http, $window, 
   	  });
 	  
   },
+  
+  $scope.showModal = function(estId) {
+    $ionicModal.fromTemplateUrl(config.template_path + '/places_modal/'+estId, function(modal) {
+      $rootScope.modal = modal;
+      modal.show();
+    }, {
+    animation: 'slide-full',
+      focusFirstInput: true
+    });
+  }, 
+  
+  $scope.hideModal = function() {
+    $rootScope.modal.hide();
+    $rootScope.modal.remove();
+  },
 
   $scope.gotNearbyLocation = function() {
     console.log("Got location via iOS");

@@ -2429,19 +2429,36 @@ class Airtab {
 		return $member_data;
 	}
  
- /***************************** John W. Blaine *******************************/
-     // Insert data into table at_user_recommend when the establishments is not an AirTab Member.
-    // Author : John W. Blaine
+    // Insert data into table at_deficiency.
+    // Author : R Scofield
+    public function at_deficiency_insert()
+    {
+        $type = $this->EE->TMPL->fetch_param("type");
+				$lat = $this->EE->TMPL->fetch_param("lat");
+        $long = $this->EE->TMPL->fetch_param("long");
+        $member_id = $this->EE->session->userdata('member_id');
+        $numFound = $this->EE->TMPL->fetch_param("num");
+        $now = new DateTime();
+        $curTime = $now->format('Y-m-d H:i:s');
+                
+        $queryEx = $this->EE->db->query("INSERT INTO at_deficiency (type,latitude,longitude,occurred,user_id,num_found) VALUES ( '$type','$lat','$long','$curTime',$member_id,$numFound )");
+        
+        return;      
+    }
+ 
+    // Insert data into table at_user_recommend
+    //
     public function at_user_recommend()
     {
         $place = $this->EE->TMPL->fetch_param("place");
-        $member_id = $this->EE->TMPL->fetch_param("member_id");
+				$address = $this->EE->TMPL->fetch_param("address");
+        $member_id = $this->EE->session->userdata('member_id');
         $establishment_id = $this->EE->TMPL->fetch_param("establishment_id");
         $now = new DateTime();
         $curTime = $now->format('Y-m-d H:i:s');
 		//$member_id = ee()->session->userdata('member_id'); // Get Current User's ID
                 
-        $queryEx = $this->EE->db->query("INSERT INTO at_user_recommend (establishment_name, occurred, member_id, estab_id) VALUES ( '$place', '$curTime', $member_id, $establishment_id )");
+        $queryEx = $this->EE->db->query("INSERT INTO at_user_recommend (establishment_name, address, occurred, member_id, estab_id) VALUES ( '$place','$address','$curTime',$member_id,$establishment_id )");
         
         //return "success";
         return $now->format('Y-m-d H:i:s');
