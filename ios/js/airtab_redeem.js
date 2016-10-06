@@ -3,8 +3,10 @@
 		
 starter.controller('RedeemCtrl', function($scope, $stateParams, $http, $window, $ionicModal, $ionicLoading, $rootScope, $ionicPopup, $state) {
 
-	$scope.location = $rootScope.location,
-  $scope.radius = 25, //In miles
+	$scope.location = $rootScope.location;
+  $scope.radius = 25; //In miles
+  $scope.noVenuesFound = false;
+  $scope.fewVenuesFound = false;
   $scope.params = $stateParams;
 	$scope.globalPlaces = null;
 	$scope.globalSearch = {text: ""};
@@ -155,6 +157,16 @@ starter.controller('RedeemCtrl', function($scope, $stateParams, $http, $window, 
     	        	}
     	        }
         	}
+          $scope.noVenuesFound = false;
+          $scope.fewVenuesFound = false;
+          if(x < 4) {
+            $scope.placesLoad();
+            if(x<1){
+              $scope.noVenuesFound = true;
+            } else {
+              $scope.fewVenuesFound = true;
+            }
+          }
 					$rootScope.hideLoading();
   	  });
 	  
@@ -219,6 +231,8 @@ starter.controller('RedeemCtrl', function($scope, $stateParams, $http, $window, 
 	
 	$scope.refreshSearch = function() {
 		delete $scope.globalPlaces;
+    $scope.noVenuesFound = true;
+    $scope.fewVenuesFound = false;
     if(typeof google != "undefined") {
       var attrib = document.getElementById("placesAttribs");
       //var location = new google.maps.LatLng($rootScope.location.latitude,$rootScope.location.longitude);
@@ -232,6 +246,10 @@ starter.controller('RedeemCtrl', function($scope, $stateParams, $http, $window, 
       var service = new google.maps.places.PlacesService(attrib);
       service.textSearch(request, function(results,status) {
         $scope.globalPlaces = results;
+        // get location from first place found and do search on airtab establishments
+        
+        
+        //
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');
       });

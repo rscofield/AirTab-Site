@@ -45,6 +45,12 @@
 			</div>
 
 			<div ng-show="places">
+        <div style="text-align:center;margin-bottom:15px;margin-top:15px" ng-show="noVenuesFound">
+          <strong>Oops... Thanks for your patience while we are waiting for establishments in your area to join. Please recommend some of your favorites below.</strong>
+        </div>
+        <div style="text-align:center;margin-bottom:15px;margin-top:15px" ng-show="fewVenuesFound">
+          <strong>Oops... Only a few establishments found in your area. Please recommend some of your favorites below.</strong>
+        </div>      
 				<ion-list>
 					<ion-item ng-repeat="item in places | filter:query" 
 										item="item"
@@ -76,6 +82,12 @@
 				</button>
 			</div>
 			<div ng-show="globalPlaces">
+        <div style="text-align:center;margin-bottom:15px;margin-top:15px" ng-show="noVenuesFound">
+          <strong>Oops... Thanks for your patience while we are waiting for establishments in your area to join. Please recommend some of your favorites below.</strong>
+        </div>
+        <div style="text-align:center;margin-bottom:15px;margin-top:15px" ng-show="fewVenuesFound">
+          <strong>Oops... Only a few establishments found in your area. Please recommend some of your favorites below.</strong>
+        </div>      
 				<ion-list>
 
 				        <ion-item ng-repeat="item in globalPlaces" 
