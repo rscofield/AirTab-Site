@@ -491,6 +491,8 @@ starter.controller('estController', function($scope, $stateParams, $rootScope, $
   },
 
   $scope.queryEstablishments = function() {
+    $scope.noVenuesFound = false;
+    $scope.fewVenuesFound = false;
     $http.get(config.template_path + '/estjson/'+$rootScope.location.latitude+'/'+$rootScope.location.longitude).success(function(results) {
       
       if(results[0].type == "Google Places") {
@@ -507,14 +509,18 @@ starter.controller('estController', function($scope, $stateParams, $rootScope, $
   },
 
   $scope.queryNearby = function() {
+    $scope.noVenuesFound = false;
+    $scope.fewVenuesFound = false;
     $http.get(config.template_path + '/estjson/'+$rootScope.location.latitude+'/'+$rootScope.location.longitude+'/'+$scope.radius).success(function(results) {
 		//$http.get(config.template_path + '/estjson/'+26.775039+'/'+-80.136109+'/'+$scope.radius).success(function(results) {
       if(results[0].type == "Google Places") {
+        $scope.noVenuesFound = true;
       	delete $scope.nearbyEsts;
         $scope.placesLoad();
       } else {
 				$rootScope.establishments = results;
         $scope.nearbyEsts = results;
+        if($rootScope.establishments.length < 4) $scope.fewVenuesFound = true;
         $scope.placesLoad();
         $rootScope.hideLoading();
         $scope.$broadcast('scroll.refreshComplete');
