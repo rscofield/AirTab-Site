@@ -136,40 +136,61 @@ starter.controller('RedeemCtrl', function($scope, $stateParams, $http, $window, 
   $scope.getNearby = function() {
 
  	  $http.get(config.template_path + '/sql_get_establishments_with_bottle/Meal/'+$rootScope.redeem.level ).success(function(results) {
-	       
-		    $scope.est_with_bottle = results;
-         	
-         	x = 0;
-         	for ( var j = 0; j <  $rootScope.establishments.length; j++) { 	
-         		
-    	        for ( var i = 0; i <  $scope.est_with_bottle.length; i++) { 
-    	        	if ( ( $scope.est_with_bottle[i].name == $rootScope.establishments[j].title ) && 
-    	        	//     ( $scope.est_with_bottle[i].type == "Bottle" ) ){
-      	        	    ( $scope.est_with_bottle[i].type == $rootScope.redeem.type ) ){
-		        		$scope.nearbyEsts[x] = new Array();
-		        		$scope.nearbyEsts[x].bg = $rootScope.establishments[j].bg;
-		        		$scope.nearbyEsts[x].id = $rootScope.establishments[j].id;
-		        		$scope.nearbyEsts[x].title = $rootScope.establishments[j].title;
-		        		$scope.nearbyEsts[x].distance = $rootScope.establishments[j].distance;
-		        		$scope.nearbyEsts[x].drink_id = $scope.est_with_bottle[i].drink_id;
-		        		x = x + 1;
-		        		break;
-    	        	}
-    	        }
-        	}
-          $scope.noVenuesFound = false;
-          $scope.fewVenuesFound = false;
-          if(x < 4) {
-            $scope.placesLoad();
-            if(x<1){
-              $scope.noVenuesFound = true;
-            } else {
-              $scope.fewVenuesFound = true;
+      $scope.est_with_bottle = results;
+      
+      $scope.noVenuesFound = false;
+      $scope.fewVenuesFound = false;
+	    
+      if(typeof $rootScope.establishments == "undefined") {
+        $scope.noVenuesFound = true;
+        $scope.placesLoad();
+
+      } else {
+                   	
+        x = 0;
+        for ( var j = 0; j <  $rootScope.establishments.length; j++) { 	         
+          for ( var i = 0; i <  $scope.est_with_bottle.length; i++) { 
+            if ( ( $scope.est_with_bottle[i].name == $rootScope.establishments[j].title ) && 
+            //     ( $scope.est_with_bottle[i].type == "Bottle" ) ){
+                  ( $scope.est_with_bottle[i].type == $rootScope.redeem.type ) ){
+            $scope.nearbyEsts[x] = new Array();
+            $scope.nearbyEsts[x].bg = $rootScope.establishments[j].bg;
+            $scope.nearbyEsts[x].id = $rootScope.establishments[j].id;
+            $scope.nearbyEsts[x].title = $rootScope.establishments[j].title;
+            $scope.nearbyEsts[x].distance = $rootScope.establishments[j].distance;
+            $scope.nearbyEsts[x].drink_id = $scope.est_with_bottle[i].drink_id;
+            x = x + 1;
+            break;
             }
           }
-					$rootScope.hideLoading();
-  	  });
+        }
+        if(x < 4) {
+          $scope.placesLoad();
+          if(x<1){
+            $scope.noVenuesFound = true;
+          } else {
+            $scope.fewVenuesFound = true;
+          }
+        }
+      }
+      $rootScope.hideLoading();      
+  	});
 	  
+  },
+  
+  $scope.showModal = function(estId) {
+    $ionicModal.fromTemplateUrl(config.template_path + '/places_modal/'+estId, function(modal) {
+      $rootScope.modal = modal;
+      modal.show();
+    }, {
+    animation: 'slide-full',
+      focusFirstInput: true
+    });
+  }, 
+  
+  $scope.hideModal = function() {
+    $rootScope.modal.hide();
+    $rootScope.modal.remove();
   },
 
   $scope.gotNearbyLocation = function() {
