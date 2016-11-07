@@ -51,7 +51,7 @@
    				           				<span style="font-size:0.75em"><font color="red"> {{drinkMsg.msg}} </font></span>                                    
  				    			 </div>
  	
- 						    	    
+ 						    	  <a href="#/app/mydrinksinfo/{{drinkMsg.redeemed_drink_id}}">    
 					    	    <div ng-if="drinkMsg.type == 'Premium'"> 					    	    
 		  				           <img src="/images/wineglass.png" width="24" height="24" style="vertical-align: top;"> 		           					  				           		
 		 				           <span style="font-size:0.75em"><font color="blue">Good for 1 {{drinkMsg.type}} drink.</font></span>                                    				           	    	  				           		 				    			 
@@ -61,6 +61,7 @@
 		  				           <img src="/images/gift2.png" width="24" height="24" style="vertical-align: top;"> 		           					  				           		
 		 				           <span style="font-size:0.75em"><font color="blue">{{drinkMsg.type}}</font></span>                                    				           	    	  				           		 				    			 
   			    				</div>
+                    </a>
  			    		{!--		
 										{if {logged_in_member_id} == "2" }      
 		     				    ...............................<br>

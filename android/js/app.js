@@ -118,9 +118,15 @@ var app = angular.module('starter', ['ionic', 'starter.controllers'])
           templateUrl: function(params){ return config.template_path + '/drinkinfo/'  + params.drinkId;},
           controller: 'DrinkCtrl',
       prefetchTemplate: false
-
     })
 
+    .state('app.mydrinksInfo', {
+      url: "/mydrinksinfo/:drinkId",
+      templateUrl: function(params){ console.log(params); return config.template_path + '/mydrinksinfo/'  + params.drinkId;},
+      controller: 'AppCtrl',
+      prefetchTemplate: false
+    })
+    
     .state('app.giftInfo', {
       url: "/giftInfo/:type/:estId/:item_id/:senderId/:recipientid",
       templateUrl: function(params){  return config.template_path + '/giftInfo/' + "/" + params.type + "/" + params.estId + "/" + params.item_id + "/" + params.senderId + "/" + params.recipientid;},
