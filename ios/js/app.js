@@ -149,6 +149,13 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'ngFacebook
       prefetchTemplate: false
     })
 
+    .state('app.mydrinksInfo', {
+      url: "/mydrinksinfo/:drinkId",
+      templateUrl: function(params){ console.log(params); return config.template_path + '/mydrinksinfo/'  + params.drinkId;},
+      controller: 'AppCtrl',
+      prefetchTemplate: false
+    })
+
     .state('app.giftInfo', {
       url: "/giftInfo/:type/:estId/:item_id/:senderId/:recipientid",
       //templateUrl: function(params){ console.log(params); return config.template_path + '/giftInfo/'  + params.giftId;},
