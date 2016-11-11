@@ -810,6 +810,8 @@ class Airtab {
 		    'channel_data',
 		    array(
 		        'field_id_17'  => $now,
+            'field_id_18'  => $est,
+            'field_id_47'  => $drink,
 		        'field_id_140' => $serverId
 		    ),
 		    array(
@@ -832,8 +834,8 @@ class Airtab {
 			    )
 			);
 			
-			//ee()->db->insert('relationships', array('parent_id' => $ticket, 'child_id'=> $est, "field_id"=>"18"));
-			//ee()->db->insert('relationships', array('parent_id' => $ticket, 'child_id'=> $drink, "field_id"=>"47"));
+			ee()->db->insert('relationships', array('parent_id' => $ticket, 'child_id'=> $est, "field_id"=>"18"));
+			ee()->db->insert('relationships', array('parent_id' => $ticket, 'child_id'=> $drink, "field_id"=>"47"));
 		} else {
 			$vars[0]['error'] = '{"status": "error", "msg": "An unknown error has occurred. If the problem persists, please contact AirTab Support.", "title":"Redemption Error"}';
 			return ee()->TMPL->parse_variables(ee()->TMPL->tagdata, $vars);
