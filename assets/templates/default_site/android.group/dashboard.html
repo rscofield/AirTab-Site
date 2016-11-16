@@ -38,6 +38,21 @@
 					<span class="item-note">{{item.price}}</span>
 				</li>
 			</ul>
+      <div class="card" ng-show="opt_in">
+        <div class="item item-text-wrap">
+          <h1 center style="font-size:16pt">Opt In text goes here</h1>
+          <button class="button  button-block button-assertive" ng-click="Agreed()">I Agree</button>
+        </div>
+      </div>
+      <div class="card" ng-show="pick_menu">
+        <div class="item item-text-wrap">
+          <h1 center style="font-size:16pt">Select all items you wish to provide</h1>
+          <ion-toggle ng-repeat="item in stdMenuInfo" ng-model="item.provided" ng-checked="item.provided" style="font-size:10pt">
+            {{item.name}}
+          </ion-toggle>
+          <button class="button  button-block button-assertive" ng-click="SaveSelections()">Save Selections</button>
+        </div>
+      </div>
 				
 			</ion-content>
 		</ion-tab>	

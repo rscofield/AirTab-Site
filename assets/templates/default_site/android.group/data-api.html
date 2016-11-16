@@ -67,7 +67,23 @@
 		"name":"{title}",
 		"status":"{status}",
 		"type":"{Type}",
-		"price":"{Price}"
+		"price":"{Price}",
+    "fld_picture":"{fld_picture}"
+		}{if count < total_results},{/if}
+		{if no_results}{"error":"no results"}{/if}
+	{/exp:query}
+]	
+
+{if:elseif segment_3 == "stdgiftmenu"}
+[
+	{exp:query sql="SELECT * FROM v_establishment_menu WHERE estab_id=248 and Type IN ('Meal','Bottle','Drink') Order By Price DESC"}
+		{
+		"menuID":{entry_id},
+		"name":"{title}",
+		"status":"{status}",
+		"type":"{Type}",
+		"price":"{Price}",
+    "fld_picture":"{fld_picture}"
 		}{if count < total_results},{/if}
 		{if no_results}{"error":"no results"}{/if}
 	{/exp:query}
@@ -86,6 +102,19 @@
 		{if no_results}{"error":"no results"}{/if}
 	{/exp:query}
 ]	
+
+{if:elseif segment_3 == "venueswith"}
+[
+	{exp:query sql="SELECT * FROM v_venue_menu_items WHERE category='{segment_4}' and type='{segment_5}'"}
+		{
+		"estab_id":{estab_id},
+		"name":"{estab_name}",
+		"drink_id":"{drink_id}"
+		}{if count < total_results},{/if}
+		{if no_results}{"error":"no results"}{/if}
+	{/exp:query}
+]	
+
 
 {if:elseif segment_3 == "sendpromotion"}
 	{exp:query sql="SELECT * FROM v_active_promotions WHERE promotion = {segment_4}" LIMIT 1}
