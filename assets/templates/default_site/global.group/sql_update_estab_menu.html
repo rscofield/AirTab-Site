@@ -1,0 +1,31 @@
+<?php
+/*  
+     Author: Ray Scofield
+     File Name: sql_update_estab_menu.html
+     Date: 11/15/2016
+     
+     Description :           
+
+		 Used for memeber who is owner/manager of venue to update menu.
+		 Called from dashboardCtrl.
+     
+     JSON data object contains estabInfo object and array of menuInfo objects.
+*/
+
+	$r = json_decode(file_get_contents('php://input'));
+	
+  // clear existing std menu items for this establishment
+  $this->EE->db->query("DELETE FROM at_estab_menus WHERE estab_id=".$r->estabInfo->venueID);
+  
+  // loop through array of std menu items and insert each one selected
+  for ($i = 0; $i < count($r->menuInfo); $i++) {
+    if($r->menuInfo[$i]->provided == true) {
+      $this->EE->db->query("INSERT INTO at_estab_menus (estab_id,item_id) VALUES (".$r->estabInfo->venueID.",".$r->menuInfo[$i]->menuID.")");
+    }
+  }
+		
+	echo json_encode(array("success"=>true, "msg"=>"Menu updated."));
+?>	
+{exp:http_header content_type="application/json"}
+  			
+  	

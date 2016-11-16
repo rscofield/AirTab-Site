@@ -818,6 +818,8 @@ starter.controller('estController', function($scope, $stateParams, $rootScope, $
   },
 
   $scope.queryNearby = function() {
+    $scope.noVenuesFound = false;
+    $scope.fewVenuesFound = false;
     $http.get(config.template_path + '/estjson/'+$rootScope.location.latitude+'/'+$rootScope.location.longitude+'/'+$scope.radius).success(function(results) {
 		//$http.get(config.template_path + '/estjson/'+26.775039+'/'+-80.136109+'/'+$scope.radius).success(function(results) {
       if(results[0].type == "Google Places") {
@@ -3268,12 +3270,14 @@ starter.controller("campaignCtrl", function($scope, $http, $window, $sce, $timeo
 
 // ########################################################
 
-starter.controller("dashboardCtrl", function($scope, $http, $window, $sce, $timeout, $rootScope, $state) {
+starter.controller("dashboardCtrl", function($scope, $http, $window, $sce, $timeout, $rootScope, $state, $ionicScrollDelegate) {
 	$scope.venueInfo = {};
-	$scope.menuInfo = {};
+	$scope.menuInfo = [];
+  $scope.stdMenuInfo = {};
 	$scope.ticketInfo = {};
   $scope.init = function() {
-
+    $scope.opt_in = false;
+    $scope.pick_menu = false;
   },
 	
 	$scope.loadVenue = function(venueID) {
@@ -3283,7 +3287,12 @@ starter.controller("dashboardCtrl", function($scope, $http, $window, $sce, $time
 			// load menu items
 			$http.get(config.template_path + '/data-api/menu/'+venueID)
 			.success(function(result) {
-				$scope.menuInfo = result;
+        if(result[0].error == "no results") {
+          // no menu, flag for Opt-In display
+          $scope.opt_in = true;
+        } else {
+          $scope.menuInfo = result;         
+        }
 				// load redeemed items
 				$http.get(config.template_path + '/data-api/venue-redeemed/'+venueID)
 				.success(function(result) {
@@ -3292,6 +3301,44 @@ starter.controller("dashboardCtrl", function($scope, $http, $window, $sce, $time
 			});
     });
 	},
+  
+  $scope.Agreed = function() {
+    $scope.opt_in = false;
+    // load std menu items
+    $http.get(config.template_path + '/data-api/stdgiftmenu/248')
+    .success(function(result) {
+      if(result[0].error == "no results") {
+        // no menu, flag for Opt-In display
+        $scope.opt_in = true;
+        $scope.pick_menu = false;
+      } else {
+        $scope.stdMenuInfo = result; 
+        $scope.pick_menu = true; 
+        // default not provided on all std menu items
+        for (var i=0; i < $scope.stdMenuInfo.length; i++) {
+          $scope.stdMenuInfo[i].provided = false;
+        }        
+      }
+    });
+  },
+  
+  $scope.SaveSelections = function() {
+    $scope.pick_menu = false; 
+    // update menu object with selected items
+    for (var i=0; i < $scope.stdMenuInfo.length; i++) {
+      if($scope.stdMenuInfo[i].provided == true)  $scope.menuInfo.push($scope.stdMenuInfo[i]);
+    }
+    // send back to server for update
+    $scope.data = {};
+    $scope.data.estabInfo = $scope.venueInfo;
+    $scope.data.menuInfo = $scope.stdMenuInfo;
+    $http.post(config.global_path + "/sql_update_estab_menu" , $scope.data)
+    .success(function (result) {
+      console.log(result);			
+    });
+    
+    $ionicScrollDelegate.scrollTop();
+  },
 	
 	 $scope.doTicketRefresh = function(venueID) {
     $http.get(config.template_path + '/data-api/venue-redeemed/'+venueID)

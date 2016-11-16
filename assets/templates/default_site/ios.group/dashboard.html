@@ -1,0 +1,97 @@
+{exp:airtab:log_page_load}
+<div ng-cloak>
+<ion-view title="Veune Dashboard" ng-init="loadVenue({segment_3})"  ng-controller="dashboardCtrl">
+	<ion-nav-buttons side="{{$root.menuSide}}">
+    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+	<ion-tabs class="tabs-striped tabs-background-assertive tabs-color-light" ng-init="$root.hideLoading()">
+
+		<ion-tab title="Main">		
+		
+			<ion-content has-header="true" padding="true" has-tabs="true">
+
+				<div class="card">
+					<div class="item item-text-wrap">
+						<h1 center style="font-size:16pt">{{ venueInfo.name }}</h1>
+						<h2 center style="font-size:16pt">{{ venueInfo.status }}</h2>
+					</div>
+				</div>
+				<div style="text-align:center;padding:10px" padding="true">
+					<p>{{venueInfo.address}}<br />{{venueInfo.city}}, {{venueInfo.state}} {{venueInfo.zip}}</p>
+					<p>Contact: {{venueInfo.contact}}    Phone: {{venueInfo.phone}}</p>
+				</div>
+				
+			</ion-content>
+		</ion-tab>	
+		
+		<ion-tab title="Menu">		
+		
+			<ion-content has-header="true" padding="true" has-tabs="true">
+				<div class="card">
+					<div class="item item-text-wrap">
+						<h1 center style="font-size:16pt">{{ venueInfo.name }}</h1>
+					</div>
+				</div>
+			<ul class="list">
+				<li class="item" ng-repeat="item in menuInfo" style="font-size:10pt">
+					{{item.name}}
+					<span class="item-note">{{item.price}}</span>
+				</li>
+			</ul>
+      <div class="card" ng-show="opt_in">
+        <div class="item item-text-wrap">
+          <h1 center style="font-size:16pt">Opt In text goes here</h1>
+          <button class="button  button-block button-assertive" ng-click="Agreed()">I Agree</button>
+        </div>
+      </div>
+      <div class="card" ng-show="pick_menu">
+        <div class="item item-text-wrap">
+          <h1 center style="font-size:16pt">Select all items you wish to provide</h1>
+          <ion-toggle ng-repeat="item in stdMenuInfo" ng-model="item.provided" ng-checked="item.provided" style="font-size:10pt">
+            {{item.name}}
+          </ion-toggle>
+          <button class="button  button-block button-assertive" ng-click="SaveSelections()">Save Selections</button>
+        </div>
+      </div>
+				
+			</ion-content>
+		</ion-tab>	
+		
+		<ion-tab title="Tickets">		
+		
+			<ion-content has-header="true" padding="true" has-tabs="true">
+				<ion-refresher
+					pulling-text="Pull to refresh..."
+					on-refresh="doTicketRefresh({segment_3})">
+				</ion-refresher>
+				<div class="card">
+					<div class="item item-text-wrap">
+						<h1 center style="font-size:16pt">{{ venueInfo.name }}</h1>
+					</div>
+				</div>
+			<ul class="list">
+				<li class="item" ng-repeat="item in ticketInfo" style="font-size:10pt">
+					{{item.name}}
+					<span class="item-note">{{item.date}}</span>
+				</li>
+			</ul>
+				
+			</ion-content>
+		</ion-tab>	
+	
+		<ion-tab title="Servers">		
+		
+			<ion-content has-header="true" padding="true" has-tabs="true">
+				<div class="card">
+					<div class="item item-text-wrap">
+						<h1 center style="font-size:16pt">{{ venueInfo.name }}</h1>
+					</div>
+				</div>
+				
+			</ion-content>
+		</ion-tab>	
+	
+	</ion-tabs>		
+</ion-view>
+
+</div>
