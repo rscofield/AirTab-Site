@@ -1,28 +1,17 @@
-{embed="global/meta" title="AirTab - Member Registration"}
-
+{exp:channel:entries channel="site_static_pages"}
+{embed="global/meta" title="Airtab Charity Challenge - {title}"}
+{exp:airtab:log_page_load}
 <body>
 <div class="page">
-	
 	<!-- Begin Static -->
-	<section id="section1" class="dynamic container">
-	
-	{embed="global/header"}
-
-	{exp:channel:entries channel="site_static_pages"}
-	
-		<h2>{title}</h2>	
-		
+	<section id="section1" class="dynamic container" style="padding: 0 10px 0 10px">
 		<!-- Content -->
 		<div class="sixteen columns">
 			{page_body}
 		</div>
-		
 	</section>
 	<!-- End Static -->
-	
 	{/exp:channel:entries}
-
-
 	<!-- Begin Footer -->
 	<footer>
 		<div class="container">

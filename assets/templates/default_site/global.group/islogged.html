@@ -1,7 +1,7 @@
 <?php
 
 if(!ee()->session->userdata('member_id')) {
-	echo json_encode(array("status"=>"error", "msg"=>"Invalid Username and/or Password"));
+	echo json_encode(array("status"=>"error", "msg"=>"{segment_3}"));
 } else {
 	$userdata = array(
 	"status"=>"success", 
