@@ -827,9 +827,10 @@ starter.controller('estController', function($scope, $stateParams, $rootScope, $
       	delete $scope.nearbyEsts;
         $scope.placesLoad();
       } else {
-      	$rootScope.establishments = results;
+      	$rootScope.nearbyEsts = results;
+				$rootScope.establishments = results;
         $scope.nearbyEsts = results;
-        if($rootScope.establishments.length < 4) $scope.fewVenuesFound = true;
+        if($rootScope.nearbyEsts.length < 4) $scope.fewVenuesFound = true;
         $scope.placesLoad();
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');
@@ -890,7 +891,10 @@ starter.controller('estController', function($scope, $stateParams, $rootScope, $
 	},
 	
   $scope.getNearby = function() {
-
+    if($rootScope.nearbyEsts && ! $scope.refreshing) {
+      $ionicLoading.hide();
+      return;
+    }
     //if($scope.isLoading) return;
     if(!$scope.places && !$scope.nearbyEsts && !$scope.refreshing) $rootScope.showLoading();
 
@@ -3291,7 +3295,10 @@ starter.controller("dashboardCtrl", function($scope, $http, $window, $sce, $time
           // no menu, flag for Opt-In display
           $scope.opt_in = true;
         } else {
-          $scope.menuInfo = result;         
+          $scope.menuInfo = result;
+					for (var i=0; i < $scope.menuInfo.length; i++) {
+						$scope.menuInfo[i].showpic = false;
+					}        					
         }
 				// load redeemed items
 				$http.get(config.template_path + '/data-api/venue-redeemed/'+venueID)
@@ -3302,6 +3309,18 @@ starter.controller("dashboardCtrl", function($scope, $http, $window, $sce, $time
     });
 	},
   
+	$scope.togglePic = function(itemID) {
+		for (var i=0; i < $scope.menuInfo.length; i++) {
+			if($scope.menuInfo[i].menuID == itemID) {
+				if($scope.menuInfo[i].showpic == false) 
+					$scope.menuInfo[i].showpic = true;
+				else 
+					$scope.menuInfo[i].showpic = false;
+				return;
+			}
+		}
+	},
+	
   $scope.Agreed = function() {
     $scope.opt_in = false;
     // load std menu items
@@ -3317,6 +3336,7 @@ starter.controller("dashboardCtrl", function($scope, $http, $window, $sce, $time
         // default not provided on all std menu items
         for (var i=0; i < $scope.stdMenuInfo.length; i++) {
           $scope.stdMenuInfo[i].provided = false;
+					$scope.stdMenuInfo[i].showpic = false;
         }        
       }
     });

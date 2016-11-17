@@ -22,7 +22,7 @@
 				<h3>You do not have Location Services enabled.</h3>
 				<button ng-click="showLocationPrefs()">Enable Location Services</button>
 			</div>
-	  		<div ng-repeat="est in nearbyEsts">
+	  		<div ng-repeat="est in $root.nearbyEsts">
 		    	<div class="list card" ng-click="showEstMenu({{est.id}});">
 		    		<div class="item item-image">
 						<img src="{{est.bg}}">

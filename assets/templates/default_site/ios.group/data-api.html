@@ -65,7 +65,7 @@
 		"status":"{status}",
 		"type":"{Type}",
 		"price":"{Price}",
-    "fld_picture":"{fld_picture}"
+    "fld_picture":"{exp:parse_file_paths}{fld_picture}{/exp:parse_file_paths}"
 		}{if count < total_results},{/if}
 		{if no_results}{"error":"no results"}{/if}
 	{/exp:query}
@@ -80,7 +80,7 @@
 		"status":"{status}",
 		"type":"{Type}",
 		"price":"{Price}",
-    "fld_picture":"{fld_picture}"
+    "fld_picture":"{exp:parse_file_paths}{fld_picture}{/exp:parse_file_paths}"
 		}{if count < total_results},{/if}
 		{if no_results}{"error":"no results"}{/if}
 	{/exp:query}
