@@ -310,16 +310,6 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
   $rootScope.initialize()
 })
 
-starter.controller('PlaylistsCtrl', function($scope) {
-  $scope.playlists = [
-    { title: 'Reggae', id: 1 },
-    { title: 'Chill', id: 2 },
-    { title: 'Dubstep', id: 3 },
-    { title: 'Indie', id: 4 },
-    { title: 'Rap', id: 5 },
-    { title: 'Cowbell', id: 6 }
-  ];
-})
 
 starter.controller('loginCtrl', function($scope, $stateParams, $rootScope, $http, $ionicLoading, $ionicModal, $ionicScrollDelegate, $timeout, $ionicPopup, $window, $state, $ionicViewService) {
   // Perform the login action when the user submits the login form
@@ -518,9 +508,10 @@ starter.controller('estController', function($scope, $stateParams, $rootScope, $
       	delete $scope.nearbyEsts;
         $scope.placesLoad();
       } else {
+      	$rootScope.nearbyEsts = results;
 				$rootScope.establishments = results;
         $scope.nearbyEsts = results;
-        if($rootScope.establishments.length < 4) $scope.fewVenuesFound = true;
+        if($rootScope.nearbyEsts.length < 4) $scope.fewVenuesFound = true;
         $scope.placesLoad();
         $rootScope.hideLoading();
         $scope.$broadcast('scroll.refreshComplete');
@@ -574,6 +565,10 @@ starter.controller('estController', function($scope, $stateParams, $rootScope, $
 	},
 	
   $scope.getNearby = function() {
+    if($rootScope.nearbyEsts && ! $scope.refreshing) {
+      $ionicLoading.hide();
+      return;
+    }
     if($scope.isLoading) return;
     if(!$scope.places && !$scope.nearbyEsts && !$scope.refreshing) $rootScope.showLoading();
     if(!$rootScope.location || $scope.refreshing ) {
@@ -3468,7 +3463,10 @@ starter.controller("dashboardCtrl", function($scope, $http, $window, $sce, $time
           // no menu, flag for Opt-In display
           $scope.opt_in = true;
         } else {
-          $scope.menuInfo = result;         
+          $scope.menuInfo = result;
+					for (var i=0; i < $scope.menuInfo.length; i++) {
+						$scope.menuInfo[i].showpic = false;
+					}        					
         }
 				// load redeemed items
 				$http.get(config.template_path + '/data-api/venue-redeemed/'+venueID)
@@ -3479,6 +3477,18 @@ starter.controller("dashboardCtrl", function($scope, $http, $window, $sce, $time
     });
 	},
   
+	$scope.togglePic = function(itemID) {
+		for (var i=0; i < $scope.menuInfo.length; i++) {
+			if($scope.menuInfo[i].menuID == itemID) {
+				if($scope.menuInfo[i].showpic == false) 
+					$scope.menuInfo[i].showpic = true;
+				else 
+					$scope.menuInfo[i].showpic = false;
+				return;
+			}
+		}
+	},
+	
   $scope.Agreed = function() {
     $scope.opt_in = false;
     // load std menu items
@@ -3494,6 +3504,7 @@ starter.controller("dashboardCtrl", function($scope, $http, $window, $sce, $time
         // default not provided on all std menu items
         for (var i=0; i < $scope.stdMenuInfo.length; i++) {
           $scope.stdMenuInfo[i].provided = false;
+					$scope.stdMenuInfo[i].showpic = false;
         }        
       }
     });

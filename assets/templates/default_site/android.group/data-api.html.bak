@@ -13,6 +13,7 @@
 {if no_results}"error":"no results"{/if}
 {/exp:query}
 ]
+
 {if:elseif segment_3 == "newslist"}
 [
 {exp:channel:entries channel="est_news" orderby="random" search:news_ispinned="= Yes"}
@@ -28,6 +29,7 @@
 	}{if count != total_results},{/if}
 {/exp:channel:entries}
 ]
+
 {if:elseif segment_3 == "friendslist"}
 [
 {exp:query sql="SELECT * FROM v_friends WHERE friend_id = {segment_4} or sender_id = {segment_4}"}
@@ -40,6 +42,7 @@
 	{if no_results}"error":"no results"{/if}
 	{/exp:query}
 ]
+
 {if:elseif segment_3 == "venue"}
 	{exp:query sql="SELECT * FROM v_establishment WHERE entry_id={segment_4}"}
 		{
@@ -65,7 +68,7 @@
 		"status":"{status}",
 		"type":"{Type}",
 		"price":"{Price}",
-    "fld_picture":"{exp:parse_file_paths}{fld_picture}{/exp:parse_file_paths}"
+    "fld_picture":"{fld_picture}"
 		}{if count < total_results},{/if}
 		{if no_results}{"error":"no results"}{/if}
 	{/exp:query}
@@ -80,7 +83,7 @@
 		"status":"{status}",
 		"type":"{Type}",
 		"price":"{Price}",
-    "fld_picture":"{exp:parse_file_paths}{fld_picture}{/exp:parse_file_paths}"
+    "fld_picture":"{fld_picture}"
 		}{if count < total_results},{/if}
 		{if no_results}{"error":"no results"}{/if}
 	{/exp:query}
@@ -127,4 +130,5 @@
 
 {if:else}
 {/if}
+
 {exp:http_header content_type="application/json"}

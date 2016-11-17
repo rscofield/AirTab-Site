@@ -34,8 +34,13 @@
 				</div>
 			<ul class="list">
 				<li class="item" ng-repeat="item in menuInfo" style="font-size:10pt">
+					<div ng-click="togglePic({{item.menuID}})">
 					{{item.name}}
 					<span class="item-note">{{item.price}}</span>
+					<div ng-show="item.showpic">
+						<img src="{{item.fld_picture}}" width="160" height="160" class="service-icon">
+					</div>
+					</div>
 				</li>
 			</ul>
       <div class="card" ng-show="opt_in">
