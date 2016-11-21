@@ -22,10 +22,13 @@
  
     
 	<ion-content has-header="true" padding="true" ng-controller="mydrinksController">
-  
+  	<ion-refresher
+		    pulling-text="Pull to refresh..."
+		    on-refresh="doRefresh()">
+		</ion-refresher>  
     	<div class="list" ng-init="getDrinksWithMsg()" >
   		    
-             <div ng-repeat="drinkMsg in drinksWithMsg">
+             <div ng-repeat="drinkMsg in $root.drinksWithMsg">
 		     
 		     <div class="list card" ng-change="replyToDrinkSender( '{{drinkMsg.id}}',  '{{drinkMsg.usr}}' );" >
 		     				<div style="width: 100%; overflow: hidden;">
@@ -52,12 +55,12 @@
  				    			 </div>
  	
  						    	  <a href="#/app/mydrinksinfo/{{drinkMsg.redeemed_drink_id}}">  
-					    	    <div ng-if="drinkMsg.type == 'Premium'"> 					    	    
+					    	    <div ng-if="drinkMsg.type == 'Standard' || drinkMsg.type == 'Premium'"> 					    	    
 		  				           <img src="/images/wineglass.png" width="24" height="24" style="vertical-align: top;"> 		           					  				           		
 		 				           <span style="font-size:0.75em"><font color="blue">Good for 1 {{drinkMsg.type}} drink.</font></span>                                    				           	    	  				           		 				    			 
   			    				</div>
   			    				
-					    	    <div ng-if="drinkMsg.type != 'Premium'"> 					    	    
+					    	    <div ng-if="drinkMsg.type != 'Standard' && drinkMsg.type != 'Premium'"> 					    	    
 		  				        <img src="/images/gift2.png" width="24" height="24" style="vertical-align: top;"> 		           					  				           		
 		 				          <span style="font-size:0.75em"><font color="blue">{{drinkMsg.type}}</font></span>                                    				           	    	  				           		 				    			 
   			    				</div>

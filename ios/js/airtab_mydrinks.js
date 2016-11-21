@@ -230,20 +230,29 @@ starter.controller("mydrinksController", function($scope, $http, $ionicPopup, $i
         }, 
 
       $scope.hideLoading = function() {
+				$ionicLoading.hide();
+      },
 
-      $ionicLoading.hide();
-
-      }
-
+			$scope.doRefresh = function() {
+				$scope.refreshing = true;
+				//$rootScope.showLoading();
+				$scope.getDrinksWithMsg();
+			},
       //---------------------------------------------------
           
-          $scope.getDrinksWithMsg = function() {
+      $scope.getDrinksWithMsg = function() {
+				
+				if($rootScope.drinksWithMsg && !$scope.refreshing) {
+					$scope.hideLoading();   
+					return;
+				}
  
         	  $http.get(config.template_path + '/sql_my_drinks_with_msg' ).success(function(result) {            	  
         	    	
-        		    $scope.drinksWithMsg = result;                	   
+        		    $rootScope.drinksWithMsg = result;                	   
               });
-             
+            $scope.refreshing = false;
+						$scope.$broadcast('scroll.refreshComplete');
         	  $scope.hideLoading();        	  
         	  //$root.hideLoading();
           }
@@ -262,7 +271,7 @@ starter.controller("mydrinksController", function($scope, $http, $ionicPopup, $i
 								level: level,
 								type: "drink"
         	    }
-							if (level != "Premium")  $rootScope.redeem.type = "gift";
+							if (level != "Standard" && level != "Premium")  $rootScope.redeem.type = "gift";
         	    if($scope.modal) {   	      
         	      $rootScope.hideModal(); //This is in a modal window, close modal
 							}
