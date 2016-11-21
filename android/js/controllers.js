@@ -3527,7 +3527,42 @@ starter.controller("dashboardCtrl", function($scope, $http, $window, $sce, $time
     
     $ionicScrollDelegate.scrollTop();
   },
+  
+	$scope.onMenuTabSelected = function() {
+		$scope.showEdit = true;
+	},
+	$scope.onMenuTabDeselected = function() {
+		$scope.showEdit = false;
+	},
 	
+	$scope.editMenu = function() {
+    // load std menu items
+    $http.get(config.template_path + '/data-api/stdgiftmenu/248')
+    .success(function(result) {
+      if(result[0].error == "no results") {
+         $scope.pick_menu = false;
+      } else {
+        $scope.stdMenuInfo = result; 
+        $scope.pick_menu = true; 
+        // default not provided on all std menu items
+        for (var i=0; i < $scope.stdMenuInfo.length; i++) {
+          $scope.stdMenuInfo[i].provided = false;
+					$scope.stdMenuInfo[i].showpic = false;
+        }
+				// loop and mark all existing as provided
+				for (var i=0; i < $scope.menuInfo.length; i++) {
+					for (var j=0; j < $scope.stdMenuInfo.length; j++) {
+						if($scope.stdMenuInfo[j].menuID == $scope.menuInfo[i].menuID) {
+							$scope.stdMenuInfo[j].provided = true;
+						}
+					}
+				}
+				delete $scope.menuInfo;
+				$scope.menuInfo = [];
+      }
+    });		
+	},
+		
 	 $scope.doTicketRefresh = function(venueID) {
     $http.get(config.template_path + '/data-api/venue-redeemed/'+venueID)
      .success(function(result) {

@@ -4,6 +4,11 @@
 	<ion-nav-buttons side="{{$root.menuSide}}">
     <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
+	<ion-nav-buttons side="right" ng-if="showEdit">
+		<button class="button button-icon button-clear" ng-click="editMenu()">
+			<i class="icon ion-plus"></i>
+		</button>
+	</ion-nav-buttons>
 	<ion-tabs class="tabs-striped tabs-background-assertive tabs-color-light" ng-init="$root.hideLoading()">
 
 		<ion-tab title="Main">		
@@ -24,7 +29,7 @@
 			</ion-content>
 		</ion-tab>	
 		
-		<ion-tab title="Menu">		
+		<ion-tab title="Menu" on-select="onMenuTabSelected()" on-deselect="onMenuTabDeselected()">		
 		
 			<ion-content has-header="true" padding="true" has-tabs="true">
 				<div class="card">
