@@ -2653,7 +2653,7 @@ class Airtab {
        
        
    	   $query = $this->EE->db->query("SELECT v_drink_tickets.entry_id, v_drink_tickets.p_member_username, v_drink_tickets.redeemed_drink_id,
-   	   v_drink_tickets.tck_p_member, v_drink_tickets.message,  v_drink_tickets.type,  v_drink_tickets.ticket_id,
+   	   v_drink_tickets.tck_p_member, v_drink_tickets.message,  v_drink_tickets.type,  v_drink_tickets.ticket_id,v_drink_tickets.drink_picture,
        v_drink_tickets.tck_purchase_date,  v_drink_tickets.redeemed_at_id, v_avatars.filename
    	   FROM v_drink_tickets 
    	    
@@ -2681,9 +2681,16 @@ class Airtab {
                      $redeem_at = "AnyWhere";
                   } 
                   
-                  $redeemed_drink_id = $result['redeemed_drink_id'];                        
-                  if ( $redeemed_drink_id == null ){
-                     $redeemed_drink_id = "258";
+                  $redeemed_drink_id = $result['redeemed_drink_id']; 
+                  $drink_pic = str_replace( "{filedir_1}", "https://airtab.me/images/uploads/drinks/", $result['drink_picture'] );                 
+                  if ( $redeemed_drink_id == null ) {
+                    if ($result['type'] == "Premium") {
+                      $redeemed_drink_id = "243";
+                      $drink_pic = "https://airtab.me/images/uploads/drinks/PremiumCocktails_Airtab_Preview.jpg";       
+                    } elseif ($result['type'] == "Standard") {
+                      $redeemed_drink_id = "213";
+                      $drink_pic = "https://airtab.me/images/uploads/drinks/StandardCocktails_Airtab_Preview.jpg";       
+                    }
                   } 
                 			                  			   
                    array_push($rArray, 
@@ -2697,7 +2704,8 @@ class Airtab {
                           "msg" => $result['message'],
                           "date" => $date,
                           "type" => $result['type'],
-                           "redeemed_at" => $redeem_at,
+                          "drink_picture" => $drink_pic,
+                          "redeemed_at" => $redeem_at,
                           "ticket_id" => $result['ticket_id'],
 //                          "redeemed_drink_id" =>$result['redeemed_drink_id'],                          
                           "redeemed_drink_id" => $redeemed_drink_id,                          
