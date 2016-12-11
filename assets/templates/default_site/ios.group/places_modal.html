@@ -13,7 +13,7 @@
           Navigate
       </button>
       <!-- <button class="button button-clear button-assertive" ng-click="$root.callPhone(pInfo.international_phone_number);">-->
-			<button class="button button-clear button-assertive" href="tel://{exp:low_replace find="[^0-9]" replace="" regex="yes"}{{pInfo.formatted_phone_number}}{/exp:low_replace}">
+			<button class="button button-clear button-assertive" href="tel://{exp:low_replace find="[^0-9]" replace="" regex="yes"}{pInfo.international_phone_number}{/exp:low_replace}">
           Call
       </button>
     </div>

@@ -23,18 +23,17 @@
 			</div>
 		{/exp:channel:entries}	
     	<div class="list">
-        {exp:query sql="SELECT * FROM v_establishment_menu WHERE estab_id={segment_3} ORDER BY Price DESC"}
-    		<a class="item item-thumbnail-left" ng-click="drinkInfo({entry_id},'{Type}')">
-				<img src="{exp:parse_file_paths}{fld_picture}{/exp:parse_file_paths}" width="80" height="80">
+    		{exp:low_search:results channel="drinks" child:drk_establishment="{segment_3}" search:drk_level="Premium"}
+    		<a class="item item-thumbnail-left" ng-click="drinkInfo({entry_id})">
+				<img src="{fld_picture:iphone5}?v=1" width="80" height="80">
 				<h2>{title}</h2>
-				<p>{drk_teaser}</p>
-        <p>${Price}</p>
+				<p>{fld_body}</p>
 		    </a>
 
 		    {if no_results}
 				{embed="android/nomenu"}
 			{/if}
-		    {/exp:query}
+		    {/exp:low_search:results}
 
 		</div>
     </ion-content>
@@ -42,16 +41,16 @@
     	<div class="row" style="padding:0 !important;">
 			<div class="col" style="text-align:center">
 				<button class="button  button-block button-assertive" onClick="window.location.href='#/app/establishments/info/{segment_3}';">
-				  Establishment Details
+				  Establishment Info
 				</button>
 			</div>
-<!--			
+			
 			<div class="col" style="text-align:center">
 				<button class="button  button-block button-assertive" ng-click="$root.changeState('app.senddrink')">
 				  Send A Drink
 				</button>
 			</div>
--->			
+			
 		</div>
 	</ion-footer-bar>
 </ion-view>

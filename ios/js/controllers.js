@@ -12,7 +12,6 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
   $rootScope.deviceUUID = config.default_UUID;
   $rootScope.launched = false;
   $rootScope.giftInfo = {method:""};
-  $rootScope.userInfo = {group_id:0};
 
   $rootScope.alertJBlaine = function( alert) {
       var alertPopup = $ionicPopup.alert({
@@ -1032,15 +1031,11 @@ starter.controller('estController', function($scope, $stateParams, $rootScope, $
     $ionicLoading.hide();
   },
 
-  $scope.drinkInfo = function(id, type) {
+  $scope.drinkInfo = function(id) {
     $rootScope.drinkId = id;
     //window.location.href="#/app/drinkinfo/"+id;
-    $rootScope.estId = $stateParams.estId;
-		if (type == "Premium") {
-			$state.transitionTo('app.drinkInfo', {estId: 0, drinkId: id});
-		} else {
-			$state.transitionTo('app.giftInfo', {type: type, estId : 0, item_id : id, senderId : $rootScope.userInfo.member_id, recipientid: 0 });
-		}
+    $stateParams.estId = $rootScope.estId;
+    $state.transitionTo('app.drinkInfo', {estId: null, drinkId: id});
   },
 
   $rootScope.showLoading()
