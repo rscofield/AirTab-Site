@@ -1,5 +1,85 @@
 {if segment_3 != "" AND segment_4 != ""}
 [
+{if logged_in_member_id == '2'}
+  {exp:channel:entries channel="Establishments" entry_id="4" status="closed"}
+  	{
+      "index": "0",
+      "type": "airtab",
+  		"id": "{entry_id}",
+    	"title": "{exp:low_replace find="&#8217;|QUOTE|NEWLINE|&amp;" replace="'|\QUOTE|SPACE|&" multiple="yes"}{title}{/exp:low_replace}",
+      "latitude": "{latitude}",
+      "longitude": "{longitude}",
+      "address": "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{address}{/exp:low_replace}",
+      "city": "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{city}{/exp:low_replace}",
+      "state": "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{state}{/exp:low_replace}",
+      "zip": "{zip}",
+      "distance": "Testing Establishment",
+      "bg": "{photo_large:android}?v=1",
+      "mgr_id": "{est_member_id}",
+      "phone": "{est_phone}"
+    },
+  {/exp:channel:entries}
+{/if}
+{if logged_in_member_id == '3'}
+  {exp:channel:entries channel="Establishments" entry_id="13892003" status="closed"}
+  	{
+      "index": "0",
+      "type": "airtab",
+  		"id": "{entry_id}",
+    	"title": "{exp:low_replace find="&#8217;|QUOTE|NEWLINE|&amp;" replace="'|\QUOTE|SPACE|&" multiple="yes"}{title}{/exp:low_replace}",
+      "latitude": "{latitude}",
+      "longitude": "{longitude}",
+      "address": "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{address}{/exp:low_replace}",
+      "city": "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{city}{/exp:low_replace}",
+      "state": "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{state}{/exp:low_replace}",
+      "zip": "{zip}",
+      "distance": "Testing Establishment",
+      "bg": "{photo_large:android}?v=1",
+      "mgr_id": "{est_member_id}",
+      "phone": "{est_phone}"
+    },
+  {/exp:channel:entries}
+{/if}
+{if logged_in_member_id == '1611'}
+  {exp:channel:entries channel="Establishments" entry_id="13892091" status="closed"}
+  	{
+      "index": "0",
+      "type": "airtab",
+  		"id": "{entry_id}",
+    	"title": "{exp:low_replace find="&#8217;|QUOTE|NEWLINE|&amp;" replace="'|\QUOTE|SPACE|&" multiple="yes"}{title}{/exp:low_replace}",
+      "latitude": "{latitude}",
+      "longitude": "{longitude}",
+      "address": "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{address}{/exp:low_replace}",
+      "city": "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{city}{/exp:low_replace}",
+      "state": "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{state}{/exp:low_replace}",
+      "zip": "{zip}",
+      "distance": "Testing Establishment",
+      "bg": "{photo_large:android}?v=1",
+      "mgr_id": "{est_member_id}",
+      "phone": "{est_phone}"
+    },
+  {/exp:channel:entries}
+{/if}
+{if logged_in_member_id == '1610'}
+  {exp:channel:entries channel="Establishments" entry_id="13892659" status="closed"}
+  	{
+      "index": "0",
+      "type": "airtab",
+  		"id": "{entry_id}",
+    	"title": "{exp:low_replace find="&#8217;|QUOTE|NEWLINE|&amp;" replace="'|\QUOTE|SPACE|&" multiple="yes"}{title}{/exp:low_replace}",
+      "latitude": "{latitude}",
+      "longitude": "{longitude}",
+      "address": "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{address}{/exp:low_replace}",
+      "city": "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{city}{/exp:low_replace}",
+      "state": "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{state}{/exp:low_replace}",
+      "zip": "{zip}",
+      "distance": "Testing Establishment",
+      "bg": "{photo_large:android}?v=1",
+      "mgr_id": "{est_member_id}",
+      "phone": "{est_phone}"
+    },
+  {/exp:channel:entries}
+{/if}
 {exp:low_search:results channel="establishments" distance:from="{segment_3}|{segment_4}" distance:to="latitude|longitude" distance:radius="{segment_5}" distance:unit="mi" limit="25"}
 	{
       "index": "{count}",
@@ -14,6 +94,7 @@
       "zip": "{zip}",
       "distance": {if low_search_distance > 50} "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{city}{/exp:low_replace}" {if:else} "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{city}{/exp:low_replace} - {low_search_distance} Miles Away"{/if},
       "bg": "{photo_large:android}?v=1",
+      "mgr_id": "{est_member_id}",
       "phone": "{est_phone}"
     }
 	{exp:airtab:log_page_load  misc="{low_search_distance}" count="{count}" match="1"}

@@ -1,7 +1,7 @@
 <?php
 
 if(!ee()->session->userdata('member_id')) {
-	echo json_encode(array("status"=>"error", "msg"=>"Invalid Username and/or Password"));
+	echo json_encode(array("status"=>"error", "msg"=>"Invalid Username and/or Password.."));
 } else {
 	echo json_encode(array("status"=>"success", "member_id"=>ee()->session->userdata('member_id'), "session_id"=>ee()->session->userdata('fingerprint'), "username"=>ee()->session->userdata('username'), "first_name"=>ee()->session->userdata('screen_name'), "email"=>ee()->session->userdata('email'), "avatar"=>str_replace(array("\r", "\n"), '', "{exp:airtab:avatar member="{logged_in_member_id}" size="28"}")));
 }
