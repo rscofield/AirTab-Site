@@ -55,12 +55,12 @@ starter.controller("sendBottleByUsername", function($scope, $http, $rootScope, $
         }, 
 
         
-        $scope.submitFormBottle = function (senderId, gift) {
+        $scope.submitFormBottle = function (senderId,gift) {
 //          	$scope.showSuccess( 'submitFormBottle', 'REMOVE IT'  );          
             $http.get(config.template_path + '/username_to_id/' + $scope.invite.username).success(function(result) {
                 if(!result.userid) {
                   $rootScope.hideLoading();
-                  $scope.showError("UserName Error", "Sorry, that username was not found.");
+                  $scope.showError("Send Drink Error", "Sorry, that username was not found.");
                 } else {               	
                   $state.transitionTo('app.establishments_bottle', {senderId: senderId, recipientid: result.userid, method : "airtab", gift : gift});                 
                 }
@@ -413,7 +413,7 @@ starter.controller('promoBottleController', function($scope, $http, $compile, $i
             $ionicViewService.nextViewOptions({
                disableBack: true
             });
-
+						// this is only used in send gift, so hardcoded to return to send gift start
 //            $state.transitionTo("app.senddrink");
             $state.transitionTo("app.sendgift");
        //     $state.transitionTo( "app.sendbottle");

@@ -28,22 +28,19 @@ starter.controller('RegiftdrinkCtrl', function($scope, $stateParams, $http, $win
 
     },
 
-    $scope.hasPromo = function(r) {  	
+    $scope.hasPromo = function(r) {      
        console.log("has promo");
        var remaining = (r.limit > 0) ? r.limit - r.sent : "unlimited";
-       $state.transitionTo('app.promo_regift', {type: $scope.method, drinkType: $scope.drinkType, fId: $scope.recipient, remaining: remaining, ticket_id: $scope.ticketid });    		  
-             
+       $state.transitionTo('app.promo_regift', {type: $scope.method, drinkType: $scope.drinkType, fId: $scope.recipient, remaining: remaining, ticket_id: $scope.ticketid });    		             
     },
 
     $scope.hideModal = function() {
       $rootScope.hideModal();
     },
-
     
     $scope.hideLoading = function() {
   	    $rootScope.hideLoading();
   	  },
-
 
     $scope.regiftByContacts = function(drinkCode, estID, drinkId) {  
         $scope.drinkCode = drinkCode;
@@ -86,7 +83,7 @@ starter.controller('RegiftdrinkCtrl', function($scope, $stateParams, $http, $win
         $rootScope.hideLoading();        
     }
     
-    $scope.regiftDrinkContactsPhone = function( phone, ticketid, estId, drinkId) {             
+    $scope.regiftDrinkContactsPhone = function( phone, ticketid, estId, drinkId) {              
     	 $state.transitionTo('app.promo_regift', {type: "text", drinkType: "Premium", fId: phone, remaining: "unlimited", ticket_id: ticketid, redeemAt: estId, redeemId: drinkId });    		  
     }
     
@@ -130,6 +127,8 @@ starter.controller("regiftDrinkByUsername", function($scope, $http, $rootScope, 
         	$scope.ticketid = ticketid;
             $rootScope.showLoading();
 
+           // $scope.showSuccess( 'title', $scope.invite.username );
+
             $http.get(config.template_path + '/username_to_id/' + $scope.invite.username).success(function(result) {
               if(!result.userid) {
                 $rootScope.hideLoading();
@@ -138,13 +137,11 @@ starter.controller("regiftDrinkByUsername", function($scope, $http, $rootScope, 
                 $scope.userid = result.userid;
                 
                 $state.transitionTo('app.promo_regift', {type: "airtab", drinkType: "Premium", fId: $scope.userid, remaining: "unlimited", ticket_id: $scope.ticketid, redeemAt: redeemAt, redeemId: redeemId });    		  
-
               }
             });
 
             return;
         },
-
 
         $scope.sendRequest = function() {
           $ionicModal.fromTemplateUrl(config.template_path + '/checkout_modal/airtab/Premium/'+$scope.userid, function(modal) {
@@ -183,6 +180,7 @@ starter.controller("regiftDrinkByUsername", function($scope, $http, $rootScope, 
           $ionicViewService.nextViewOptions({
                disableBack: true
             });
+//          $location.url("/app/senddrink");
           $location.url("/app/regiftdrink");
         })
 })
@@ -270,7 +268,7 @@ starter.controller("regiftDrinkText", function($scope, $http, $ionicPopup, $ioni
         }, $scope.submitForm = function (ticketid, redeemAt, redeemId) {
         	$scope.ticketid = ticketid;
             
-            $state.transitionTo('app.promo_regift', {type: "text", drinkType: "Premium", fId: $scope.invite.phone, remaining: "unlimited", ticket_id: $scope.ticketid, redeemAt: redeemAt, redeemId: redeemId });    		  
+             $state.transitionTo('app.promo_regift', {type: "text", drinkType: "Premium", fId: $scope.invite.phone, remaining: "unlimited", ticket_id: $scope.ticketid, redeemAt: redeemAt, redeemId: redeemId });    		  
         },
 
         $scope.showAlert = function(title, alert) {
@@ -282,7 +280,6 @@ starter.controller("regiftDrinkText", function($scope, $http, $ionicPopup, $ioni
             console.log('Hit OK');
           });
         },
-
 
         $scope.$on('modal.removed', function() {
         })
@@ -314,6 +311,7 @@ starter.controller("RegiftdrinkMainCtrl", function($scope, $http, $ionicPopup, $
      }
     
     $scope.drinkWithMsgClicked = function(ticketId, username, purchaseDate) {
+	   //$scope.showAlert( 'error', 'drinkWithMsgClicked' );
 
 	   $rootScope.redeem = {
 	      id: ticketId,
@@ -364,23 +362,22 @@ starter.controller('promoControllerRegift', function($scope, $http, $compile, $i
       });
     },
 
-    $scope.createTicket = function(invite_type, recipient, drinkType) {    	
-       $scope.showAlert("DEL", "createTicket" , false);
-    },
 
     $scope.regiftDrink = function(invite_type, recipient, drinkType, ticketID, estID, drinkID ) {
-    	
+   	   
       	$http.get(config.template_path + '/redeem_via_regift/' + ticketID + '/' + estID + '/' + drinkID + '/8787' + '/' + recipient  ).success(function(result) {   
         	    
       	       if(result.status == "success") {
-      	      	    
+       	      	    
 	      	      	var link = config.template_path + '/sql_createticket_promo_bottle/' + invite_type + '/' + recipient + '/' + estID + '/' + drinkID + '/' + 'Enjoy';
 	      	    	
 	      	    	$http.get( link  ).success(function(result){
 	      	      	    $scope.showAlert("Drink Sent", "You have successfully regifted your selected drink.", true);
 	      	     	 });
      	      	    
-       	    }
+       	       } else{
+       	    	  $scope.showAlert("error", result.status, true);
+       	       }
         	    
       	 });
            	

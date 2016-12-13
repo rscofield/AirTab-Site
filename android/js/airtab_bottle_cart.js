@@ -209,7 +209,7 @@ starter.controller("AirtabBottleCartCtrl", function($scope, $http, $window, $sce
         $scope.showAlert("Cart Error", result.msg);
       } else {
         $rootScope.hideLoading();
-        $scope.showAlert("Purchase Successful", "Your drink has been successfully sent. Thank You!", $scope.purchaseComplete);
+        $scope.showAlert("Purchase Successful", "Your gift has been successfully sent. Thank You!", $scope.purchaseComplete);
       }
     });
   },
@@ -266,7 +266,7 @@ starter.controller("AirtabBottleCartCtrl", function($scope, $http, $window, $sce
 	           $scope.showAlert("Cart Error", "Error!" );
 	       } else {
 	        $rootScope.hideLoading();
-	        $scope.showAlert("Purchase Successful", "Your drink has been successfully sent. Thank You!", $scope.purchaseComplete);
+	        $scope.showAlert("Purchase Successful", "Your gift has been successfully sent. Thank You!", $scope.purchaseComplete);
 	      }
 	    });
 	    
@@ -282,6 +282,4 @@ starter.controller("AirtabBottleCartCtrl", function($scope, $http, $window, $sce
   $scope.checkCart();
 
 })
-
-
 

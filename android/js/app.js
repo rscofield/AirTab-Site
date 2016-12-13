@@ -336,6 +336,13 @@ var app = angular.module('starter', ['ionic', 'starter.controllers'])
          prefetchTemplate: false
     })
 
+    .state('app.senddrinkregift', {
+         url: "/senddrink/regift",
+         templateUrl: config.template_path + "/send_drink/regift",
+         controller: 'SenddrinkCtrl',
+         prefetchTemplate: false
+    })
+
     .state('app.promo', {
       url: '/promo/:type/:drinkType/:fId/:remaining',
       templateUrl: function(params){ return config.template_path + '/promo/' + params.type + "/" + params.drinkType + "/" + params.fId + "/" + params.remaining;},
@@ -352,6 +359,20 @@ var app = angular.module('starter', ['ionic', 'starter.controllers'])
       prefetchTemplate: false
     })
   
+//    .state('app.promo_regift', {
+//      url: '/promo_regift/:type/:drinkType/:fId/:remaining/:ticket_id',
+//      templateUrl: function(params){ return config.template_path + '/promo_regift/' + params.type + "/" + params.drinkType + "/" + params.fId + "/" + params.remaining + "/" + params.ticket_id;},
+//      controller: 'promoControllerRegift',
+//      prefetchTemplate: false
+//    })
+    
+    .state('app.promo_regift', {
+        url: '/promo_regift/:type/:drinkType/:fId/:remaining/:ticket_id/:redeemAt/:redeemId',
+        templateUrl: function(params){ return config.template_path + '/promo_regift/' + params.type + "/" + params.drinkType + "/" + params.fId + "/" + params.remaining + "/" + params.ticket_id + "/" + params.redeemAt + "/" + params.redeemId;},
+        controller: 'promoControllerRegift',
+        prefetchTemplate: false
+      })
+
     .state('app.mydrinks', {
       url: "/mydrinks",
           templateUrl: config.template_path + "/mydrinks",
@@ -363,6 +384,68 @@ var app = angular.module('starter', ['ionic', 'starter.controllers'])
       url: "/mydrinks/:screen",
       templateUrl: function(params){ return config.template_path + '/mydrinks/' + params.screen;},
       controller: 'AppCtrl',
+      prefetchTemplate: false
+
+    })
+
+	.state('app.mydrinkOptions', {
+      url: "/mydrinks/options/:dId",
+      templateUrl: function(params){ return config.template_path + '/mydrinks/options/' + params.dId;},
+      controller: 'AppCtrl',
+      prefetchTemplate: false
+
+    })
+
+    .state('app.redeem_my_drink_DEL', {
+      url: "/redeem_my_drink_DEL",
+      templateUrl: config.template_path + "/redeem_my_drink_DEL",
+      controller: 'redeem_my_drink_DEL',
+      prefetchTemplate: false
+
+    })
+        
+
+    .state('app.rec_or_reg_est', {
+      url: "/rec_or_reg_est/:estId/:esttitle",
+      //url: "/rec_or_reg_est",
+      templateUrl: config.template_path + "/rec_or_reg_est",
+      controller: 'rec_or_reg_est',
+      prefetchTemplate: false
+
+    })
+    
+    .state('app.rec_or_reg_estOption', {
+      url: '/rec_or_reg_est/options/:estId/:esttitle',
+
+      templateUrl: config.template_path + "/rec_or_reg_est/options",
+      //   templateUrl: function(params){ return config.template_path + '/friends/options/'  + params.fId;},
+          controller: 'AppCtrl',
+      prefetchTemplate: false
+
+    })
+
+    .state('app.register_establishment', {
+      url: "/register_establishment/:estId",
+      templateUrl: config.template_path + "/register_establishment",
+      controller: 'register_establishment',
+      prefetchTemplate: false
+
+    })
+    
+    .state('app.friends_via_contacts', {
+      url: "/friends_via_contacts",
+
+          templateUrl: config.template_path + "/friends_via_contacts",
+          controller: 'AppCtrl',
+      prefetchTemplate: false
+
+    })
+    
+    .state('app.friends_via_contactsoptions', {
+      url: '/friends_via_contacts/options_jblaine/:fId',
+
+          templateUrl: function(params){ return config.template_path + '/friends_via_contacts/options_jblaine/'  + params.fId;},
+          controller: 'AppCtrl',
       prefetchTemplate: false
 
     })
@@ -386,6 +469,39 @@ var app = angular.module('starter', ['ionic', 'starter.controllers'])
           templateUrl: function(params){ return config.template_path + '/friends/request/'  + params.fId;},
           controller: 'AppCtrl',
       prefetchTemplate: false
+
+    })
+    
+    .state('app.addfriend_via_contact', {
+        url: "/addfriend_via_contact",
+        templateUrl: config.template_path + '/addfriend_via_contact',
+        controller: 'AppCtrl',
+        prefetchTemplate: false
+ 
+    })
+    
+    
+    .state('app.drinks_regift', {
+        url: "/drinks_regift",
+        templateUrl: config.template_path + '/drinks_regift',
+        controller: 'AppCtrl',
+        prefetchTemplate: false
+    })
+         
+    .state('app.drinks_with_msg_input', {
+          url: '/drinks_with_msg_input/:usr/:usrName',
+          templateUrl: function(params){ return config.template_path + '/drinks_with_msg_input/'  + params.usr + '/' + params.usrName;},
+          controller: 'AppCtrl',
+          prefetchTemplate: false
+    })
+
+    .state('app.addfriend_via_contactText', {
+      url: "/addfriend_via_contact/text",
+
+          templateUrl: config.template_path + '/addfriend_via_contact/text',
+          controller: 'AppCtrl',
+      prefetchTemplate: false
+
     })
 
     .state('app.addfriend', {
@@ -418,13 +534,6 @@ var app = angular.module('starter', ['ionic', 'starter.controllers'])
           controller: 'AppCtrl'
     })
     
-    .state('app.addfriend_via_contact', {
-        url: "/addfriend_via_contact",
-        templateUrl: config.template_path + '/addfriend_via_contact',
-        controller: 'AppCtrl',
-        prefetchTemplate: false
- 
-    })
     
     .state('app.campaign/send', {
       url: "/campaign/send",

@@ -50,13 +50,14 @@
 			</ul>
       <div class="card" ng-show="opt_in">
         <div class="item item-text-wrap">
-          <h1 center style="font-size:16pt">Opt In text goes here</h1>
+          <p style="font-size:10pt">For <strong>Party of 4, Just For Two, Gratitude, Prelude and Appetizers,</strong> you will receive 85% of the proceeds, <strong>Premium & Standard Drinks</strong> you receive 70% of the proceeds, and all <strong>Gift Vouchers</strong>, you receive 90% of the proceeds. <br /><br />
+Click agree button to select the campaigns that you would like to participate in.</p>
           <button class="button  button-block button-assertive" ng-click="Agreed()">I Agree</button>
         </div>
       </div>
       <div class="card" ng-show="pick_menu">
         <div class="item item-text-wrap">
-          <h1 center style="font-size:16pt">Select all items you wish to provide</h1>
+          <h1 center style="font-size:16pt">You must opt-in to each campaign in order for you to be a part of each offer.<br /></h1>
           <ion-toggle ng-repeat="item in stdMenuInfo" ng-model="item.provided" ng-checked="item.provided" style="font-size:10pt">
             {{item.name}}
           </ion-toggle>

@@ -709,11 +709,15 @@ starter.controller('estController', function($scope, $stateParams, $rootScope, $
     $rootScope.hideLoading();
   },
 
-  $scope.drinkInfo = function(id) {
+  $scope.drinkInfo = function(id, type) {
     $rootScope.drinkId = id;
     //window.location.href="#/app/drinkinfo/"+id;
     $stateParams.estId = $rootScope.estId;
+    if (type == "Premium") {
     $state.transitionTo('app.drinkInfo', {estId: null, drinkId: id});
+		} else {
+			$state.transitionTo('app.giftInfo', {type: type, estId : 0, item_id : id, senderId : $rootScope.userInfo.member_id, recipientid: 0 });
+		}      
   },
 
   $rootScope.showLoading()
@@ -738,6 +742,7 @@ starter.controller('NewsCtrl', function($scope, $stateParams, $rootScope, $http,
   },
 
   $scope.loadNews = function() {
+		delete $rootScope.redeem;
     if($rootScope.news && !$scope.refreshing) {
       $rootScope.hideLoading();
       return;
@@ -798,8 +803,7 @@ starter.controller('NewsCtrl', function($scope, $stateParams, $rootScope, $http,
 
 })
 
-
-starter.controller('DrinkCtrl', function($scope, $state, $stateParams, $http, $window, $ionicModal, $ionicLoading, $rootScope, $ionicPopup) {
+starter.controller('DrinkCtrl', function($scope, $state, $stateParams, $http, $window, $ionicModal, $ionicLoading, $rootScope, $ionicPopup, $ionicViewService) {
   $scope.data = {},
 
   $scope.hideLoading = function() {
@@ -939,140 +943,8 @@ starter.controller('DrinkCtrl', function($scope, $state, $stateParams, $http, $w
       $rootScope.redeem = null;
       $scope.redeemData = null;
       $scope.data = {};
-      $state.transitionTo("app.mydrinks");
-
-    });
-  }
-})
-
-
-starter.controller('DrinkCtrl_DEL', function($scope, $stateParams, $http, $window, $ionicModal, $ionicLoading, $rootScope, $ionicPopup) {
-  $scope.data = {},
-
-  $scope.hideLoading = function() {
-    $rootScope.hideLoading();
-  },
-
-  $scope.redeemDrink = function() {
-    if($rootScope.redeem) {
-      $scope.redeem();
-    } else {
-    	if($rootScope.isLogged) {
-    		$rootScope.showLoading();
-		    $ionicModal.fromTemplateUrl(config.template_path + '/mydrinks/modal', {
-		      scope: $scope,
-		      animation: 'slide-in-right'
-		    }).then(function(modal) {
-		      $rootScope.modal = modal;
-		      modal.show();
-		    });
-    	} else {
-    		var alertPopup = $ionicPopup.alert({
-				title: 'Oops, you can\'t do that!',
-				template: 'You must be logged in to do that!'
-			});
-			alertPopup.then(function(res) {
-				console.log('Thank you for not eating my delicious ice cream cone');
-			});
-    	}
-    }
-  },
-
-  $scope.$on('modal.removed', function() {
-    if(!$rootScope.redeem) return;
-    $scope.redeem();
-  }),
-
-  $scope.redeem = function() {
-    if(!$rootScope.redeem) return;
-
-    var myPopup = $ionicPopup.show({
-      template: '<input type="password" ng-model="data.serverCode">',
-      title: 'Enter Your Server Code',
-      subTitle: 'Please show this screen to your server to redeem your drink.',
-      scope: $scope,
-      buttons: [
-        { 
-          text: 'Cancel',
-          onTap: function(e) {
-            $scope.data.serverCode = null;
-            return "cancel";
-          }
-        },
-        {
-          text: '<b>Confirm</b>',
-          type: 'button-positive',
-          onTap: function(e) {
-            if (!$scope.data.serverCode) {
-              //don't allow the user to close unless he enters wifi password
-              e.preventDefault();
-            } else {
-              return $scope.data.serverCode;
-            }
-          }
-        }
-      ]
-    });
-
-    myPopup.then(function(res) {
-      if(res != "cancel") {
-        $rootScope.showLoading();
-        $scope.completeRedeem();
-      }
-    });
-  },
-
-  $scope.showAlert = function(title, alert) {
-      var alertPopup = $ionicPopup.alert({
-        title: title,
-        template: alert
-      });
-      alertPopup.then(function(res) {
-        $scope.redeem();
-        console.log('Hit OK');
-      });
-  },
-
-  $scope.completeRedeem = function() {
-    $http.get(config.template_path + '/redeem/' + $rootScope.redeem.id + '/' + $rootScope.estId + '/' + $rootScope.drinkId + '/' + $scope.data.serverCode)
-      .success(function (data) {
-        $rootScope.hideLoading();
-        if(data.status == "error") {
-          $scope.showAlert("Error", data.msg);
-        } else {
-          $scope.redeemData = data;
-          $scope.showSuccess();
-        }
-      })
-      .error(function (data, status, headers, config) {
-        $rootScope.hideLoading();
-        $scope.showAlert("Error", "An unknown error has occured. Please contact AirTab support.");
-    });
-  },
-
-  $scope.showSuccess = function() {
-    $rootScope.hideLoading();
-    var myPopup = $ionicPopup.show({
-      template: '<img src="' + $scope.redeemData.image + '" width="100%" /><br /><p style="text-align:center;">Drink Count:' + $scope.redeemData.count + '</p>',
-      title: 'Redemption Complete',
-      subTitle: $scope.redeemData.msg,
-      scope: $scope,
-      buttons: [
-        {
-          text: '<b>Close Window</b>',
-          type: 'button-positive',
-          onTap: function(e) {
-            return true;
-          }
-        }
-      ]
-    });
-
-    myPopup.then(function(res) {
-      console.log("redemption complete OK");
-      $rootScope.redeem = null;
-      $scope.redeemData = null;
-      $scope.data = {};
+			// remove browser history so no back button displayed
+			$ionicViewService.nextViewOptions({ disableAnimate: true, disableBack: true });
       $state.transitionTo("app.mydrinks");
 
     });

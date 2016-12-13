@@ -1,6 +1,6 @@
 
 
-starter.controller("mydrinksController", function($scope, $http, $ionicPopup, $ionicLoading, $ionicModal, $location, $sce, $timeout, $rootScope, $ionicPopover, $window, $state) {
+starter.controller("mydrinksController", function($scope, $http, $ionicPopup, $ionicLoading, $ionicModal, $location, $sce, $timeout, $rootScope, $ionicPopover, $window, $state, $ionicActionSheet) {
 
         //$scope.btn_invite = "invite",
         $scope.friends = "Loading your friends list...",
@@ -27,8 +27,7 @@ starter.controller("mydrinksController", function($scope, $http, $ionicPopup, $i
         },
 
         $scope.sendPromo = function( promoCode ) {
-        	//$scope.showAlert( 'title', $scope.promo.code );
-        	
+         	
         	// check pro code
         	// check if the member got one
         	// assign drink
@@ -43,7 +42,15 @@ starter.controller("mydrinksController", function($scope, $http, $ionicPopup, $i
         
         $scope.gotoPromo = function( promoCode ) {         
         	//url: "/mydrinks/:screen",
-            $state.transitionTo('app.mydrinksPromo', {screen: "promo" });
+        	
+        	if ( promoCode == "promo" ){
+        		$state.transitionTo('app.mydrinksPromo', {screen: "promo" });
+			} else {
+				//   .state('app.howtoredeem', {
+		        $state.transitionTo( 'app.howtoredeem' );
+
+			}
+        	
         }
         
         $scope.showAlert = function(title, alert) {
@@ -87,8 +94,6 @@ starter.controller("mydrinksController", function($scope, $http, $ionicPopup, $i
         },
 
         $scope.getFriends = function () {
-            $rootScope.hideLoading();
-
           $http.get(config.template_path + '/friends/list').success(function(result) {
             console.log('checked friends')
             $ionicLoading.hide();
@@ -166,13 +171,10 @@ starter.controller("mydrinksController", function($scope, $http, $ionicPopup, $i
 		        	for( var i = $scope.non_members.length-1; i > -1; i-- ){		            	
 		                if ( $scope.non_members[i].invite == "true" ){
 		                 	var $lnk = '/sql_process_friend_invite_member/text/' + $scope.non_members[i].phone;
-		                 	//var $lnk = '/sql_process_friend_invite_member/text/' + '7723418799';
 		                 	$lnk = $lnk + '/' +  $scope.non_members[i].name;
 		                 	$lnk = $lnk + '/' + $scope.non_members[i].first + '/' + $scope.non_members[i].last;
 		                 	$lnk = $lnk + '/' +  msg;
  
-		                 	//$scope.showAlert( 'title', $lnk );
-		                 	
 		                 	$http.get(config.template_path + $lnk ).success(function (data) {
 	        	                $scope.showAlert( 'title', data);
 	        	            })
@@ -228,50 +230,63 @@ starter.controller("mydrinksController", function($scope, $http, $ionicPopup, $i
         }, 
 
       $scope.hideLoading = function() {
-        	$ionicLoading.hide();
-      }
+				$ionicLoading.hide();
+      },
 
+			$scope.doRefresh = function() {
+				$scope.refreshing = true;
+				//$rootScope.showLoading();
+				$scope.getDrinksWithMsg();
+			},
       //---------------------------------------------------
           
-          $scope.getDrinksWithMsg = function() {
-
-        	  $http.get(config.template_path + '/sql_my_drinks_with_msg' ).success(function(result) {            	  
-        		    $scope.drinksWithMsg = result;            	      
-              });
-             
-          }
+      $scope.getDrinksWithMsg = function() {
+				
+				if($rootScope.drinksWithMsg && !$scope.refreshing) {
+					$scope.hideLoading();   
+					return;
+				} 
+        $http.get(config.template_path + '/sql_my_drinks_with_msg' ).success(function(result) {            	        	    	
+            $rootScope.drinksWithMsg = result;                	   
+        });
+        $scope.refreshing = false;
+        $scope.$broadcast('scroll.refreshComplete');
+        $scope.hideLoading();        	  
+      },
                     
-          $scope.replyToDrinkSender = function( targetID, usrID ) {
-              window.location.href='#/app/drinks_with_msg_input/' + targetID + '/' + usrID;
+      $scope.replyToDrinkSender = function( targetID, usrID ) {
+          window.location.href='#/app/drinks_with_msg_input/' + targetID + '/' + usrID;
+      },
+ 
+      $scope.viewDetail = function( id) {
+          window.location.href='#/app/mydrinksinfo/' + id;
+      }, 
+          
+      $scope.redeemDrink = function(ticketId, username, purchaseDate, level) {
+          //$scope.showAlert( 'name', 'redeemDrink:' + ticketId );
+          $rootScope.redeem = {
+            id: ticketId,
+            username: username,
+            purchased: purchaseDate,
+            level: level,
+            type: "drink"
           }
-          
-          
-          $scope.redeemDrink = function(ticketId, username, purchaseDate, level) {
-
-						$rootScope.redeem = {
-							id: ticketId,
-							username: username,
-							purchased: purchaseDate,
-							level: level,
-							type: "drink"								
-						}
-						if (level != "Premium")  $rootScope.redeem.type = "gift";
-						if($scope.modal) {   	      
-							$rootScope.hideModal(); //This is in a modal window, close modal
-						}
-						$state.transitionTo( ($rootScope.redeem.type == "gift" ? "app.redeemsearch" : "app.establishments") );
-					}
-          
-          $scope.redeemDrinkAt = function(entryId, estId, usrID, drinkID) {
-                 $state.transitionTo('app.drinkInfoRedeem', {entryId: entryId, estId: estId, usrID : usrID, drinkID : drinkID });                                  
+          if (level != "Premium" && level != "Standard")  $rootScope.redeem.type = "gift";
+          if($scope.modal) {   	      
+            $rootScope.hideModal(); //This is in a modal window, close modal
           }
-
-          $scope.drinkRegiftNew = function(ticketId, redeemAt, drinkId) {
-          	   $state.transitionTo('app.regiftdrink', {screen: "main",  ticket_id: ticketId,  redeemAt: redeemAt,  drinkId: drinkId } );    	 
-          }
+          $state.transitionTo( ($rootScope.redeem.type == "gift" ? "app.redeemsearch" : "app.establishments") );
+      },
           
-
-          $scope.query_friendsListEx = function () {
+      $scope.redeemDrinkAt = function(entryId, estId, usrID, drinkID) {
+        $state.transitionTo('app.drinkInfoRedeem', {entryId: entryId, estId: estId, usrID : usrID, drinkID : drinkID });                 				        
+      },
+           
+      $scope.drinkRegiftNew = function(ticketId, redeemAt, drinkId) {
+         $state.transitionTo('app.regiftdrink', {screen: "main",  ticket_id: ticketId,  redeemAt: redeemAt,  drinkId: drinkId } );    	 
+      },
+          
+        $scope.query_friendsListEx = function () {
               $rootScope.showLoading();
 
                $http.get(config.template_path + '/sql_get_friends_list').success(function(result) {
@@ -284,19 +299,64 @@ starter.controller("mydrinksController", function($scope, $http, $ionicPopup, $i
 	            }
 
            })
-
             $scope.hideLoading();
+        },
+          
+      $scope.submitDrinkRegift = function(ticketId, recipientId) {        	
+        $http.get(config.template_path + '/sql_drink_regift/' + ticketId + "/" +  recipientId ).success(function(result) {            	  
+           $scope.showAlert( 'name', result );
+        });
+      }, 
 
+      $scope.loadTicket = function(id){
+        for (var i = 0; i < $rootScope.drinksWithMsg.length; i++) {
+          if ($rootScope.drinksWithMsg[i].entry_id == id)  {
+            $scope.selectedTicket = $rootScope.drinksWithMsg[i];
+            return;
+          }
         }
-          
-        $scope.submitDrinkRegift = function(ticketId, recipientId) {
-        	
-            $http.get(config.template_path + '/sql_drink_regift/' + ticketId + "/" +  recipientId ).success(function(result) {            	  
-          	   $scope.showAlert( 'name', result );
-            });
-        }     
-          
-
+      },
+ 
+      $scope.showActionSheet = function(ticket_id) {
+        $scope.loadTicket(ticket_id);        
+        // Show the action sheet
+        var hideSheet = $ionicActionSheet.show({
+         buttons: [
+           { text: 'View Details' },
+           { text: 'Redeem' },
+           { text: 'Regift' },
+           { text: 'Send Message to Sender' }
+         ],
+         titleText: 'Drink & Gift Actions',
+         cancelText: 'Cancel',
+         cancel: function() {
+              // add cancel code..
+            },
+         buttonClicked: function(index) {
+           switch (index)
+           {
+             case 0: 
+              $scope.viewDetail($scope.selectedTicket.redeemed_drink_id);
+              break;
+             case 1: 
+              if ($scope.selectedTicket.redeemed_at == 'AnyWhere') {
+                $scope.redeemDrink( $scope.selectedTicket.entry_id, $scope.selectedTicket.usr , $scope.selectedTicket.date, $scope.selectedTicket.type);
+              } else {
+                $scope.redeemDrinkAt( $scope.selectedTicket.entry_id, $scope.selectedTicket.redeemed_at , $rootScope.userInfo.member_id, $scope.selectedTicket.redeemed_drink_id);
+              }
+              break;                  
+             case 2: 
+              $scope.drinkRegiftNew( $scope.selectedTicket.entry_id, $scope.selectedTicket.redeemed_at , $scope.selectedTicket.redeemed_drink_id);
+              break;
+             case 3: 
+              $scope.replyToDrinkSender( $scope.selectedTicket.id, $scope.selectedTicket.usr );
+              break;                  
+          }
+           return true;
+         }
+        }); 
+      }
+      
 })
 
 
