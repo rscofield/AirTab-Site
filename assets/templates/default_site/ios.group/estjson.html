@@ -94,6 +94,7 @@
       "zip": "{zip}",
       "distance": {if low_search_distance > 50} "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{city}{/exp:low_replace}" {if:else} "{exp:low_replace find="QUOTE|NEWLINE" replace="\QUOTE|SPACE" multiple="yes"}{city}{/exp:low_replace} - {low_search_distance} Miles Away"{/if},
       "bg": "{photo_large:android}?v=1",
+      "mgr_id": "{est_member_id}",
       "phone": "{est_phone}"
     }
 	{exp:airtab:log_page_load  misc="{low_search_distance}" count="{count}" match="1"}
