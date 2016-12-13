@@ -18,124 +18,30 @@
 <ion-view title="My Drinks & Gifts" ng-init="$root.hideLoading();">
 	<ion-nav-buttons side="{{$root.menuSide}}">
       <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
-    </ion-nav-buttons>
- 
-    
+  </ion-nav-buttons>
+     
 	<ion-content has-header="true" padding="true" ng-controller="mydrinksController">
   	<ion-refresher
 		    pulling-text="Pull to refresh..."
 		    on-refresh="doRefresh()">
-		</ion-refresher>  
-    	<div class="list" ng-init="getDrinksWithMsg()" >
-  		    
-             <div ng-repeat="drinkMsg in $root.drinksWithMsg">
-		     
-		     <div class="list card" ng-change="replyToDrinkSender( '{{drinkMsg.id}}',  '{{drinkMsg.usr}}' );" >
-		     				<div style="width: 100%; overflow: hidden;">
-				    			
-				    			<div style="width:15%; float: left; border-width: 1px; border-style: solid; border-color: transparent; margin-top:10px;"> 
-					    			<div ng-if="drinkMsg.image != ''"> 
-			 					          <img src="//airtab.me/avatar/?file={{drinkMsg.image}}" width="40" height="40" style="vertical-align: middle;" > 			 					          
-				    				</div>				    								    				
-			    				</div>
-			    				
-
-			    				<div style="width:70%; float: left; border-width: 1px; border-style: solid; border-color: transparent;"> 
-				           		 
-				           		 <img src="/images/ios7-person-outline.png" width="24" height="24" style="vertical-align: top;" > 		           					
-					           	 {{drinkMsg.usr}}<br>   
-				           		 
-				           		 <img src="/images/clock.png" width="24" height="24" style="vertical-align: top;" > 		           					
-				           		 {{drinkMsg.date}} <br>
-				           		 
-				           		  			    				
- 			    				 <div ng-click="replyToDrinkSender( '{{drinkMsg.id}}', '{{drinkMsg.usr}}' );"> 
- 				           	    	 	<img src="/images/ios7-chatboxes-outline.png" width="30" height="30" style="vertical-align: top;" > 		           					  				           		
-   				           				<span style="font-size:0.75em"><font color="red"> {{drinkMsg.msg}} </font></span>                                    
- 				    			 </div>
- 	
- 						    	  <a href="#/app/mydrinksinfo/{{drinkMsg.redeemed_drink_id}}">  
-					    	    <div ng-if="drinkMsg.type == 'Standard' || drinkMsg.type == 'Premium'"> 					    	    
-		  				           <img src="/images/wineglass.png" width="24" height="24" style="vertical-align: top;"> 		           					  				           		
-		 				           <span style="font-size:0.75em"><font color="blue">Good for 1 {{drinkMsg.type}} drink.</font></span>                                    				           	    	  				           		 				    			 
-  			    				</div>
-  			    				
-					    	    <div ng-if="drinkMsg.type != 'Standard' && drinkMsg.type != 'Premium'"> 					    	    
-		  				        <img src="/images/gift2.png" width="24" height="24" style="vertical-align: top;"> 		           					  				           		
-		 				          <span style="font-size:0.75em"><font color="blue">{{drinkMsg.type}}</font></span>                                    				           	    	  				           		 				    			 
-  			    				</div>
-                    </a>
- 			    			
- 								{if {logged_in_member_id} == "2" }      
-		     				    ...............................<br>
-		     				    ticket_id: {{drinkMsg.ticket_id}} <br>
-										type: {{drinkMsg.type}} <br>
-		     				    redeemed_at: {{drinkMsg.redeemed_at}} <br>
-		     				    redeemed_drink_id: {{drinkMsg.redeemed_drink_id}}<br>
-		     				    entry_id: {{drinkMsg.entry_id}}<br>
-		     				    
-		     				    {/if}
- 				           		 					           	
-			    				</div>			    				
-		     				    
-		     				    {!-- transparent --}
-		     				    
-		     				    <div align="center" style="width:15%; float: left; border-width: 1px; border-style: solid; border-color: transparent;  margin-top:1px; align : center; " )"> 			    				
-		           					
-					    			<div ng-if="drinkMsg.redeemed_at == 'AnyWhere'"  ng-click="redeemDrink( '{{drinkMsg.entry_id}}', '{{drinkMsg.usr}}' , '{{drinkMsg.date}}', '{{drinkMsg.type}}');"> 
- 		 					        <img src="/images/Bar-128.png" width="28" height="28" style="vertical-align: middle;"> 		           					
-			           				<br>
-			           				<span style="font-size:0.6em"><font color="black">redeem</small></font></span>                                    
- 				    				</div>	
- 				    						
- 					    			<div ng-if="drinkMsg.redeemed_at != 'AnyWhere'"  ng-click="redeemDrinkAt( '{{drinkMsg.entry_id}}', '{{drinkMsg.redeemed_at}}' , '{logged_in_member_id}', '{{drinkMsg.redeemed_drink_id}}');"> 
- 										<img src="/images/Bar-128.png" width="28" height="28" style="vertical-align: middle;"> 		           					
-			           					<br>
-			           					<span style="font-size:0.6em"><font color="black">redeem at</small></font></span>                                    
- 				    				</div>			    	
-
-				    				<div  ng-click="drinkRegiftNew( '{{drinkMsg.entry_id}}', '{{drinkMsg.redeemed_at}}' , '{{drinkMsg.redeemed_drink_id}}');">			    	
-										<img src="/images/regift.jpg" width="28" height="28" style="vertical-align: middle;"> 
-			           					<br>
-			           					<span style="font-size:0.6em"><font color="red">regift</small></font></span>                                    
-				    				</div>			    	
-                                    
-		     
-								</div>
-								</div>
-								</div>
-		           
-			</div>
-			
-	   </div>
-
-		
-    </ion-content>
-		 
- {!--  
-    
-<ion-footer-bar align-title="left" class="bar-assertive">
-  <div class="buttons">
-    <button class="button">Left Button</button>
-  </div>
-  <h1 class="title"></h1>
-  <div class="buttons" ng-click="doSomething()">
-    <button class="button">Right Button</button>
-  </div>
-</ion-footer-bar>
-
-			  <div class="buttons" ng-click="gotoPromo( 'promo' );">
-				  <button class="button">Promo Code</button>				  
-			  </div>
-	 			 <h1 class="title"></h1>
-			  			  
-			  <div class="buttons" ng-click="gotoPromo( 'promo' );">
-				  <h1 class="title">How To Redeem</h1>
-				  <button class="button">How To Redeem</button>				  
-			  </div>
-
-		  --}
-
+		</ion-refresher>    
+    <div class="list" ng-init="getDrinksWithMsg()" > 		    
+      <div ng-repeat="drinkMsg in drinksWithMsg">
+		    <div class="list"> 
+          <a class="item item-thumbnail-left" ng-click="showActionSheet( '{{drinkMsg.entry_id}}' )">			
+            <img src="{{drinkMsg.drink_picture}}" width="80" height="80">
+            <h2 ng-if="drinkMsg.type == 'Standard' || drinkMsg.type == 'Premium'">{{drinkMsg.type}} Drink</h2>
+            <h2 ng-if="drinkMsg.type != 'Standard' && drinkMsg.type != 'Premium'">{{drinkMsg.type}}</h2>
+            <span style="font-size:0.75em">
+              <p>{{drinkMsg.usr}} @ {{drinkMsg.date}}</p>
+              <p>{{drinkMsg.msg}}</p>
+            </span>
+          </a>
+        </div> 
+			</div>			
+	  </div>
+	
+    </ion-content>		 
 
 		<ion-footer-bar align-title="center" class="bar-assertive" ng-controller="mydrinksController">
 			  <div class="buttons" ng-click="gotoPromo( 'promo' );">
@@ -164,6 +70,7 @@
 		</div>
   </ion-content>
 </div>
+
 {if:elseif segment_3 == "options"}
 <ion-view title="My Drinks/Gifts">
 	<ion-nav-buttons side="{{$root.menuSide}}">
@@ -178,7 +85,6 @@
 
     </ion-content>
 </ion-view>
-</div>
 
 {if:elseif segment_3 == "promo"}
 <div ng-cloak>

@@ -548,16 +548,24 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
       }
   });
 
-  $rootScope.$on('$viewHistory.historyChange', function(e, data) {
+  $rootScope.$on('$viewHistory.historyChange', function(event, data) {
         $rootScope.isBackButtonShown = !!data.showBack;
         if(data.showBack) { 
-          $rootScope.menuSide = "right";
-          console.log("Right")
+					$rootScope.menuSide = "right";
+					console.log("Right");
         } else {
           $rootScope.menuSide = "left";
           console.log("left");
         }
   });
+	
+	$rootScope.$on('$viewContentLoading', 
+	function(event, viewConfig){ 
+			// Access to all the view config properties.
+			// and one special property 'targetView'
+			// viewConfig.targetView 
+			console.log("viewContentLoading");
+	});
 	
 	$scope.hideSplash = function() {
 		if(bridge) {
@@ -1121,7 +1129,7 @@ starter.controller('NewsCtrl', function($scope, $stateParams, $rootScope, $http,
 
 })
 
-starter.controller('DrinkCtrl', function($scope, $state, $stateParams, $http, $window, $ionicModal, $ionicLoading, $rootScope, $ionicPopup) {
+starter.controller('DrinkCtrl', function($scope, $state, $stateParams, $http, $window, $ionicModal, $ionicLoading, $rootScope, $ionicPopup, $ionicViewService) {
   $scope.data = {},
 
   $scope.hideLoading = function() {
@@ -1261,6 +1269,8 @@ starter.controller('DrinkCtrl', function($scope, $state, $stateParams, $http, $w
       $rootScope.redeem = null;
       $scope.redeemData = null;
       $scope.data = {};
+			// remove browser history so no back button displayed
+			$ionicViewService.nextViewOptions({ disableAnimate: true, disableBack: true });
       $state.transitionTo("app.mydrinks");
 
     });
