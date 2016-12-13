@@ -12,7 +12,6 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
   $rootScope.deviceUUID = config.default_UUID;
   $rootScope.launched = false;
   $rootScope.giftInfo = {method:""};
-  $rootScope.userInfo = {group_id:0};
 
   $rootScope.alertJBlaine = function( alert) {
       var alertPopup = $ionicPopup.alert({
@@ -262,7 +261,9 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
   };
 	
   $scope.isSuperAdmin = function() {
-    if($rootScope.userInfo.group_id == 1) {
+    if(typeof $rootScope.userInfo === "undefined" || !$rootScope.userInfo.group_id) {
+      return false;
+    } else if($rootScope.userInfo.group_id == 1) {
       return true;
     } else {
       return false;
@@ -290,9 +291,11 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
 	//  alert( "checkLogin" );
     if($rootScope.isLoggingIn) return;
 
+    // Only need to do once
+    if($rootScope.userInfo !== null && typeof $rootScope.userInfo === 'object') {
     //Only Do Login Checks Every 5 minutes
-    if($scope.isLogged && $rootScope.lastLoginCheck && (Date.now() - $rootScope.lastLoginCheck) < 300000) {
-      console.log("Skipping login check: ", (Date.now() - $rootScope.lastLoginCheck));
+    //if($scope.isLogged && $rootScope.lastLoginCheck && (Date.now() - $rootScope.lastLoginCheck) < 300000) {
+      console.log("Skipping login check: ", $rootScope.userInfo);
       return;
     }
     showModal = typeof showModal !== 'undefined' ? showModal : true;
@@ -327,27 +330,6 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
     });
   };
 
-//  $rootScope.hasPromoAccess = function(callback,type) {
-//  	if (type === undefined) type = "drink";
-// 
-//  	switch(type) {
-//	  	case: "drink":
-//		    $http.get(config.global_path + '/haspromo').success(function(result) {
-//		        callback(result);
-//		    });
-//			break
-//		case: "bottle":
-//			$http.get(config.global_path + '/haspromo/bottle').success(function(result) {
-//		        callback(result);
-//		    });
-//			break
-//		case: "meal":
-//			$http.get(config.global_path + '/haspromo/meal').success(function(result) {
-//		        callback(result);
-//		    });
-//			break
-//	}
-//  },
   // check for user promotional send drink rights,  calls server for json response
   // callback, function to send the results to for processing
   // ** this should be changed to app service for global scope and eliminate server call **
@@ -1040,11 +1022,15 @@ starter.controller('estController', function($scope, $stateParams, $rootScope, $
     $ionicLoading.hide();
   },
 
-  $scope.drinkInfo = function(id) {
+  $scope.drinkInfo = function(id, type) {
     $rootScope.drinkId = id;
     //window.location.href="#/app/drinkinfo/"+id;
     $stateParams.estId = $rootScope.estId;
-    $state.transitionTo('app.drinkInfo', {estId: null, drinkId: id});
+    if (type == "Premium") {
+      $state.transitionTo('app.drinkInfo', {estId: null, drinkId: id});
+		} else {
+			$state.transitionTo('app.giftInfo', {type: type, estId : 0, item_id : id, senderId : $rootScope.userInfo.member_id, recipientid: 0 });
+		}      
   },
 
   $rootScope.showLoading()

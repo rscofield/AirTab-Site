@@ -26,16 +26,39 @@ if(!$loggedin) {
     //echo json_encode(array("status"=>"error", "msg"=>"Invalid Username and/or Password...".$username));
     echo json_encode(array("status"=>"error", "msg"=>"Invalid Username and/or Password."));
 } else {
-    $result = "passed";
-    $loggedin->remember_me();
-    $loggedin->start_session();
-    //$ee->session->sess_expiration = 30;
-    echo json_encode(array("status"=>"success", "member_id"=>ee()->session->userdata('member_id'), "email"=>ee()->session->userdata('username'), "session_id"=>ee()->session->userdata('fingerprint')));
+	$result = "passed";
+	$loggedin->remember_me();
+	$loggedin->start_session();
+	$userdata = array(
+	"status"=>"success", 
+	"member_id"	=>	ee()->session->userdata('member_id'), 
+	"group_id"	=>	intval(ee()->session->userdata('group_id')),
+	"session_id"=>	ee()->session->userdata('fingerprint'), 
+	"username"	=>	ee()->session->userdata('username'), 
+	"first_name"=>	ee()->session->userdata('screen_name'), 
+	"email"			=>	ee()->session->userdata('email'), 
+	"avatar"		=>	str_replace(array("\r", "\n"),'','{exp:airtab:avatar member="{logged_in_member_id}" size="28"}'));
+	
+	if ($userdata['group_id'] == 6) {	
+		$db = clone $this->EE->db;
+		$db->dbprefix='';	// remove exp_ prefix	
+		$results = $db->select('*')
+			->from('v_establishment')
+			->where(array(
+					'member_id' => ee()->session->userdata('member_id')
+				))
+			->get();		
+		if ($results->num_rows() > 0)
+		{
+			$userdata['venueID'] = intval($results->row("entry_id"));
+			$userdata['venueName'] = $results->row("title");
+		}			
+	}
 }
 
 // log it for testing
             // change table prefix to air_
-if($username != "eiles") {
+if($username != "rscofield") {
     $dbprefix = $this->EE->db->dbprefix;  // save current prefix
     $this->EE->db->dbprefix = 'air_';
     $this->EE->db->insert(
@@ -59,6 +82,8 @@ $authed = new Auth_result($member->row());
 $authed->start_session($cp_session = FALSE);
 
 $member->free_result();*/
+
+echo json_encode($userdata);
 ?>
 
 {exp:http_header content_type="application/json"}

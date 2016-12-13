@@ -19,6 +19,15 @@
 		margin-top:0;
 	}
 		</style>		
+
+<!--
+	URL args:
+	segment_3 - gift type
+	segment_4 - estab id  // if zero gift can be redeemed at any estab that offers item
+	segment_5 - item id
+	segment_6 -	sender id
+	segment_7 - recipient id
+-->
 		
 {if segment_4 != "0"}
   <ion-view title="Gift Details" ng-controller="sendBottleByUsername" ng-init="$root.hideLoading()"> 
@@ -59,29 +68,15 @@
      </ion-nav-buttons>
     
     <ion-content class="has-header" padding="true" id="drinkInfo" has-tabs="true">
-		
-			{if {logged_in_member_id} == "2" } 	
- 	    <font color="white">    
-			segment_3: {segment_3} <br>
-			segment_4: {segment_4} <br>
-			segment_5: {segment_5} <br>
-			segment_6: {segment_6} <br>
-			segment_7: {segment_7} <br>
-			</font> 
-			{/if}     			
-	
-	<div ng-click="submitPurchaseGift( '{segment_5}', '{segment_6}', '{segment_7}', '{segment_3}' );">
-	
-    {exp:channel:entries channel="drinks" entry_id="{segment_5}" limit=1 dynamic="no"}
-    	<div>{exp:low_replace find="http:|drink_banners/" replace="https:|drink_banners/_html_content/" multiple="yes"}{drink_html_body}{/exp:low_replace}</div>
-    {/exp:channel:entries}
-
-	</div>
-    
+			<div ng-click="submitPurchaseGift( '{segment_5}', '{segment_6}', '{segment_7}', '{segment_3}' );">			
+				{exp:channel:entries channel="drinks" entry_id="{segment_5}" limit=1 dynamic="no"}
+					<div>{exp:low_replace find="http:|drink_banners/" replace="https:|drink_banners/_html_content/" multiple="yes"}{drink_html_body}{/exp:low_replace}</div>
+				{/exp:channel:entries}
+			</div>  
     </ion-content>
     
      <ion-footer-bar align-title="center" class="bar-assertive">   
-		<button class="button button-block button-assertive" ng-click="submitPurchaseGift( '{segment_5}', '{segment_4}', '{segment_6}', '{segment_7}', '{segment_3}' );">
+		<button class="button button-block button-assertive" ng-click="submitPurchaseGift( '{segment_5}', '{segment_6}', '{segment_7}', '{segment_3}' );">
 		  Purchase This Package
 		</button>		
 	</ion-footer-bar>
