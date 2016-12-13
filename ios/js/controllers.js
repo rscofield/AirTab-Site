@@ -12,6 +12,7 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
   $rootScope.deviceUUID = config.default_UUID;
   $rootScope.launched = false;
   $rootScope.giftInfo = {method:""};
+  $rootScope.userInfo = {group_id:0};
 
   $rootScope.alertJBlaine = function( alert) {
       var alertPopup = $ionicPopup.alert({
