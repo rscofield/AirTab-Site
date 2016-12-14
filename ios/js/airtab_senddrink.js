@@ -262,11 +262,6 @@ starter.controller('sendDrinkTextViaContacts', function($scope, $stateParams, $h
     $scope.sendDrinkViaContacts = function( phone, mem_id ) {  
         $scope.invite.phone = phone;
         
-        //For testing purpose only
-        if ( (mem_id == 'x952') || (mem_id == 'x1171') ){ 
-            $scope.invite.phone = "7723418799";
-		}
-
         $rootScope.hasPromoAccess($scope.hasPromo)
    }
     

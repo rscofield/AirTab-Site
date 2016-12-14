@@ -44,8 +44,7 @@ starter.controller("SendgiftCtrl", function($scope, $http, $rootScope, $ionicLoa
         },				
        
 				// AirTab UserName
-        $scope.submitFormBottle = function (senderId,gift) {
-//          	$scope.showSuccess( 'submitFormBottle', 'REMOVE IT'  );          
+        $scope.submitFormBottle = function (senderId,gift) {       
             $http.get(config.template_path + '/username_to_id/' + $scope.invite.username).success(function(result) {
                 if(!result.userid) {
                   $rootScope.hideLoading();
@@ -56,8 +55,7 @@ starter.controller("SendgiftCtrl", function($scope, $http, $rootScope, $ionicLoa
 									$rootScope.hasPromoAccess($scope.hasPromo);
                   //$state.transitionTo('app.establishments_bottle', {senderId: senderId, recipientid: result.userid, method : "airtab", gift : gift});                 
                 }
-              });
-            return;           
+              });    
         }, 
 				
 				// by text message

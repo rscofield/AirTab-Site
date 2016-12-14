@@ -29,13 +29,12 @@
     </ion-nav-buttons>
     <ion-content has-header="true" padding="true" ng-init="$root.hideLoading()">
 	
-
 	<div class="list">
 		<div class="item-divider">
 		    You have chosen to send a gift to a friend. Below are your order details.
 		  </div>
-
-		{if segment_4 != "0"}
+		  
+		{if segment_4 != "0"} 
 		<div class="item item-input item-stacked-label">
 			<span class="input-label">Establishment</span>
 			{exp:query sql="SELECT * FROM v_establishment WHERE entry_id ={segment_4}"} 
@@ -47,41 +46,30 @@
 		<div class="item item-input item-stacked-label">
 			<span class="input-label">Sender</span>
 						{exp:query sql="SELECT * FROM v_members WHERE member_id ={segment_6}"} 
-							<p>Name: {First} {Last}</p>
+							<p>{First} {Last}</p>
 						{/exp:query}
 		</div>
-		  
-		<div class="item item-input item-stacked-label">
 		
+		{if segment_3 == "email" OR segment_3 == "text"}				
+    		<div class="item item-input item-stacked-label">
 				<span class="input-label">Recipient</span>
-					
+					<p>{segment_7}</p>
+			</div>
+		
+		{if:else}
+			<div class="item item-input item-stacked-label">
+				<span class="input-label">Recipient</span>
 				{if segment_3 == "airtab" OR segment_3 == "username"}
 						{exp:query sql="SELECT * FROM v_members WHERE member_id ={segment_7}"} 
-							<p>Name: {First} {Last}</p>
+							<p>{First} {Last}</p>
 						{/exp:query}
-				{/if}
-	
-				{if segment_3 == "email" OR segment_3 == "text"}
-					<p>{segment_5}</p>
-				{/if}
-			
-			
-			
-		</div>
-		       
+				{/if}									
+			</div>
 		
-
-		<?php 
-			$this->EE =& get_instance();
-			$segment_4 = $this->EE->uri->segment(4);
-
-{!--			$item_key = $segment_4; --}
-
-			$item_key = "Premium"; 
-			if ($item_key == "Premium")  $item_key = "13889069";		
-		?>
-	{!--	{exp:query sql="SELECT * FROM v_products WHERE item_id = <?php echo $item_key;?>"} --}
-
+		{/if}
+		  				
+				
+						        
 		{exp:query sql="SELECT * FROM v_products WHERE item_id ='{segment_5}'"} 
 
 		<div class="item item-input item-stacked-label">
@@ -94,9 +82,9 @@
 			<p>{price}</p>
 		</div>
 		
+
 		{/exp:query}		
 		
-{!--		{if segment_3 == "email" OR segment_3 == "text"} --}
 			<div class="item-divider">
 	          Optional Message For Recipient
 	        </div>
@@ -104,41 +92,21 @@
 	        <label class="item item-input">
 	          <textarea placeholder="Enter your custom message here..." ng-model="input.message"></textarea>
 	        </label>
-{!--		{/if} --}
 
 
 		{embed="android/charities"}
-		
-		<input type="hidden" name="Premium Drink" value="12.95">
-    <input type="hidden" name="recipient_id" value="{segment_5}">
-
-		<div class="control-group">
-
-				<input type="hidden" id="product_quantity" class="input-medium"  placeholder='1' name="quantity" size="8" value="1"  />
-
-		</div>
-		
+			
 	</div>
 
-	{if segment_4 == "email" OR segment_4 == "text"}
-
-			  <label class="item item-input">
-			    <textarea placeholder="Custom Message (Optional)" ng-model="input.message"></textarea>
-			  </label>
-			</div>
-			{/if}
- 
-
-	
 		<div class="control-group">
 			<div class="form-actions">
 				<h5 style="text-align:center">{if segment_6 == "unlimited"}You have promotional access and will not be charged.{if:else}You have {segment_6} promotional gifts remaining. You will not be charged.{/if}</h5>
-				<input type="submit" id="checkout_complete" class="button button-block button-assertive"  value="Send Gift" ng-click="createTicketForBottle( '{segment_4}', '{segment_5}', '{segment_6}', '{segment_7}' )" />
+				<input type="submit" id="checkout_complete" class="button button-block button-assertive"  value="Send Gift" ng-click="createTicketForBottle( '{segment_3}', '{segment_4}', '{segment_5}', '{segment_6}', '{segment_7}' )" />
       		</div>
 		</div>
 
-
     </ion-content>
+    
 </ion-view>
 </div>
 
