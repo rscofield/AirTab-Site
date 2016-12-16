@@ -14,7 +14,7 @@ var imageCallback = null;
 var bridge = null;
 
 var config = {
-  template_path: "/ios",
+  template_path: "/ios_ray",
   global_path: "/global",
 	default_UUID: "d01f38bdd5b9345a37f4e6a6ddd714c8ac8696ce982a9bd4765ed6c5730c67e3",
   version: "1.07",
@@ -727,7 +727,7 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'ngFacebook
 
     });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/establishments');
+  $urlRouterProvider.otherwise('/app/sendgift');
 });
 
 app.directive('checkoutform', function($compile) {
