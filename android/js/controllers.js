@@ -357,7 +357,7 @@ starter.controller('loginCtrl', function($scope, $stateParams, $rootScope, $http
 					$ionicViewService.nextViewOptions({
 						 disableBack: true
 					});
-					$state.go("app.establishments");
+					$state.go("app.sendgift");
         } else {
             // if successful, bind success message to message
             var alertPopup = $ionicPopup.alert({
