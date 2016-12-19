@@ -181,7 +181,7 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
 				$rootScope.isAdmin = (result.group_id==1 || result.group_id==10) ? true : false;
 				$rootScope.isVenueManager = result.group_id==6 ? true : false;
         $templateCache.removeAll();
-        $rootScope.deviceId = Android.getDeviceId();
+        if(typeof Android != "undefined") $rootScope.deviceId = Android.getDeviceId();
         $window.setDeviceId();
         $rootScope.saveDeviceId();
 				// load any promoter settings
@@ -268,7 +268,40 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
       $rootScope.checkFacebookSDK();
       $rootScope.initialized = true;
     }
-  }
+  },
+  
+  $scope.firstLaunch = function() {
+	  
+	  if($rootScope.launched) return;	  
+	  $rootScope.launched = true;
+    
+    if(typeof Android != "undefined") {
+      
+    } else {
+			// load from browser navagator
+			$rootScope.location = {latitude: 27.63007,longitude: -80.420380};  // default if geolocation fails
+			navigator.geolocation.getCurrentPosition(
+				function(position) {
+					$rootScope.location = {
+						latitude: position.coords.latitude,
+						longitude: position.coords.longitude
+					};
+					console.log("Got location via GeoLocation");
+				},
+				function(err) {
+					var error = err.message;
+					if(err.code == "1") error = "You did not allow AirTab access to your location. Please go into your settings and allow AirTab to access your location.";
+					if(err.code == 3) error = "Unable to find your current location. Please try again later.";
+					$scope.showAlert("Location Error", error);
+					$rootScope.hideLoading();
+				}, {
+					enableHighAccuracy: true,
+					timeout: 5000,
+					maximumAge: 0
+				}
+			);      
+    } 
+	},  
 
   $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
       //console.log(fromState, fromParams);
@@ -307,7 +340,9 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
         }
   }),
 
-  $rootScope.initialize()
+  $scope.firstLaunch();
+  $rootScope.initialize();
+  $scope.checkLogin(false);
 })
 
 

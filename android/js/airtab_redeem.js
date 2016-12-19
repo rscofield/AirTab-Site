@@ -238,12 +238,7 @@ starter.controller('RedeemCtrl', function($scope, $stateParams, $http, $window, 
         $scope.places = results;
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');
-				//Hide startup Splash screen
-				if(bridge) {
-						bridge.callHandler("hideSplash", null, function(r) {
-							console.log("Splash Hidden");
-						});
-				}
+				$rootScope.hideLoading();
       });
     } else {
       console.log("No Google API");
