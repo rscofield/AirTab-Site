@@ -276,7 +276,22 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
 	  $rootScope.launched = true;
     
     if(typeof Android != "undefined") {
-      
+      $rootScope.location = JSON.parse(Android.getLocation());
+      console.log("Got location via Android");
+      if($rootScope.location.status == "not found") {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          $rootScope.location = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+          };
+          $scope.queryEstablishments();
+        });
+      } else if ($rootScope.location.status == "disabled") {
+        $rootScope.hideLoading();
+        $scope.$broadcast('scroll.refreshComplete');
+      } else {
+        $scope.queryEstablishments();
+      }      
     } else {
 			// load from browser navagator
 			$rootScope.location = {latitude: 27.63007,longitude: -80.420380};  // default if geolocation fails
