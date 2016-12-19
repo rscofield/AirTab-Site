@@ -9,7 +9,7 @@
 	}
 </style>
 <div class="bar bar-subheader bar-dark" ng-if="$root.redeem">
-  <h4 class="title smaller-title">Which drink would you like to redeem?</h4>
+  <h4 class="title smaller-title">Which item would you like to redeem?</h4>
 </div>
 
 <ion-view ng-if="!isDrinkView()" title="Menu" ng-controller="estController" ng-init="hideLoading()">
@@ -17,12 +17,12 @@
       <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
     </ion-nav-buttons>
     <ion-content has-header="true" padding="true" has-tabs="true" ng-class="($root.redeem) ? 'has-subheader' : ''">
-		{exp:channel:entries channel="establishments" entry_id="{segment_3}"}
+		{exp:channel:entries channel="establishments" entry_id="{segment_3} status="open|closed|waiting approval"}
 			<div class="panel-body text-center" style="padding: 10px 20px 0 20px">
 				<h3>{title}</h3>
 			</div>
 		{/exp:channel:entries}	
-    	<div class="list">
+    	<div class="list" ng-if="$root.redeem.type != 'drink'">
         {exp:query sql="SELECT * FROM v_establishment_menu WHERE estab_id={segment_3} ORDER BY Price DESC"}
     		<a class="item item-thumbnail-left" ng-click="drinkInfo({entry_id},'{Type}')">
 				<img src="{exp:parse_file_paths}{fld_picture}{/exp:parse_file_paths}" width="80" height="80">
@@ -35,8 +35,15 @@
 				{embed="android/nomenu"}
 			{/if}
 		    {/exp:query}
-
-		</div>
+      </div>
+    	<div class="list" ng-if="$root.redeem.type == 'drink'">
+        <div class="list" ng-if="$root.redeem.level == 'Premium'">
+          {embed="global/premiummenu"}
+        </div>
+        <div class="list" ng-if="$root.redeem.level == 'Standard'">
+          {embed="global/standardmenu"}
+        </div>
+      </div>
     </ion-content>
     <ion-footer-bar align-title="center" class="bar-dark" style="padding:0;">
     	<div class="row" style="padding:0 !important;">

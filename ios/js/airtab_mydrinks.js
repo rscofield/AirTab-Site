@@ -263,7 +263,10 @@ starter.controller("mydrinksController", function($scope, $http, $ionicPopup, $i
       }, 
           
       $scope.redeemDrink = function(ticketId, username, purchaseDate, level) {
-          //$scope.showAlert( 'name', 'redeemDrink:' + ticketId );
+          // do for backward compatabliliy
+          if (level == "Premium Drink")  level = "Premium";
+          if (level == "Standard Drink")  level = "Standard";
+          //
           $rootScope.redeem = {
             id: ticketId,
             username: username,

@@ -2,7 +2,7 @@
 {if segment_3 == ""}
 
 {if:else}
-{exp:channel:entries channel="establishments" entry_id="{segment_3}" limit="1"}
+{exp:channel:entries channel="establishments" entry_id="{segment_3}" status="open|closed|waiting approval" limit="1"}
 <div ng-cloak>
 <ion-view title="Establishment" ng-init="hideLoading()">
 	<ion-nav-buttons side="{{$root.menuSide}}">

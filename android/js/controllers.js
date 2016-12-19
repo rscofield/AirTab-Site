@@ -377,6 +377,7 @@ starter.controller('loginCtrl', function($scope, $stateParams, $rootScope, $http
 
   // Triggered in the login modal to close it
   $scope.closeLogin = function() {
+    $rootScope.isLoggingIn = false;
     $rootScope.hideModal();
   },
 
@@ -713,7 +714,7 @@ starter.controller('estController', function($scope, $stateParams, $rootScope, $
     $rootScope.drinkId = id;
     //window.location.href="#/app/drinkinfo/"+id;
     $stateParams.estId = $rootScope.estId;
-    if (type == "Premium") {
+  if (type == "Premium" || type == "Standard" || type == "Drink") {
     $state.transitionTo('app.drinkInfo', {estId: null, drinkId: id});
 		} else {
 			$state.transitionTo('app.giftInfo', {type: type, estId : 0, item_id : id, senderId : $rootScope.userInfo.member_id, recipientid: 0 });
