@@ -14,7 +14,19 @@ starter.controller("SendgiftCtrl", function($scope, $http, $rootScope, $ionicLoa
             return $scope.form_sendDrinkText.$valid
  
         },
-        
+
+		$scope.$on('$viewContentLoaded', 
+		function(event, viewConfig){ 
+				// Access to all the view config properties.
+				// and one special property 'targetView'
+				// viewConfig.targetView 
+				console.log("viewContentLoaded");
+				$rootScope.hideLoading();
+        // now make sure establishments are updated
+        $rootScope.getLocation();
+        $rootScope.loadEstablishments();  
+		}),  
+    
         $scope.submitPurchaseGift = function ( item_id, senderId, recipientId, giftType ) {
         	         	
         	$rootScope.giftInfo.item_id = item_id;
@@ -32,7 +44,10 @@ starter.controller("SendgiftCtrl", function($scope, $http, $rootScope, $ionicLoa
 				},			
 				
         $scope.viewGiftDetails = function ( item_id ) {
-          	$state.transitionTo('app.giftInfo', {type: "Meal", estId : 0, item_id : item_id, senderId : $rootScope.userInfo.member_id, recipientid: 0 });
+            $rootScope.checkLogin(true);
+            if($rootScope.userInfo !== "undefined") {
+              $state.transitionTo('app.giftInfo', {type: "Meal", estId : 0, item_id : item_id, senderId : $rootScope.userInfo.member_id, recipientid: 0 });
+            }
         }, 
 
 				// AirTab friend
@@ -120,12 +135,6 @@ starter.controller("SendgiftCtrl", function($scope, $http, $rootScope, $ionicLoa
             });
             $location.url("/app/friends");
           });
-        },
-
-        $scope.$on('modal.removed', function() {
-        	$scope.showSuccess( 'submitFormBottle', 'REMOVE IT'  );          
-
-        })
-
+        }
 })
 
