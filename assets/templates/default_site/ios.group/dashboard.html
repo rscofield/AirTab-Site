@@ -14,17 +14,12 @@
 		<ion-tab title="Main">		
 		
 			<ion-content has-header="true" padding="true" has-tabs="true">
-
-				<div class="card">
-					<div class="item item-text-wrap">
-						<h1 center style="font-size:16pt">{{ venueInfo.name }}</h1>
-						<h2 center style="font-size:16pt">{{ venueInfo.status }}</h2>
-					</div>
-				</div>
+        <img src="{{venueInfo.photo_large}}" style="width:100%;height:auto;"/>
 				<div style="text-align:center;padding:10px" padding="true">
+          <h4>{{venueInfo.name}}</h4>
 					<p>{{venueInfo.address}}<br />{{venueInfo.city}}, {{venueInfo.state}} {{venueInfo.zip}}</p>
 					<p>Contact: {{venueInfo.contact}}    Phone: {{venueInfo.phone}}</p>
-				</div>
+ 				</div>
 				
 			</ion-content>
 		</ion-tab>	
