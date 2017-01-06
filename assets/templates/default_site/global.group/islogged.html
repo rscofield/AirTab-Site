@@ -1,8 +1,35 @@
+{exp:airtab:log_page_load}
 <?php
-
+$logged = true;
 if(!ee()->session->userdata('member_id')) {
-	echo json_encode(array("status"=>"error", "msg"=>"{segment_3}"));
-} else {
+  // not currently logged in, check if deviceid sent and try to auto login
+  $devId =  ee()->uri->segment(3);
+  if($devId != "")  {
+		$db = clone $this->EE->db;
+		$db->dbprefix='';	// remove exp_ prefix	
+		$results = $db->select('*')
+			->from('at_devicetokens')
+			->where(array(
+					'token' => $devId
+				))
+			->get();		
+		if ($results->num_rows() == 1) {
+      $this->EE->db->where('member_id', $results->row("member"));
+      $member = $this->EE->db->get('members');
+			$this->EE->load->library('auth');
+      // Load a new Auth_result object which logs in the member
+      $authed = new Auth_result($member->row());
+      $authed->start_session($cp_session = FALSE);
+      $member->free_result();
+		}			
+  } else {
+    $logged = false;
+    echo json_encode(array("status"=>"error", "msg"=>"{segment_3}"));
+  }
+}
+
+if($logged) {
+
 	$userdata = array(
 	"status"=>"success", 
 	"member_id"	=>	ee()->session->userdata('member_id'), 
@@ -28,9 +55,9 @@ if(!ee()->session->userdata('member_id')) {
 			$userdata['venueName'] = $results->row("title");
 		}			
 	}
-	
-	echo json_encode($userdata);
-}
+}	
+echo json_encode($userdata);
+
 
 ?>
 

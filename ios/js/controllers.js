@@ -10,6 +10,7 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
   $window.state = $state;
   $rootScope.isLoggingIn = false;
   $rootScope.deviceUUID = config.default_UUID;
+  $rootScope.deviceId = '';
   $rootScope.launched = false;
   $rootScope.giftInfo = {method:""};
 
@@ -300,8 +301,7 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
     }
     showModal = typeof showModal !== 'undefined' ? showModal : true;
     console.log("Verifying Login");
-    $http.get(config.global_path + '/islogged').success(function(result) {
-      
+    $http.get(config.global_path + '/islogged/' + $rootScope.deviceId).success(function(result) {
       if(result.status == "success") {
 				$rootScope.userInfo = result;
         $rootScope.isLogged = true;
@@ -548,6 +548,15 @@ starter.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $lo
 			// and one special property 'targetView'
 			// viewConfig.targetView 
 			console.log("viewContentLoading");
+	});
+	
+	$rootScope.$on('$viewContentLoaded', 
+	function(event, viewConfig){ 
+			// Access to all the view config properties.
+			// and one special property 'targetView'
+			// viewConfig.targetView 
+			console.log("viewContentLoaded");
+			$rootScope.hideLoading();
 	});
 	
 	$scope.hideSplash = function() {
